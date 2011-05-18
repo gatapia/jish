@@ -1,19 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net", "js\js.net.csproj", "{78104D21-D04B-468F-924E-5649C5ED52CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net", "js.net\js.net.csproj", "{78104D21-D04B-468F-924E-5649C5ED52CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.closure.tests", "closuretests\js.net.closure.tests.csproj", "{258AF24C-666D-4C15-AF5E-58CED61916DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.tests", "js.net.tests\js.net.tests.csproj", "{258AF24C-666D-4C15-AF5E-58CED61916DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.node.tests", "nodetests\js.net.node.tests.csproj", "{5007A200-86B1-4F17-91F8-436C2C230A69}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{22D8988A-120C-4FE4-8B35-E2B8C84AE76B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.engine.tests", "js.net.engine.tests\js.net.engine.tests.csproj", "{F92842F0-6EA3-4849-9833-97B3A8BED1DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.node.tests", "js.net.node.tests\js.net.node.tests.csproj", "{5007A200-86B1-4F17-91F8-436C2C230A69}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{774163BA-8779-48A7-B4CD-960BA427D4C8}"
 	ProjectSection(SolutionItems) = preProject
+		lib\dom\env.therubyracer.js = lib\dom\env.therubyracer.js
+		README.txt = README.txt
 		TODO.txt = TODO.txt
+		lib\dom\window.js = lib\dom\window.js
 	EndProjectSection
 EndProject
 Global
@@ -56,23 +55,8 @@ Global
 		{5007A200-86B1-4F17-91F8-436C2C230A69}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5007A200-86B1-4F17-91F8-436C2C230A69}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5007A200-86B1-4F17-91F8-436C2C230A69}.Release|x86.ActiveCfg = Release|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{5007A200-86B1-4F17-91F8-436C2C230A69} = {22D8988A-120C-4FE4-8B35-E2B8C84AE76B}
-		{258AF24C-666D-4C15-AF5E-58CED61916DF} = {22D8988A-120C-4FE4-8B35-E2B8C84AE76B}
-		{F92842F0-6EA3-4849-9833-97B3A8BED1DC} = {22D8988A-120C-4FE4-8B35-E2B8C84AE76B}
 	EndGlobalSection
 EndGlobal
