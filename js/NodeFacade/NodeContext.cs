@@ -1,13 +1,11 @@
-﻿using System;
-using System.IO;
-using js.Engine;
-using js.NodeFacade.Modules;
+﻿using System.IO;
+using js.net.Engine;
 
-namespace js.NodeFacade
+namespace js.net.NodeFacade
 {
   public class NodeContext
   {
-    private const string NODE_LIB_DIR = @"C:\dev\projects\play\picnetjs\lib\Nodelib\";    
+    private const string NODE_LIB_DIR = @"C:\dev\projects\labs\js.net\lib\Nodelib\";    
 
     private readonly IEngine engine;
     private readonly string workingDirectory;

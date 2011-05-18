@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
-using js.Engine;
-using js.NodeFacade;
+using js.net.Engine;
+using js.net.NodeFacade;
 using NUnit.Framework;
 
-namespace nodetests
+namespace js.net.node.tests
 {
   [TestFixture] public class NodeTestSuite
   {
-    private const string NODE_TEST_DIR = @"C:\dev\projects\play\picnetjs\lib\Nodelib\test\";
+    private const string NODE_TEST_DIR = @"C:\dev\projects\labs\js.net\lib\Nodelib\test\";
 
     private JSNetEngineAdapter engine;
     private NodeContext ctx;

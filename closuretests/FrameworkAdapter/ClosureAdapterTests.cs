@@ -1,17 +1,17 @@
-﻿using js.Closure;
-using js.Engine;
+﻿using js.net.Engine;
+using js.net.FrameworkAdapters.Closure;
 using NUnit.Framework;
 
-namespace closuretests
+namespace js.net.closure.tests.FrameworkAdapter
 {
-  [TestFixture] public class ClosureContextTests
+  [TestFixture] public class ClosureAdapterTests
   {
-    private ClosureContext ctx;
+    private ClosureAdapter ctx;
     [SetUp] public void SetUp()
     {
-      const string basejsfile = @"C:\dev\lib\closure-library\closure\goog\base.js";
+      const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";
       IEngine engine = new JSNetEngineAdapter();      
-      ctx = new ClosureContext(basejsfile, engine);
+      ctx = new ClosureAdapter(basejsfile, engine);
     }
 
     [TearDown] public void TearDown()

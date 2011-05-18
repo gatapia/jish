@@ -1,7 +1,7 @@
-﻿using js.Engine;
+﻿using js.net.Engine;
 using NUnit.Framework;
 
-namespace closuretests
+namespace js.net.engine.tests
 {
   [TestFixture] public class JSNetEngineTests : AbstractEngineTests
   {

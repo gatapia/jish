@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using js.Engine;
+using js.net.Engine;
 
-namespace js.NodeFacade
+namespace js.net.NodeFacade
 {
   public class NodeProcess
   {

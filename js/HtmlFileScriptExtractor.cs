@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 
-namespace js
+namespace js.net
 {
   public class HtmlFileScriptExtractor
   {

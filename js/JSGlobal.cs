@@ -1,4 +1,4 @@
-﻿namespace js
+﻿namespace js.net
 {
   public class JSGlobal
   {

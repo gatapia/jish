@@ -1,4 +1,6 @@
-﻿namespace js.Closure.Test
+﻿using System;
+
+namespace js.net.TestAdapters.Closure
 {
   public class ClosureTestsConsoleScrapper : JSConsole
   {
@@ -15,23 +17,16 @@
       return results;
     }
 
-    public override void log(string message)
+    public override void log(object message)
     {
       if (!silent) base.log(message);
-      ScrapeResultInformationFromMessage(message);
+      string msg = message as string;
+      if (String.IsNullOrEmpty(msg)) return;
+      ScrapeResultInformationFromMessage(msg);
     }
 
     private void ScrapeResultInformationFromMessage(string message)
-    {
-//      This will be usefull if we want to keep all the console.log messages
-//      together with the actual test that generated them.
-//
-//      int startIdx = message.IndexOf("Running test: ");
-//      if (startIdx >= 0)
-//      {
-//        string testName = message.Substring(message.IndexOf(": ", startIdx) + 2).Trim();
-//        results.AddTest(testName);
-//      }
+    {      
       if (message.IndexOf(" : PASSED") >= 0)
       {
         results.AddPassedTest(GetTestNameFromPassOrFailLogLine(message));

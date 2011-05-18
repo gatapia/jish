@@ -8,8 +8,8 @@
     <ProjectGuid>{78104D21-D04B-468F-924E-5649C5ED52CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>js</RootNamespace>
-    <AssemblyName>js</AssemblyName>
+    <RootNamespace>js.net</RootNamespace>
+    <AssemblyName>js.net</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -41,20 +41,20 @@
     <Reference Include="Noesis.Javascript">
       <HintPath>..\lib\JSEngines\JS.Net\Noesis.Javascript.dll</HintPath>
     </Reference>
-    <Reference Include="PicNet2">
-      <HintPath>..\lib\PicNet2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Closure\ClosureContext.cs" />
-    <Compile Include="Closure\ClosureInterceptor.cs" />
-    <Compile Include="Closure\ClosureRootDependencies.cs" />
-    <Compile Include="Closure\Test\ClosureTestResults.cs" />
-    <Compile Include="Closure\Test\ClosureTestContext.cs" />
-    <Compile Include="Closure\Test\ClosureTestsConsoleScrapper.cs" />
-    <Compile Include="Closure\Test\ClosureTestSuiteResults.cs" />
+    <Compile Include="Engine\AbstractEngineAdapter.cs" />
+    <Compile Include="FrameworkAdapters\AbstractFrameworkAdapter.cs" />
+    <Compile Include="FrameworkAdapters\Closure\ClosureAdapter.cs" />
+    <Compile Include="FrameworkAdapters\Closure\ClosureInterceptor.cs" />
+    <Compile Include="FrameworkAdapters\Closure\ClosureRootDependencies.cs" />
+    <Compile Include="FrameworkAdapters\PathLoader.cs" />
+    <Compile Include="TestAdapters\Closure\ClosureTestResults.cs" />
+    <Compile Include="TestAdapters\Closure\ClosureTestAdapter.cs" />
+    <Compile Include="TestAdapters\Closure\ClosureTestsConsoleScrapper.cs" />
+    <Compile Include="TestAdapters\Closure\ClosureTestSuiteResults.cs" />
     <Compile Include="Engine\IEngine.cs" />
     <Compile Include="Engine\IronJSEngineAdapter.cs" />
     <Compile Include="Engine\JSNetEngineAdapter.cs" />

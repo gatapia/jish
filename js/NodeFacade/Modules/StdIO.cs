@@ -1,4 +1,4 @@
-﻿namespace js.NodeFacade.Modules
+﻿namespace js.net.NodeFacade.Modules
 {
   public class StdIO : AbstractNodeModule
   {

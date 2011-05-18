@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PicNet2;
 
-namespace js.Closure.Test
+namespace js.net.TestAdapters.Closure
 {
   public class ClosureTestResults
   {
@@ -37,8 +36,8 @@ namespace js.Closure.Test
     {
       string passedstr = String.Empty;
       string failedstr = String.Empty;
-      if (Passed.Any()) passedstr = "\nPASSED:\n\t" + CollectionUtils.ToString(Passed, "\n\t");
-      if (Failed.Any()) failedstr = "\nFAILED:\n\t" + CollectionUtils.ToString(Failed, "\n\t");
+      if (Passed.Any()) passedstr = "\nPASSED:\n\t" + String.Join("\n\t", Passed);
+      if (Failed.Any()) failedstr = "\nFAILED:\n\t" + String.Join("\n\t", Failed);
       return "RESULTS\n=======\n" + passedstr + failedstr;
     }
   }

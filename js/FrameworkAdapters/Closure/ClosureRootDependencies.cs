@@ -2,18 +2,18 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace js.Closure
+namespace js.net.FrameworkAdapters.Closure
 {
   public class ClosureRootDependencies
   {
-    private readonly ClosureContext ctx;
+    private readonly ClosureAdapter ctx;
     private readonly string baseJsFile;
     private readonly PathLoader loader;
 
     private string basedir;
     private ClosureInterceptor interceptor;    
 
-    public ClosureRootDependencies(ClosureContext ctx, string baseJsFile, PathLoader loader)
+    public ClosureRootDependencies(ClosureAdapter ctx, string baseJsFile, PathLoader loader)
     {
       Trace.Assert(ctx != null);
       Trace.Assert(loader != null);
