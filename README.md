@@ -21,6 +21,8 @@ simply follow these steps:
 - Add your unit test like this (This is using NUnit style code but you can use 
   anything you want):
 
+Example:
+
     [TestFixture] public class JavaScriptTests {
       [Test] public void TestSingleFile()
       { 
@@ -28,8 +30,9 @@ simply follow these steps:
         using (ITestAdapter adapter = JSNet.QUnit(pathToTheQunitJsFile)) 
         {
           // Run your test file
-          TestResults results = adapter.RunTest(@"pathToYourTestingJsOrHtmlFile.js"); 
-          
+          TestResults results = 
+            adapter.RunTest("pathToYourTestingJsOrHtmlFile.js"); 
+              
           // Assert no failures
           Assert.AreEqual(0, results.Failed.Count(), results.ToString());
           Assert.AreEqual(22, results.Passed.Count(), results.ToString());
@@ -42,12 +45,15 @@ Unit testing multiple files is just as simple as testing a single file.  So once
 you have added the js.net.dll reference to your project simply write some code
 like this:
 
+Example:
+
     [TestFixture] public class JavaScriptTests {
       [Test] public void TestAllFiles()
       { 
         // Run all tests
         string[] files = GetTestSuiteFiles();
-        TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(baseJsFile);
+        TestSuiteRunner runner = 
+          JSNet.ClosureLibraryTestSuiteRunner(baseJsFile);
         runner.AddGlobalSourceFile(depsJsFile);
         TestSuiteResults results = runner.TestFiles(files);
 
@@ -62,8 +68,9 @@ like this:
 This project would not be possible without JavaScript.Net:
 [http://javascriptdotnet.codeplex.com/](http://javascriptdotnet.codeplex.com/).
 
-John Resig's awesome Env.js provides the DOM support that all test adapters
-levarage.
+John Resig's awesome 
+[Env.js](http://jqueryjs.googlecode.com/svn/trunk/jquery/build/runtest/env.js) 
+provides the DOM support that all test adapters levarage.
 
 ## About [PicNet](http://www.picnet.com.au)
 PicNet does software development for large companies in Australia.  We 
