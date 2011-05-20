@@ -1,4 +1,7 @@
-﻿using js.net.Engine;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.QUnit
@@ -10,6 +13,10 @@ namespace js.net.TestAdapters.QUnit
 
     public QUnitTestAdapterFactory(string qUnitJs, IEngineFactory engineFactory)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));
+      Trace.Assert(File.Exists(qUnitJs));
+      Trace.Assert(engineFactory != null);
+
       this.qUnitJs = qUnitJs;
       this.engineFactory = engineFactory;
     }

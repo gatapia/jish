@@ -13,6 +13,8 @@ namespace js.net.TestAdapters
 
     public TestSuiteRunner(ITestAdapterFactory adapterFactory)
     {
+      Trace.Assert(adapterFactory != null);
+
       this.adapterFactory = adapterFactory;
     }
 
@@ -20,17 +22,23 @@ namespace js.net.TestAdapters
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
       Trace.Assert(File.Exists(file));
+
       globalSourceFiles.Add(file);
     }
 
     public TestSuiteResults TestFiles(IEnumerable<string> files)
     {      
+      Trace.Assert(files != null);
+
       IEnumerable<TestResults> results = files.Select(RunSingleTest);
       return new TestSuiteResults(results);  
     }
 
     private TestResults RunSingleTest(string file)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(file));
+      Trace.Assert(File.Exists(file));
+
       ITestAdapter adapter = GetAdapter();
       foreach(string globalFile in globalSourceFiles)
       {

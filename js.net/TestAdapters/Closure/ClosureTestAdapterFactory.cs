@@ -1,4 +1,7 @@
-﻿using js.net.Engine;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using js.net.Engine;
 using js.net.FrameworkAdapters.Closure;
 
 namespace js.net.TestAdapters.Closure
@@ -10,6 +13,10 @@ namespace js.net.TestAdapters.Closure
 
     public ClosureTestAdapterFactory(string baseJsFile, IEngineFactory engineFactory)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(baseJsFile));
+      Trace.Assert(File.Exists(baseJsFile));
+      Trace.Assert(engineFactory != null);
+
       this.baseJsFile = baseJsFile;
       this.engineFactory = engineFactory;
     }

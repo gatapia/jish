@@ -1,4 +1,6 @@
-﻿using js.net.Util;
+﻿using System;
+using System.Diagnostics;
+using js.net.Util;
 using Noesis.Javascript;
 
 namespace js.net.Engine
@@ -8,8 +10,8 @@ namespace js.net.Engine
     static JSNetEngine()
     {
       // No need to include 2 assemblies, just load the embedded resource.
-      new EmbeddedAssemblyLoader("Noesis.Javascript.dll", "js.net.Noesis.Javascript.dll").
-        CopyAssemblyToExecutable(); 
+      new EmbeddedResourcesUtils().
+        CopyAssemblyToExecutable("Noesis.Javascript.dll", "js.net.resources.Noesis.Javascript.dll"); 
     }
     private readonly JavascriptContext ctx;
 
@@ -20,16 +22,25 @@ namespace js.net.Engine
 
     public override object Run(string script)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(script));
+      Trace.Assert(ctx != null);
+
       return ctx.Run(script);
     }
 
     public override void SetGlobal(string name, object value)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+      Trace.Assert(ctx != null);
+
       ctx.SetParameter(name, value);
     }
 
     public override object GetGlobal(string name)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+      Trace.Assert(ctx != null);
+
       return ctx.GetParameter(name);
     }
 

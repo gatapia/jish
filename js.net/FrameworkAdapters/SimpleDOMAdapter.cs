@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using js.net.Engine;
+using js.net.Util;
 
 namespace js.net.FrameworkAdapters
 {
@@ -19,13 +21,15 @@ namespace js.net.FrameworkAdapters
 
     public virtual void Initialise()
     {
-      LoadJSFile(@"C:\dev\projects\labs\js.net\lib\dom\env.therubyracer.js");
-      LoadJSFile(@"C:\dev\projects\labs\js.net\lib\dom\window.js");
+      EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();
+      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.env.therubyracer.js"));
+      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.window.js"));
 
       engine.SetGlobal("global", new JSGlobal());
       engine.SetGlobal("console", new JSConsole());
     }
-    
+
+
     public object LoadJSFile(string file)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
@@ -53,11 +57,15 @@ namespace js.net.FrameworkAdapters
 
     public void SetGlobal(string name, object value)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+
       engine.SetGlobal(name, value);
     }
 
     public object GetGlobal(string name)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+
       return engine.GetGlobal(name);
     }
 

@@ -25,17 +25,19 @@ namespace js.net.tests.TestAdapters
     [Test] public void RunHtmlFileTest()
     {
       using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
-      {
+      {        
         TestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
-        Assert.IsNotNull(results);
-        Console.WriteLine(results);
+        
+        Assert.AreEqual(0, results.Failed.Count(), results.ToString());
+        Assert.Greater(results.Passed.Count(), 0, results.ToString());
       }
     }    
         
     [Test, Ignore("Runs out of memory")] public void RunEntireClosureTestSuite()
     {
       string[] files = GetTestSuiteFiles();
-      TestSuiteResults results = JSNet.ClosureLibraryTestSuiteRunner(basejsfile).TestFiles(files);
+      TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile);      
+      TestSuiteResults results = runner.TestFiles(files);
 
       Assert.AreEqual(0, results.Failed.Count(), results.ToString());
       Assert.Greater(results.Passed.Count(), 0, results.ToString());

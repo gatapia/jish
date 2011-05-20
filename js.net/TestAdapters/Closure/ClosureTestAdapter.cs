@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using js.net.FrameworkAdapters.Closure;
 
 namespace js.net.TestAdapters.Closure
@@ -13,6 +15,9 @@ namespace js.net.TestAdapters.Closure
 
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
+      Trace.Assert(File.Exists(sourceFile));
+
       string fileName = new FileInfo(sourceFile).Name;
       scrapper = new ClosureTestsConsoleScrapper(fileName, Silent);        
       js.SetGlobal("console", scrapper); // Intercept console.log calls               
@@ -27,8 +32,10 @@ G_testRunner.execute();
 "); 
     }
 
-    protected override TestResults GetResults(string fileName)
+    protected override TestResults GetResults(string testFixtureName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));
+
       return scrapper.GetResults();
     }
   }

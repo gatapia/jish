@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using js.net.FrameworkAdapters;
+using js.net.Util;
 
 namespace js.net.TestAdapters.JsUnit
 {
@@ -11,20 +15,29 @@ namespace js.net.TestAdapters.JsUnit
 
     public JsUnitTestAdapter(SimpleDOMAdapter js, string jsUnitCoreFile) : base(js)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
+      Trace.Assert(File.Exists(jsUnitCoreFile));
+
       this.jsUnitCoreFile = jsUnitCoreFile;
     }
 
     protected override void PrepareFrameworkAndRunTest(string testFile) {
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFile));
+      Trace.Assert(File.Exists(testFile));
+
       js.Initialise();
       js.LoadJSFile(jsUnitCoreFile);
       js.Run(GetTestingJSFromFile(testFile)); // Load tests into memory
-      js.LoadJSFile(@"TestAdapters\JsUnit\js\testmanager.js");
+      string testManager = new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.resources.jsunit.testmanager.js");
+      js.Run(testManager);
     }
 
-    protected override TestResults GetResults(string fileName)
+    protected override TestResults GetResults(string testFixtureName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));
+
       IDictionary<string, object> results = (IDictionary<string, object>) js.GetGlobal("results");
-      TestResults res = new TestResults(fileName);
+      TestResults res = new TestResults(testFixtureName);
       foreach (KeyValuePair<string, object> testResult in results)
       {
         if (testResult.Value == null)

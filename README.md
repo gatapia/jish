@@ -31,7 +31,7 @@ Example:
         {
           // Run your test file
           TestResults results = 
-            adapter.RunTest("pathToYourTestingJsOrHtmlFile.js"); 
+            adapter.RunTest(pathToTestJsOrHtmlFile); 
               
           // Assert no failures
           Assert.AreEqual(0, results.Failed.Count(), results.ToString());

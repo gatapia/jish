@@ -1,4 +1,7 @@
-﻿using js.net.Engine;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.JsUnit
@@ -10,6 +13,10 @@ namespace js.net.TestAdapters.JsUnit
 
     public JsUnitTestAdapterFactory(string jsUnitCoreFile, IEngineFactory engineFactory)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
+      Trace.Assert(File.Exists(jsUnitCoreFile));
+      Trace.Assert(engineFactory != null);
+
       this.jsUnitCoreFile = jsUnitCoreFile;
       this.engineFactory = engineFactory;
     }

@@ -1,4 +1,7 @@
-﻿using js.net.Engine;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.Jasmine
@@ -10,6 +13,10 @@ namespace js.net.TestAdapters.Jasmine
 
     public JasmineTestAdapterFactory(string jasmineJsFile, IEngineFactory engineFactory)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(jasmineJsFile));
+      Trace.Assert(File.Exists(jasmineJsFile));
+      Trace.Assert(engineFactory != null);
+
       this.jasmineJsFile = jasmineJsFile;
       this.engineFactory = engineFactory;
     }

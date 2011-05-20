@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace js.net.TestAdapters.Closure
 {
@@ -8,9 +9,11 @@ namespace js.net.TestAdapters.Closure
   {
     private readonly TestResults results;
     private readonly bool silent;
-    public ClosureTestsConsoleScrapper(string testName, bool silent)
+    public ClosureTestsConsoleScrapper(string testFixtureName, bool silent)
     {
-      results = new TestResults(testName);
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));      
+
+      results = new TestResults(testFixtureName);
       this.silent = silent;
     }
 
@@ -21,6 +24,8 @@ namespace js.net.TestAdapters.Closure
 
     public override void log(object message)
     {
+      Trace.Assert(message != null);
+
       if (!silent) base.log(message);
       string msg = message as string;
       if (String.IsNullOrEmpty(msg)) return;
@@ -29,6 +34,8 @@ namespace js.net.TestAdapters.Closure
 
     private void ScrapeResultInformationFromMessage(string message)
     {            
+      Trace.Assert(message != null);
+
       if (message.IndexOf(" : PASSED") < 0 && message.IndexOf(" : FAILED") < 0) { return; }
       string testName = GetTestNameFromPassOrFailLogLine(message);
       if (String.IsNullOrWhiteSpace(testName)) { return; }
@@ -44,6 +51,8 @@ namespace js.net.TestAdapters.Closure
 
     private string GetTestNameFromPassOrFailLogLine(string message)
     {
+      Trace.Assert(message != null);
+
       string testName = message.Substring(message.IndexOf(": ") + 2).Trim();
       return testName.Substring(0, testName.IndexOf(": "));
     }

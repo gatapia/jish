@@ -7,14 +7,16 @@ namespace js.net.TestAdapters
 {
   public class TestResults
   {
-    public string TestName { get; private set; }
+    public string FixtureName { get; private set; }
     public IEnumerable<string> Passed { get { return all.Where(kvp => kvp.Value).Select(kvp => kvp.Key); } }
     public IEnumerable<string> Failed { get { return all.Where(kvp => !kvp.Value).Select(kvp => kvp.Key); } }
     private readonly IList<KeyValuePair<string, bool>> all;
 
-    public TestResults(string testName)
+    public TestResults(string fixtureName)
     {
-      TestName = testName;
+      Trace.Assert(!String.IsNullOrWhiteSpace(fixtureName));      
+
+      FixtureName = fixtureName;
       all = new List<KeyValuePair<string, bool>>();
     }
 
@@ -34,7 +36,7 @@ namespace js.net.TestAdapters
 
     public override string ToString()
     {
-      return new TestResultsStringFormatter(TestName, all).FormatTestResults();
+      return new TestResultsStringFormatter(FixtureName, all).FormatTestResults();
     }
   }
 }

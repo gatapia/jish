@@ -91,14 +91,16 @@
     <Compile Include="TestAdapters\ITestAdapter.cs" />
     <Compile Include="TestAdapters\TestSuiteRunner.cs" />
     <Compile Include="TestAdapters\ITestAdapterFactory.cs" />
-    <Compile Include="Util\EmbeddedAssemblyLoader.cs" />
+    <Compile Include="Util\EmbeddedResourcesUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Noesis.Javascript.dll" />
-    <Content Include="TestAdapters\Jasmine\js\reporter.js">
+    <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
+    <EmbeddedResource Include="resources\env.therubyracer.js" />
+    <EmbeddedResource Include="resources\window.js" />
+    <Content Include="resources\jasmine.reporter.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestAdapters\JsUnit\js\testmanager.js">
+    <Content Include="resources\jsunit.testmanager.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

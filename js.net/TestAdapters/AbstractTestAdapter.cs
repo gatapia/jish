@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using js.net.FrameworkAdapters;
 using Noesis.Javascript;
@@ -11,11 +12,16 @@ namespace js.net.TestAdapters
 
     protected AbstractTestAdapter(SimpleDOMAdapter js)
     {
+      Trace.Assert(js != null);
+
       this.js = js;
     }
 
     protected string GetTestingJSFromFile(string testFile)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFile));
+      Trace.Assert(File.Exists(testFile));
+
       return testFile.EndsWith(".js")
         ? File.ReadAllText(testFile)
         : new HtmlFileScriptExtractor(testFile).GetScriptContents();
@@ -23,11 +29,17 @@ namespace js.net.TestAdapters
 
     public void LoadSourceFile(string sourceFile)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
+      Trace.Assert(File.Exists(sourceFile));
+
       js.LoadJSFile(sourceFile);
     }
 
     public TestResults RunTest(string testFile)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(testFile));
+      Trace.Assert(File.Exists(testFile));
+
       string fileName = new FileInfo(testFile).Name;
       try
       {
@@ -43,7 +55,7 @@ namespace js.net.TestAdapters
 
     protected abstract void PrepareFrameworkAndRunTest(string file);
 
-    protected abstract TestResults GetResults(string fileName);
+    protected abstract TestResults GetResults(string testFixtureName);
 
     public void Dispose()
     {

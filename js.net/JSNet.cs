@@ -10,7 +10,7 @@ using js.net.TestAdapters.QUnit;
 
 namespace js.net
 {
-  // A helper utility class for easy use of the project
+  // A helper utility class for easy use of the entire project
   public static class JSNet
   {
     static JSNet()
