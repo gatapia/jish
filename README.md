@@ -21,6 +21,8 @@ simply follow these steps:
 - Add your unit test like this (This is using NUnit style code but you can use 
   anything you want):
 
+Example:
+
     [TestFixture] public class JavaScriptTests {
       [Test] public void TestSingleFile()
       { 
@@ -29,7 +31,7 @@ simply follow these steps:
         {
           // Run your test file
           TestResults results = adapter.RunTest(@"pathToYourTestingJsOrHtmlFile.js"); 
-          
+              
           // Assert no failures
           Assert.AreEqual(0, results.Failed.Count(), results.ToString());
           Assert.AreEqual(22, results.Passed.Count(), results.ToString());
@@ -41,6 +43,8 @@ simply follow these steps:
 Unit testing multiple files is just as simple as testing a single file.  So once
 you have added the js.net.dll reference to your project simply write some code
 like this:
+
+Example:
 
     [TestFixture] public class JavaScriptTests {
       [Test] public void TestAllFiles()
