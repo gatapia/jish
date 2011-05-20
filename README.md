@@ -47,7 +47,9 @@ like this:
       { 
         // Run all tests
         string[] files = GetTestSuiteFiles();
-        TestSuiteResults results = JSNet.ClosureLibraryTestSuiteRunner(basejsfile).TestFiles(files);
+        TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(baseJsFile);
+        runner.AddGlobalSourceFile(depsJsFile);
+        TestSuiteResults results = runner.TestFiles(files);
 
         // Assert no failures
         Assert.AreEqual(0, results.Failed.Count(), results.ToString());
@@ -58,10 +60,7 @@ like this:
 
 ## Shout Outs
 This project would not be possible without JavaScript.Net:
-[http://javascriptdotnet.codeplex.com/](http://javascriptdotnet.codeplex.com/)
-Kudos to the guys at [Noesis](http://www.noesisinnovation.net/Home) for 
-developing kick ass bindings for V8 and secondly for realising this work under
-BSD license.
+[http://javascriptdotnet.codeplex.com/](http://javascriptdotnet.codeplex.com/).
 
 John Resig's awesome Env.js provides the DOM support that all test adapters
 levarage.

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using js.net.TestAdapters.Closure;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace js.net.TestAdapters
 {
   public class TestSuiteRunner
   {
+    private readonly IList<string> globalSourceFiles = new List<string>();
     private readonly ITestAdapterFactory adapterFactory;
 
     public TestSuiteRunner(ITestAdapterFactory adapterFactory)
@@ -13,16 +16,26 @@ namespace js.net.TestAdapters
       this.adapterFactory = adapterFactory;
     }
 
-    public TestSuiteResults TestFiles(string[] files)
+    public void AddGlobalSourceFile(string file)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(file));
+      Trace.Assert(File.Exists(file));
+      globalSourceFiles.Add(file);
+    }
+
+    public TestSuiteResults TestFiles(IEnumerable<string> files)
     {      
-      IList<TestResults> results = new List<TestResults>();
-      Array.ForEach(files, f => results.Add(RunSingleTest(f)));
+      IEnumerable<TestResults> results = files.Select(RunSingleTest);
       return new TestSuiteResults(results);  
     }
 
     private TestResults RunSingleTest(string file)
     {
       ITestAdapter adapter = GetAdapter();
+      foreach(string globalFile in globalSourceFiles)
+      {
+        adapter.LoadSourceFile(globalFile);
+      }
       return adapter.RunTest(file);
     }
 

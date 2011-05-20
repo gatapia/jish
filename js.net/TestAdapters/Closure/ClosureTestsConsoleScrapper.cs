@@ -2,6 +2,8 @@
 
 namespace js.net.TestAdapters.Closure
 {
+  // TODO: We should not need a console scrapper to get results, we should
+  // just plug into the test runner.
   public class ClosureTestsConsoleScrapper : JSConsole
   {
     private readonly TestResults results;
@@ -26,21 +28,24 @@ namespace js.net.TestAdapters.Closure
     }
 
     private void ScrapeResultInformationFromMessage(string message)
-    {      
+    {            
+      if (message.IndexOf(" : PASSED") < 0 && message.IndexOf(" : FAILED") < 0) { return; }
+      string testName = GetTestNameFromPassOrFailLogLine(message);
+      if (String.IsNullOrWhiteSpace(testName)) { return; }
+
       if (message.IndexOf(" : PASSED") >= 0)
       {
-        results.AddPassedTest(GetTestNameFromPassOrFailLogLine(message));
-      }     
-      if (message.IndexOf(" : FAILED") >= 0)
+        results.AddPassedTest(testName);
+      } else if (message.IndexOf(" : FAILED") >= 0)
       {
-        results.AddFailedTest(GetTestNameFromPassOrFailLogLine(message));
-      }      
+        results.AddFailedTest(testName);
+      }
     }
 
     private string GetTestNameFromPassOrFailLogLine(string message)
     {
-      string testName = message.Substring(message.IndexOf(" : ") + 3).Trim();
-      return testName.Substring(0, testName.IndexOf(" : "));
+      string testName = message.Substring(message.IndexOf(": ") + 2).Trim();
+      return testName.Substring(0, testName.IndexOf(": "));
     }
   }
 }

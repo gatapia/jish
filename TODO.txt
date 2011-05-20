@@ -1,3 +1,5 @@
+- Add better contract checking (Trace.Assert)
+
 Engine
 ======
 - Fork the JavaScript.Net project as it appears to have died.

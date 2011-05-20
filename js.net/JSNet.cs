@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using js.net.Engine;
 using js.net.FrameworkAdapters;
 using js.net.FrameworkAdapters.Closure;
@@ -24,7 +23,9 @@ namespace js.net
 
     public static ITestAdapter ClosureLibrary(string baseJsFile)
     {
-      return new ClosureTestAdapter(new ClosureAdapter(baseJsFile, new JSNetEngine()));
+      ClosureAdapter adapter = new ClosureAdapter(baseJsFile, new JSNetEngine());
+      adapter.Initialise();
+      return new ClosureTestAdapter(adapter);
     }
 
     public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile)
@@ -35,7 +36,7 @@ namespace js.net
 
     public static ITestAdapter JSUnit(string jsUnitCoreFile)
     {
-      return new JsUnitTestAdapter(new SimpleDOMAdapter(new JSNetEngine()), jsUnitCoreFile);
+      return new JsUnitTestAdapter(GetSimpleDOMAdapter(), jsUnitCoreFile);
     }
 
     public static TestSuiteRunner JSUnitTestSuiteRunner(string jsUnitCoreFile)
@@ -46,7 +47,7 @@ namespace js.net
 
     public static ITestAdapter QUnit(string qUnitJsFile)
     {
-      return new QUnitTestAdapter(new SimpleDOMAdapter(new JSNetEngine()), qUnitJsFile);
+      return new QUnitTestAdapter(GetSimpleDOMAdapter(), qUnitJsFile);
     }
 
     public static TestSuiteRunner QUnitTestSuiteRunner(string qUnitJsFile)
@@ -57,13 +58,20 @@ namespace js.net
 
     public static ITestAdapter Jasmine(string jasmineJsFile)
     {
-      return new JasmineTestAdapter(new SimpleDOMAdapter(new JSNetEngine()), jasmineJsFile);
+      return new JasmineTestAdapter(GetSimpleDOMAdapter(), jasmineJsFile);
     }
 
     public static TestSuiteRunner JasmineTestSuiteRunner(string jasmineJsFile)
     {
       JasmineTestAdapterFactory fact = new JasmineTestAdapterFactory(jasmineJsFile, new DefaultEngineFactory()) { Silent = true };
       return new TestSuiteRunner(fact);
+    }
+    
+    private static SimpleDOMAdapter GetSimpleDOMAdapter()
+    {
+      SimpleDOMAdapter adapter = new SimpleDOMAdapter(new JSNetEngine());
+      adapter.Initialise();
+      return adapter;
     }
   }  
 }

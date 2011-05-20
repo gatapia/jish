@@ -13,10 +13,18 @@ namespace js.net.TestAdapters.Closure
 
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
     {
-      scrapper = new ClosureTestsConsoleScrapper(new FileInfo(sourceFile).Name, Silent);        
+      string fileName = new FileInfo(sourceFile).Name;
+      scrapper = new ClosureTestsConsoleScrapper(fileName, Silent);        
       js.SetGlobal("console", scrapper); // Intercept console.log calls               
+      js.Run("goog.require('goog.testing.jsunit');");
       js.Run(GetTestingJSFromFile(sourceFile)); // Load the file        
-      js.Run("window.onload();"); 
+      js.Run(
+@"
+var test = new goog.testing.TestCase('" + fileName + @"');
+test.autoDiscoverTests();
+G_testRunner.initialize(test);
+G_testRunner.execute();
+"); 
     }
 
     protected override TestResults GetResults(string fileName)

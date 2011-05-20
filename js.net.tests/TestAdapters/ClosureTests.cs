@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using js.net.Engine;
 using js.net.TestAdapters;
-using js.net.TestAdapters.Closure;
 using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters
@@ -14,17 +12,19 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunJSFileTest()
     {
-      using (ITestAdapter adapter = GetAdapter())
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {
-        TestResults results = adapter.RunTest(@"TestAdapters\stand_alone_base_tests.js"); 
-        Assert.IsNotNull(results);
-        Console.WriteLine(results);
+        TestResults results = adapter.RunTest(@"TestAdapters\stand_alone_base_tests.js");         
+
+        // 7 tests known to fail
+        Assert.AreEqual(7, results.Failed.Count(), results.ToString());
+        Assert.Greater(results.Passed.Count(), 0, results.ToString());
       }            
     }    
 
     [Test] public void RunHtmlFileTest()
     {
-      using (ITestAdapter adapter = GetAdapter())
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {
         TestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
         Assert.IsNotNull(results);
@@ -39,11 +39,6 @@ namespace js.net.tests.TestAdapters
 
       Assert.AreEqual(0, results.Failed.Count(), results.ToString());
       Assert.Greater(results.Passed.Count(), 0, results.ToString());
-    }
-
-    private ITestAdapter GetAdapter()
-    {
-      return JSNet.ClosureLibrary(basejsfile);
     }
 
     private string[] GetTestSuiteFiles()

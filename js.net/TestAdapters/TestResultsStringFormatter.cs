@@ -20,20 +20,20 @@ namespace js.net.TestAdapters
     {
       StringBuilder sb = new StringBuilder("\n");
       sb.Append(testName).Append(" Results (").Append(allTests.Where(t => t.Value).Count()).Append("/").Append(allTests.Count).Append(")\n");
-      sb.Append(new String('=', 52)).Append('\n');
-      sb.Append(String.Format("|{0,-30}|{1,-9}|{2,-9}|\n", FormatString("Test Name", 30), FormatString("Passed", 9), FormatString("Failed", 9)));
-      sb.Append(new String('-', 52)).Append('\n');
+      sb.Append(new String('=', 102)).Append('\n');
+      sb.Append(String.Format("|{0,-80}|{1,-9}|{2,-9}|\n", FormatString("Test Name", 80), FormatString("Passed", 9), FormatString("Failed", 9)));
+      sb.Append(new String('-', 102)).Append('\n');
       foreach (var t in allTests)
       {
         sb.Append(CreateRow(t.Key, t.Value ? "X" : "", t.Value ? "" : "X"));
       }      
-      sb.Append(new String('-', 52));
+      sb.Append(new String('-', 102));
       return sb.ToString();
     }
 
     private string CreateRow(string testName, string passed, string failed)
     {
-      return String.Format("|{0,30}|{1,-9}|{2,-9}|\n", FormatString(testName, 30), FormatString(passed, 9), FormatString(failed, 9));
+      return String.Format("|{0,80}|{1,-9}|{2,-9}|\n", FormatString(testName, 80), FormatString(passed, 9), FormatString(failed, 9));
     }
 
     private string FormatString(string str, int len)

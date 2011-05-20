@@ -5,12 +5,16 @@ namespace js.net.Engine
 {
   public class JSNetEngine : AbstractEngine
   {    
+    static JSNetEngine()
+    {
+      // No need to include 2 assemblies, just load the embedded resource.
+      new EmbeddedAssemblyLoader("Noesis.Javascript.dll", "js.net.Noesis.Javascript.dll").
+        CopyAssemblyToExecutable(); 
+    }
     private readonly JavascriptContext ctx;
 
     public JSNetEngine()
-    {
-      // No need to include 2 assemblies, just load the embedded resource.
-      new EmbeddedAssemblyLoader("Noesis.Javascript.dll", "js.net.Noesis.Javascript.dll").CopyAssemblyToExecutable();
+    {      
       ctx = new JavascriptContext();
     }
 

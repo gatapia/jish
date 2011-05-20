@@ -29,7 +29,6 @@ namespace js.net.TestAdapters
     public TestResults RunTest(string testFile)
     {
       string fileName = new FileInfo(testFile).Name;
-      Console.WriteLine("Running Test: " + fileName);
       try
       {
         PrepareFrameworkAndRunTest(testFile);
