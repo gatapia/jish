@@ -30,12 +30,8 @@ Example:
         using (ITestAdapter adapter = JSNet.QUnit(pathToTheQunitJsFile)) 
         {
           // Run your test file
-<<<<<<< HEAD
           TestResults results = 
             adapter.RunTest("pathToYourTestingJsOrHtmlFile.js"); 
-=======
-          TestResults results = adapter.RunTest(@"pathToYourTestingJsOrHtmlFile.js"); 
->>>>>>> 5ea0e433e4e7cb85124b40cf9d2f0ff4f89f0ce4
               
           // Assert no failures
           Assert.AreEqual(0, results.Failed.Count(), results.ToString());
