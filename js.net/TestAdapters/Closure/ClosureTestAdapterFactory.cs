@@ -1,34 +1,17 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.FrameworkAdapters.Closure;
 
 namespace js.net.TestAdapters.Closure
 {
-  public class ClosureTestAdapterFactory : ITestAdapterFactory
+  public class ClosureTestAdapterFactory : AbstractTestAdapterFactory
   {
-    private readonly string baseJsFile;
-    private readonly IEngineFactory engineFactory;
+    public ClosureTestAdapterFactory(string baseJsFile, IEngineFactory engineFactory) : base(baseJsFile, engineFactory) {}
 
-    public ClosureTestAdapterFactory(string baseJsFile, IEngineFactory engineFactory)
+    protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(baseJsFile));
-      Trace.Assert(File.Exists(baseJsFile));
-      Trace.Assert(engineFactory != null);
-
-      this.baseJsFile = baseJsFile;
-      this.engineFactory = engineFactory;
-    }
-
-    public bool Silent { get; set; }
-
-    public ITestAdapter CreateAdapter()
-    {
-      ClosureAdapter closure = new ClosureAdapter(baseJsFile, engineFactory.CreateEngine());
+      ClosureAdapter closure = new ClosureAdapter(frameworkJsFile, engine);
       closure.Initialise();
-      ClosureTestAdapter adapter = new ClosureTestAdapter(closure) { Silent = Silent };
-      return adapter;
+      return new ClosureTestAdapter(closure);
     }
   }
 }

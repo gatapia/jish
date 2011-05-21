@@ -9,6 +9,7 @@ Currently js.net supports several JavaScript unit testing frameworks:
 - [qUnit](http://docs.jquery.com/Qunit)
 - [jsUnit](http://www.jsunit.net/)
 - [Jasmine](http://pivotal.github.com/jasmine/)
+- [JsCoverage](http://siliconforks.com/jscoverage/)
 
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 
@@ -30,7 +31,7 @@ Example:
         using (ITestAdapter adapter = JSNet.QUnit(pathToTheQunitJsFile)) 
         {
           // Run your test file
-          TestResults results = 
+          ITestResults results = 
             adapter.RunTest(pathToTestJsOrHtmlFile); 
               
           // Assert no failures
@@ -61,6 +62,44 @@ Example:
         Assert.AreEqual(0, results.Failed.Count(), results.ToString());
         Assert.Greater(results.Passed.Count(), 0, results.ToString());
         }            
+      }
+    }
+
+## Coverage
+Running coverage on your tests is just as simple as running the tests 
+themselves.
+
+Example:
+
+    [TestFixture] public class JavaScriptTests {
+      [Test] public void TestRunCoverageWithProperAdapter()
+      {
+        // Code must be instrumented first (use the native instrumenter).
+        Process p = Process.Start("jscoverage.exe", "src\ instrumented\").WaitForExit();
+
+        using (ICoverageAdapter adapter = JSNet.JsCoverage(JSNet.ClosureLibrary(basejsfile)))
+        {        
+          adapter.LoadSourceFile(@"instrumented\instrumentedSourceFile.js"); 
+          ICoverageResults results = adapter.RunCoverage(@"src\tests\sourceFileTests.js");         
+
+          // Assert tests passes as per normal
+          Assert.AreEqual(0, results.Failed.Count(), results.ToString());
+          Assert.AreEqual(4, results.Passed.Count(), results.ToString());
+
+          // Assert coverage is as expected
+          Assert.AreEqual(1, results.FilesCount);
+          Assert.AreEqual(5, results.Statements);
+          Assert.AreEqual(5, results.Executed);
+          // Assert we have 100% coverage
+          Assert.AreEqual(100.0m, results.CoveragePercentage);
+
+          // Assert coverage for individual files within the test
+          IFileCoverageResults sourceCoverage = results.FileResults.First();
+          Assert.AreEqual("jscoverage_source.js", sourceCoverage.FileName);
+          Assert.AreEqual(5, sourceCoverage.Statements);
+          Assert.AreEqual(5, sourceCoverage.Executed);
+          Assert.AreEqual(100.0m, sourceCoverage.CoveragePercentage);                  
+        } 
       }
     }
 

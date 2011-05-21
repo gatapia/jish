@@ -1,33 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.JsUnit
 {
-  public class JsUnitTestAdapterFactory : ITestAdapterFactory
+  public class JsUnitTestAdapterFactory : AbstractTestAdapterFactory
   {
-    private readonly string jsUnitCoreFile;
-    private readonly IEngineFactory engineFactory;
+    public JsUnitTestAdapterFactory(string jsUnitCoreFile, IEngineFactory engineFactory) : base(jsUnitCoreFile, engineFactory) {}
 
-    public JsUnitTestAdapterFactory(string jsUnitCoreFile, IEngineFactory engineFactory)
+    protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
-      Trace.Assert(File.Exists(jsUnitCoreFile));
-      Trace.Assert(engineFactory != null);
-
-      this.jsUnitCoreFile = jsUnitCoreFile;
-      this.engineFactory = engineFactory;
-    }
-
-    public bool Silent { get; set; }
-
-    public ITestAdapter CreateAdapter()
-    {
-      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engineFactory.CreateEngine());
-      JsUnitTestAdapter jsUnit = new JsUnitTestAdapter(domAdapter, jsUnitCoreFile) {Silent = Silent};
-      return jsUnit;
+      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engine);
+      return new JsUnitTestAdapter(domAdapter, frameworkJsFile);
     }
   }
 }

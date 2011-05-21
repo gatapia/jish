@@ -1,33 +1,17 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.QUnit
 {
-  public class QUnitTestAdapterFactory : ITestAdapterFactory
+  public class QUnitTestAdapterFactory : AbstractTestAdapterFactory
   {
-    private readonly string qUnitJs;
-    private readonly IEngineFactory engineFactory;
 
-    public QUnitTestAdapterFactory(string qUnitJs, IEngineFactory engineFactory)
+    public QUnitTestAdapterFactory(string qUnitJs, IEngineFactory engineFactory) : base(qUnitJs, engineFactory) { }
+
+    protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));
-      Trace.Assert(File.Exists(qUnitJs));
-      Trace.Assert(engineFactory != null);
-
-      this.qUnitJs = qUnitJs;
-      this.engineFactory = engineFactory;
-    }
-
-    public bool Silent { get; set; }
-
-    public ITestAdapter CreateAdapter()
-    {
-      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engineFactory.CreateEngine());
-      QUnitTestAdapter qUnit = new QUnitTestAdapter(domAdapter, qUnitJs) {Silent = Silent};
-      return qUnit;
+      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engine);
+      return new QUnitTestAdapter(domAdapter, frameworkJsFile);
     }
   }
 }

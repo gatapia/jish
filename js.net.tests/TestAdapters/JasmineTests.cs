@@ -14,7 +14,7 @@ namespace js.net.tests.TestAdapters
       using (ITestAdapter adapter = JSNet.Jasmine(jasmineJsFile))
       {
         adapter.LoadSourceFile(@"C:\dev\libs\jasmine\src\Player.js");
-        TestResults results = adapter.RunTest(@"C:\dev\libs\jasmine\spec\PlayerSpec.js"); 
+        ITestResults results = adapter.RunTest(@"C:\dev\libs\jasmine\spec\PlayerSpec.js"); 
 
         Assert.AreEqual(5, results.Failed.Count());
         Assert.AreEqual(0, results.Passed.Count());

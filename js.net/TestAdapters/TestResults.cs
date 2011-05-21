@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace js.net.TestAdapters
 {
-  public class TestResults
+  public class TestResults : ITestResults
   {
     public string FixtureName { get; private set; }
     public IEnumerable<string> Passed { get { return all.Where(kvp => kvp.Value).Select(kvp => kvp.Key); } }

@@ -5,6 +5,7 @@ using js.net.FrameworkAdapters.Closure;
 using js.net.TestAdapters;
 using js.net.TestAdapters.Closure;
 using js.net.TestAdapters.Jasmine;
+using js.net.TestAdapters.JsCoverage;
 using js.net.TestAdapters.JsUnit;
 using js.net.TestAdapters.QUnit;
 
@@ -21,6 +22,12 @@ namespace js.net
       Trace.Listeners.Add(def);
     }
 
+    public static ICoverageAdapter JsCoverage(ITestAdapter testAdapter)
+    {
+      JsCoverageTestAdapter jsCoverage = new JsCoverageTestAdapter(testAdapter);
+      return jsCoverage;
+    }
+
     public static ITestAdapter ClosureLibrary(string baseJsFile)
     {
       ClosureAdapter adapter = new ClosureAdapter(baseJsFile, new JSNetEngine());
@@ -30,7 +37,7 @@ namespace js.net
 
     public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile)
     {
-      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, new DefaultEngineFactory()) { Silent = true };
+      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 
@@ -41,7 +48,7 @@ namespace js.net
 
     public static TestSuiteRunner JSUnitTestSuiteRunner(string jsUnitCoreFile)
     {
-      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory()) { Silent = true };
+      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 
@@ -52,7 +59,7 @@ namespace js.net
 
     public static TestSuiteRunner QUnitTestSuiteRunner(string qUnitJsFile)
     {
-      QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJsFile, new DefaultEngineFactory()) { Silent = true };
+      QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJsFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 
@@ -63,7 +70,7 @@ namespace js.net
 
     public static TestSuiteRunner JasmineTestSuiteRunner(string jasmineJsFile)
     {
-      JasmineTestAdapterFactory fact = new JasmineTestAdapterFactory(jasmineJsFile, new DefaultEngineFactory()) { Silent = true };
+      JasmineTestAdapterFactory fact = new JasmineTestAdapterFactory(jasmineJsFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
     

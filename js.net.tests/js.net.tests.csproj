@@ -57,15 +57,26 @@
     <Compile Include="Engine\JSNetEngineTests.cs" />
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
+    <Compile Include="TestAdapters\JsCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />
     <Compile Include="TestAdapters\QUnitTests.cs" />
     <Compile Include="TestAdapters\JsUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="resources\jscoverage\instrumented\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestAdapters\stand_alone_base_tests.js">
+    <Content Include="resources\jscoverage\jscoverage.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\jscoverage\src\jscoverage_source.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\jscoverage\jscoverage_test.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\simple_closure_tests.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

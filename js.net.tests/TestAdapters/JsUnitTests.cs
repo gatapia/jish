@@ -16,7 +16,7 @@ namespace js.net.tests.TestAdapters
     {      
       using (ITestAdapter adapter = JSNet.JSUnit(jsUnitCoreFile))
       {
-        TestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\failingTest.html"); 
+        ITestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\failingTest.html"); 
 
         Assert.AreEqual(2, results.Failed.Count());
         Assert.AreEqual(0, results.Passed.Count());
@@ -30,7 +30,7 @@ namespace js.net.tests.TestAdapters
     {      
       using (ITestAdapter adapter = JSNet.JSUnit(jsUnitCoreFile))
       {
-        TestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\jsUnitAssertionTests.html"); 
+        ITestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\jsUnitAssertionTests.html"); 
 
         Assert.AreEqual(0, results.Failed.Count());
         Assert.AreEqual(31, results.Passed.Count());
@@ -42,7 +42,7 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunEntireJSUnitTestSuite()
     {
-      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory()) { Silent = true };
+      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
       string[] files = GetTestSuiteFiles();
       TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
       Assert.IsNotNull(results);

@@ -15,7 +15,7 @@ namespace js.net.tests.TestAdapters
     {      
       using (ITestAdapter adapter = JSNet.QUnit(qUnitJS))
       {
-        TestResults results = adapter.RunTest(@"C:\dev\libs\qunit\test\test.js"); 
+        ITestResults results = adapter.RunTest(@"C:\dev\libs\qunit\test\test.js"); 
         
         //Tests 'sync', 'setup' and 'basics' fail
         Assert.AreEqual(3, results.Failed.Count());
@@ -28,7 +28,7 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunEntireQUnitTestSuite()
     {
-      QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJS, new DefaultEngineFactory()) { Silent = true };
+      QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJS, new DefaultEngineFactory());
       string[] files = GetTestSuiteFiles();
       TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
       Assert.IsNotNull(results);

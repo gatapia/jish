@@ -7,14 +7,14 @@ namespace js.net.TestAdapters
 {
   public class TestSuiteResults : TestResults
   {
-    public TestSuiteResults(IEnumerable<TestResults> individualResults) : base("Test Suite")
+    public TestSuiteResults(IEnumerable<ITestResults> individualResults) : base("Test Suite")
     {
       Trace.Assert(individualResults != null);
 
       Array.ForEach(individualResults.ToArray(), ExtractResultsFromTest);
     }
 
-    private void ExtractResultsFromTest(TestResults result)
+    private void ExtractResultsFromTest(ITestResults result)
     {
       Trace.Assert(result != null);
       Trace.Assert(!String.IsNullOrWhiteSpace(result.FixtureName));

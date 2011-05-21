@@ -30,11 +30,11 @@ namespace js.net.TestAdapters
     {      
       Trace.Assert(files != null);
 
-      IEnumerable<TestResults> results = files.Select(RunSingleTest);
+      IEnumerable<ITestResults> results = files.Select(RunSingleTest);
       return new TestSuiteResults(results);  
     }
 
-    private TestResults RunSingleTest(string file)
+    private ITestResults RunSingleTest(string file)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
       Trace.Assert(File.Exists(file));

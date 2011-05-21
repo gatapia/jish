@@ -54,14 +54,25 @@
     <Compile Include="FrameworkAdapters\SimpleDOMAdapter.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureAdapter.cs" />
     <Compile Include="JSNet.cs" />
+    <Compile Include="TestAdapters\AbstractTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\Closure\ClosureTestAdapterFactory.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureInterceptor.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureDependencies.cs" />
     <Compile Include="Engine\IEngineFactory.cs" />
     <Compile Include="FrameworkAdapters\PathLoader.cs" />
     <Compile Include="TestAdapters\AbstractTestAdapter.cs" />
+    <Compile Include="TestAdapters\CoverageResultsBase.cs" />
+    <Compile Include="TestAdapters\ICoverageAdapterFactory.cs" />
+    <Compile Include="TestAdapters\ICoverageAdapter.cs" />
+    <Compile Include="TestAdapters\ICoverageResults.cs" />
+    <Compile Include="TestAdapters\IFileCoverageResults.cs" />
+    <Compile Include="TestAdapters\ITestResults.cs" />
     <Compile Include="TestAdapters\Jasmine\JasmineTestAdapter.cs" />
     <Compile Include="TestAdapters\Jasmine\JasmineTestAdapterFactory.cs" />
+    <Compile Include="TestAdapters\TotalCoverageResults.cs" />
+    <Compile Include="TestAdapters\FileCoverageResults.cs" />
+    <Compile Include="TestAdapters\JsCoverage\JsCoverageTestAdapter.cs" />
+    <Compile Include="TestAdapters\JsCoverage\JsCoverageTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\JsUnit\JsUnitTestAdapter.cs" />
     <Compile Include="TestAdapters\JsUnit\JsUnitTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\QUnit\QUnitTestAdapter.cs" />
@@ -97,6 +108,9 @@
     <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
     <EmbeddedResource Include="resources\env.therubyracer.js" />
     <EmbeddedResource Include="resources\window.js" />
+    <EmbeddedResource Include="resources\jscoverage.parser.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="resources\jasmine.reporter.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -14,7 +14,7 @@ namespace js.net.tests.TestAdapters
     {
       using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {
-        TestResults results = adapter.RunTest(@"TestAdapters\stand_alone_base_tests.js");         
+        ITestResults results = adapter.RunTest(@"resources\simple_closure_tests.js");         
 
         // 7 tests known to fail
         Assert.AreEqual(7, results.Failed.Count(), results.ToString());
@@ -26,7 +26,7 @@ namespace js.net.tests.TestAdapters
     {
       using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {        
-        TestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
+        ITestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
         
         Assert.AreEqual(0, results.Failed.Count(), results.ToString());
         Assert.Greater(results.Passed.Count(), 0, results.ToString());

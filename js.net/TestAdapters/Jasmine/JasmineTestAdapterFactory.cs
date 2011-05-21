@@ -1,33 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.Jasmine
 {
-  public class JasmineTestAdapterFactory : ITestAdapterFactory
+  public class JasmineTestAdapterFactory : AbstractTestAdapterFactory
   {
-    private readonly string jasmineJsFile;
-    private readonly IEngineFactory engineFactory;
+    public JasmineTestAdapterFactory(string jasmineJsFile, IEngineFactory engineFactory) : base(jasmineJsFile, engineFactory) { }
 
-    public JasmineTestAdapterFactory(string jasmineJsFile, IEngineFactory engineFactory)
+    protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(jasmineJsFile));
-      Trace.Assert(File.Exists(jasmineJsFile));
-      Trace.Assert(engineFactory != null);
-
-      this.jasmineJsFile = jasmineJsFile;
-      this.engineFactory = engineFactory;
-    }
-
-    public bool Silent { get; set; }
-
-    public ITestAdapter CreateAdapter()
-    {
-      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engineFactory.CreateEngine());
-      JasmineTestAdapter jsUnit = new JasmineTestAdapter(domAdapter, jasmineJsFile) {Silent = Silent};
-      return jsUnit;
+      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engine);
+      return new JasmineTestAdapter(domAdapter, frameworkJsFile);
     }
   }
 }
