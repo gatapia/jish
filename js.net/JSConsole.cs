@@ -14,11 +14,14 @@ namespace js.net
     public void info(string message) { log(message); }
     public void dir(object message) { log(message); }
 
-    public virtual void log(object message)
+    public virtual string log(object message, bool newline = true)
     {
       Trace.Assert(message != null);
 
-      Console.WriteLine(GetMessageObjectDescription(message));      
+      string msg = GetMessageObjectDescription(message);
+      if (newline) Console.WriteLine(msg);
+      else Console.Write(msg);
+      return msg;
     }
 
     private string GetMessageObjectDescription(object msg)

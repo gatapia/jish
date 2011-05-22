@@ -1,24 +1,24 @@
 ﻿using System;
 using System.IO;
-using js.net.Engine;
 
 namespace js.net.repl
 {
   public class REPL
   {
-    private readonly IEngine engine;
-    private readonly JSConsole console;
+    private readonly ICommandLineInterpreter interpretter;
 
-    public REPL(IEngine engine, JSConsole console)
+    public REPL(ICommandLineInterpreter interpretter)
     {
-      this.engine = engine;
-      this.console = console;
+      this.interpretter = interpretter;
     }
 
     public void StartREPL()
     {   
-      CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
-      while (cli.ReadAndExecuteCommand()) {}
+      while (true)
+      {
+        string command = interpretter.ReadCommand();
+        interpretter.ExecuteCommand(command);
+      }
     }
 
     public void ExecuteArgs(string[] args)
@@ -29,7 +29,7 @@ namespace js.net.repl
         Console.WriteLine("Could not find " + file);
         return;
       }
-      engine.Run(File.ReadAllText(file));
+      interpretter.RunFile(file);      
     }    
   }
 }

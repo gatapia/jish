@@ -7,3 +7,5 @@
 - REPL
   - Add multi line support
   - Allow creating of binded (using) objects
+  - Implement require to load file
+  - Impleament load to load assemblies

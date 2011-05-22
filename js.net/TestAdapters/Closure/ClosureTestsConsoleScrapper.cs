@@ -22,14 +22,15 @@ namespace js.net.TestAdapters.Closure
       return results;
     }
 
-    public override void log(object message)
+    public override string log(object message, bool newline = true)
     {
       Trace.Assert(message != null);
 
-      if (!silent) base.log(message);
+      if (!silent) base.log(message, newline);
+
       string msg = message as string;
-      if (String.IsNullOrEmpty(msg)) return;
-      ScrapeResultInformationFromMessage(msg);
+      if (!String.IsNullOrEmpty(msg)) ScrapeResultInformationFromMessage(msg);
+      return msg;
     }
 
     private void ScrapeResultInformationFromMessage(string message)

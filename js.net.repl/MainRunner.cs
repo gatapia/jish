@@ -54,7 +54,10 @@ namespace js.net.repl
         engine.SetGlobal("console", console);
         engine.SetGlobal("global", new JSGlobal());
 
-        var repl = new REPL(engine, console);
+        CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
+        cli.InitialiseConsole();
+
+        var repl = new REPL(cli);
         if (args == null || args.Length == 0)
         {
           repl.StartREPL();
