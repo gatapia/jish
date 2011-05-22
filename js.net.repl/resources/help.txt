@@ -1,4 +1,5 @@
-﻿.break  Sometimes you get stuck, this gets you out
-.clear  Break, and also clear the local context
-.exit   Exit the repl
-.help   Show repl options
+﻿.break                       Sometimes you get stuck, this gets you out
+.clear                       Break, and also clear the local context
+.using(namespace.ClassName)  Imports all static functions into the global scope
+.exit                        Exit the repl
+.help                        Show repl options

@@ -18,7 +18,15 @@ namespace js.net.repl
       this.engine = engine;
       this.console = console;
 
+      InitialiseConsole();
+
       Console.WriteLine("Type '.help' for options.");
+    }
+
+    private void InitialiseConsole()
+    {
+      Console.TreatControlCAsInput = false;
+      Console.CancelKeyPress += (s, e) => Environment.Exit(0);
     }
 
     public bool ReadAndExecuteCommand()
@@ -34,10 +42,19 @@ namespace js.net.repl
         if (val != null) engine.SetGlobal("_", val);
       }
       catch (Exception e)
-      {
-        Console.WriteLine(e.Message);
+      {        
+        PrintExceptionMessage(e);
       }
       return true;
+    }
+
+    private void PrintExceptionMessage(Exception e)
+    {
+      string msg = e.Message;
+      if (msg.IndexOf(": ") > 0) msg = msg.Substring(msg.IndexOf(": ") + 2);
+      if (msg.IndexOf('(') > 0) msg = msg.Substring(0, msg.IndexOf('('));
+      
+      Console.WriteLine(msg);
     }
 
     private bool InterceptSpecialCommands(string input)
