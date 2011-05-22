@@ -5,7 +5,7 @@
 - Blogs or Wikis for each framewor that will enable promotion better
 
 - REPL
+  - internal commands should just be classes that implement an interface and
+    should be auto discovered.
   - Add multi line support
-  - Allow creating of binded (using) objects
-  - Implement require to load file
-  - Impleament load to load assemblies
+  - Allow creating of binded (using) objects, i.e new FileIO('file'); // From javascript  

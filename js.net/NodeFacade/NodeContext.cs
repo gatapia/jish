@@ -18,15 +18,10 @@ namespace js.net.NodeFacade
 
     public void Initialise()
     {
-      InitialiseGlobalObjects();
+      new JSConsole(engine);
+      // engine.SetGlobal("exports", new Exports());
       // InitialiseGlobalFunctions();      
       LoadInitialNodeCore(new NodeProcess());
-    }    
-
-    private void InitialiseGlobalObjects()
-    {
-      engine.SetGlobal("console", new JSConsole());
-      // engine.SetGlobal("exports", new Exports());
     }
 
     private void InitialiseGlobalFunctions()

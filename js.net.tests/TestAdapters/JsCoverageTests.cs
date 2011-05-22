@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -40,21 +39,6 @@ namespace js.net.tests.TestAdapters
       Assert.AreEqual(0, p.ExitCode);
 
       Assert.IsTrue(File.Exists(instrumented + "jscoverage_source.js"));
-    }
-
-    [Test] public void TestRunCoverageWithRawTestAdapter()
-    {
-      TestInstrument();
-      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
-      {        
-        adapter.LoadSourceFile(@"resources\jscoverage\instrumented\jscoverage_source.js"); 
-        ITestResults results = adapter.RunTest(@"resources\jscoverage\jscoverage_test.js");         
-
-        Assert.AreEqual(0, results.Failed.Count(), results.ToString());
-        Assert.AreEqual(4, results.Passed.Count(), results.ToString());
-        
-        adapter.LoadSourceFile(@"resources\jscoverage.parser.js");         
-      }  
     }
 
     [Test] public void TestRunCoverageWithProperAdapter()

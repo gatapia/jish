@@ -59,7 +59,9 @@
     <Compile Include="Engine\IronJSEngineTests.cs" />
     <Compile Include="Engine\JSNetEngineTests.cs" />
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
-    <Compile Include="REPL\UsingTests.cs" />
+    <Compile Include="REPL\GlobalTests.cs" />
+    <Compile Include="REPL\TestingConsole.cs" />
+    <Compile Include="REPL\LoadAndUsingTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
     <Compile Include="TestAdapters\JSCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />

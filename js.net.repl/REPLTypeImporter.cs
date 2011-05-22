@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -9,21 +10,24 @@ namespace js.net.repl
 {
   public class REPLTypeImporter
   {    
+    private readonly IDictionary<string, Assembly> additionalLoadedAssemblies;
     private readonly IEngine engine;
     private readonly JSConsole console;
-    private readonly string typeName;
+    private readonly string typeName;    
 
-    public REPLTypeImporter(IEngine engine, string typeName, JSConsole console)
+    public REPLTypeImporter(IDictionary<string, Assembly> additionalLoadedAssemblies, IEngine engine, string typeName, JSConsole console)
     {
+      this.additionalLoadedAssemblies = additionalLoadedAssemblies;
       this.typeName = typeName;
       this.console = console;
       this.engine = engine;
     }
 
     public void ImportType()
-    {      
-      string className = typeName.Substring(typeName.LastIndexOf('.') + 1);
-      Type t = Type.GetType(typeName);
+    {
+      string typeNameWithoutAssembly = typeName.IndexOf(',') >= 0 ? typeName.Substring(0, typeName.IndexOf(',')) : typeName;
+      string className = typeNameWithoutAssembly.Substring(typeNameWithoutAssembly.LastIndexOf('.') + 1);
+      Type t = LoadType();
       if (t == null)
       {
         console.log("Could not find type: " + typeName);
@@ -32,22 +36,36 @@ namespace js.net.repl
       var dyn = new Dictionary<string, object>();
       ScrapeMethods(t, dyn);
       engine.SetGlobal(className, dyn);
-      console.log(typeName + " imported.  Use like: " + className + ".Method(args);");
+      console.log(typeNameWithoutAssembly + " imported.  Use like: " + className + ".Method(args);");
+    }
+
+    private Type LoadType()
+    {
+      if (typeName.IndexOf(',') > 0)
+      {
+        string assembly = typeName.Substring(typeName.IndexOf(',') + 1).Trim();
+        if (additionalLoadedAssemblies.ContainsKey(assembly))
+        {
+          return additionalLoadedAssemblies[assembly].GetType(typeName.Substring(0, typeName.IndexOf(',')));
+        }
+      }
+      return Type.GetType(typeName);
     }
 
     private void ScrapeMethods(Type targetType, IDictionary<string, object> methods)
     {
       foreach (MethodInfo mi in targetType.GetMethods(BindingFlags.Public | BindingFlags.Static))
-      {
-        // Note: Only adding one instance of each method (no overrides)
-        if (methods.ContainsKey(mi.Name)) { continue; }
+      {        
+        // Note: Only adding one instance of each method (no overrides) and 
+        // ignoring generic methods
+        if (methods.ContainsKey(mi.Name) || mi.GetGenericArguments().Length > 0) { continue; }
         methods.Add(mi.Name, ToDelegate(mi, null));
       }
     }
 
     public Delegate ToDelegate(MethodInfo mi, object target)
     {
-      if (mi == null) throw new ArgumentNullException("mi");
+      Trace.Assert(mi != null);
 
       Type delegateType;
 

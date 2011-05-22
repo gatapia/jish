@@ -25,8 +25,8 @@ namespace js.net.FrameworkAdapters
       Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.env.therubyracer.js"));
       Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.window.js"));
 
-      engine.SetGlobal("global", new JSGlobal());
-      engine.SetGlobal("console", new JSConsole());
+      new JSGlobal(engine).BindToGlobalScope();
+      new JSConsole(engine);
     }
 
 
@@ -47,6 +47,7 @@ namespace js.net.FrameworkAdapters
         throw;
       }
     }
+    
 
     public object Run(string script)
     {

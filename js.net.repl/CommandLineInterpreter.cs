@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.Util;
@@ -9,6 +11,9 @@ namespace js.net.repl
 {
   public class CommandLineInterpreter : ICommandLineInterpreter
   {
+    
+    private readonly IDictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
+
     private readonly JSConsole console;
     private readonly IEngine engine;
 
@@ -89,7 +94,11 @@ namespace js.net.repl
       }
       else if (input.StartsWith(".using"))
       {
-        ImportClassIntoGlobalNamespace(input.Substring(6));
+        ImportClassIntoGlobalNamespace(input.Substring(input.IndexOf('(')));
+      }
+      else if (input.StartsWith(".load"))
+      {
+        LoadAssembly(input.Substring(input.IndexOf('(')));
       }
       else
       {
@@ -127,10 +136,23 @@ for (var i in this) {
         );
     }
 
+    private void LoadAssembly(string input)
+    {
+      string assemblyFileName = ParseFileOrTypeName(input);
+      Assembly assembly = Assembly.LoadFrom(assemblyFileName);
+      loadedAssemblies[assembly.GetName().Name] = assembly;
+      console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
+    }    
+
     private void ImportClassIntoGlobalNamespace(string input)
     {
-      string nameSpaceAndClass = new Regex(@"([A-z\.])+").Match(input).Captures[0].Value;
-      new REPLTypeImporter(engine, nameSpaceAndClass, console).ImportType();
-    }    
+      string nameSpaceAndClass = ParseFileOrTypeName(input);
+      new REPLTypeImporter(loadedAssemblies, engine, nameSpaceAndClass, console).ImportType();
+    }
+    
+    private string ParseFileOrTypeName(string input)
+    {
+      return new Regex(@"([A-z0-9\., ])+").Match(input).Captures[0].Value.Trim();
+    }
   }
 }

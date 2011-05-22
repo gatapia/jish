@@ -48,10 +48,15 @@ namespace js.net.TestAdapters
       } catch (JavascriptException ex)
       {
         TestResults tr = new TestResults(fileName);
-        tr.AddFailedTest(fileName + " - " + ex.Message);
+        tr.AddFailedTest(fileName + " - " + GetNiceExceptionMessage(ex));
         return tr;
       }
       return GetResults(fileName);
+    }
+
+    private string GetNiceExceptionMessage(Exception exception)
+    {
+      return exception.Message.Replace("Exception in managed code invocation ", "");
     }
 
     public IEngine GetInternalEngine()

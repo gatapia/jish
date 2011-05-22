@@ -50,9 +50,8 @@ namespace js.net.repl
     {
       using (IEngine engine = new JSNetEngine())
       {
-        JSConsole console = new JSConsole();
-        engine.SetGlobal("console", console);
-        engine.SetGlobal("global", new JSGlobal());
+        JSConsole console = new JSConsole(engine);
+        new JSGlobal(engine).BindToGlobalScope();        
 
         CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
         cli.InitialiseConsole();

@@ -1,5 +1,4 @@
 
-
 goog.require('goog.functions');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');

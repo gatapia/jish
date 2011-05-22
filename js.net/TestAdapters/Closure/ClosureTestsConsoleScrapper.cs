@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using js.net.Engine;
 
 namespace js.net.TestAdapters.Closure
 {
@@ -9,7 +10,7 @@ namespace js.net.TestAdapters.Closure
   {
     private readonly TestResults results;
     private readonly bool silent;
-    public ClosureTestsConsoleScrapper(string testFixtureName, bool silent)
+    public ClosureTestsConsoleScrapper(string testFixtureName, bool silent, IEngine engine) : base(engine)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));      
 
@@ -22,7 +23,7 @@ namespace js.net.TestAdapters.Closure
       return results;
     }
 
-    public override string log(object message, bool newline = true)
+    public override string log(object message, bool newline)
     {
       Trace.Assert(message != null);
 
