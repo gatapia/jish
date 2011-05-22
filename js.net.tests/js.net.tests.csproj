@@ -60,6 +60,7 @@
     <Compile Include="Engine\JSNetEngineTests.cs" />
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
+    <Compile Include="jish\MultiLineTests.cs" />
     <Compile Include="jish\TestingConsole.cs" />
     <Compile Include="jish\LoadAndUsingTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />

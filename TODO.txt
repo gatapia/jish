@@ -7,5 +7,4 @@
 - jish
   - internal commands should just be classes that implement an interface and
     should be auto discovered.
-  - Add multi line support
   - Allow creating of binded (using) objects, i.e new FileIO('file'); // From javascript  

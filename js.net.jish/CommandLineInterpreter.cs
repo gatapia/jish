@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.Util;
+using Noesis.Javascript;
 
 namespace js.net.jish
 {
@@ -39,19 +40,52 @@ namespace js.net.jish
       return input;      
     }
 
+    private string bufferedCommand = String.Empty;
     public void ExecuteCommand(string input)
     {  
       if (InterceptSpecialCommands(input)) { return; }
       try
-      {        
-        object val = engine.Run(input);
-        if (val != null && (!(val is string) || (string) val != String.Empty)) console.log(val);
-        if (val != null) engine.SetGlobal("_", val);
+      {
+        bufferedCommand += input + '\n';
+        object returnValue;
+        if (!AttemptToRunCommand(out returnValue)) { return; } // Is multi-line
+        if (returnValue != null && (!(returnValue is string) || (string) returnValue != String.Empty))
+        {
+          console.log(returnValue);
+        }
+        if (returnValue != null) engine.SetGlobal("_", returnValue);
       }
       catch (Exception e)
       {
+        bufferedCommand = String.Empty;
         PrintExceptionMessage(e);
       }
+    }
+
+    private bool AttemptToRunCommand(out object returnValue)
+    {
+      returnValue = null;
+      try
+      {
+        returnValue = engine.Run("(" + bufferedCommand + ")");
+        bufferedCommand = String.Empty;
+      }  catch (JavascriptException)
+      {
+        try
+        {
+          returnValue = engine.Run(bufferedCommand);
+          bufferedCommand = String.Empty;
+        } catch (JavascriptException ex2)
+        {
+          string msg = ex2.Message;
+          if (msg.IndexOf("Unexpected token ILLEGAL") >= 0 || msg.IndexOf("SyntaxError") < 0)
+          {
+            throw;
+          }
+          return false;
+        }
+      }
+      return true;
     }
 
     public void RunFile(string file)
@@ -114,7 +148,7 @@ namespace js.net.jish
 
     private void Break()
     {
-      console.log("Not implemented...");
+      bufferedCommand = String.Empty;
     }
 
     private void Help()
