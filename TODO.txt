@@ -4,7 +4,7 @@
 - Find a way of getting more fail information from tests.
 - Blogs or Wikis for each framewor that will enable promotion better
 
-- REPL
+- jish
   - internal commands should just be classes that implement an interface and
     should be auto discovered.
   - Add multi line support

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.Util;
 
-namespace js.net.repl
+namespace js.net.jish
 {
   public class CommandLineInterpreter : ICommandLineInterpreter
   {
@@ -147,7 +147,7 @@ for (var i in this) {
     private void ImportClassIntoGlobalNamespace(string input)
     {
       string nameSpaceAndClass = ParseFileOrTypeName(input);
-      new REPLTypeImporter(loadedAssemblies, engine, nameSpaceAndClass, console).ImportType();
+      new TypeImporter(loadedAssemblies, engine, nameSpaceAndClass, console).ImportType();
     }
     
     private string ParseFileOrTypeName(string input)

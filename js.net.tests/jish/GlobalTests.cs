@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using js.net.Engine;
-using js.net.repl;
+using js.net.jish;
 using NUnit.Framework;
 
-namespace js.net.tests.REPL
+namespace js.net.tests.jish
 {
   [TestFixture] public class GlobalTests
   {

@@ -6,16 +6,16 @@ using System.Linq.Expressions;
 using System.Reflection;
 using js.net.Engine;
 
-namespace js.net.repl
+namespace js.net.jish
 {
-  public class REPLTypeImporter
+  public class TypeImporter
   {    
     private readonly IDictionary<string, Assembly> additionalLoadedAssemblies;
     private readonly IEngine engine;
     private readonly JSConsole console;
     private readonly string typeName;    
 
-    public REPLTypeImporter(IDictionary<string, Assembly> additionalLoadedAssemblies, IEngine engine, string typeName, JSConsole console)
+    public TypeImporter(IDictionary<string, Assembly> additionalLoadedAssemblies, IEngine engine, string typeName, JSConsole console)
     {
       this.additionalLoadedAssemblies = additionalLoadedAssemblies;
       this.typeName = typeName;

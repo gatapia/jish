@@ -1,8 +1,8 @@
 ﻿using js.net.Engine;
-using js.net.repl;
+using js.net.jish;
 using NUnit.Framework;
 
-namespace js.net.tests.REPL
+namespace js.net.tests.jish
 {
   [TestFixture] public class LoadAndUsingTests
   {
@@ -32,10 +32,10 @@ namespace js.net.tests.REPL
 
     [Test] public void TestUsingFullyQualifiedName()
     {
-      cli.ExecuteCommand(".using(js.net.tests.REPL.LoadAndUsingTests)");
-      Assert.AreEqual("Could not find type: js.net.tests.REPL.LoadAndUsingTests", console.GetLastMessage());      
-      cli.ExecuteCommand(".using(js.net.tests.REPL.LoadAndUsingTests, js.net.tests)");
-      Assert.IsTrue(console.GetLastMessage().StartsWith("js.net.tests.REPL.LoadAndUsingTests imported"));
+      cli.ExecuteCommand(".using(js.net.tests.jish.LoadAndUsingTests)");
+      Assert.AreEqual("Could not find type: js.net.tests.jish.LoadAndUsingTests", console.GetLastMessage());      
+      cli.ExecuteCommand(".using(js.net.tests.jish.LoadAndUsingTests, js.net.tests)");
+      Assert.IsTrue(console.GetLastMessage().StartsWith("js.net.tests.jish.LoadAndUsingTests imported"));
     }
 
     

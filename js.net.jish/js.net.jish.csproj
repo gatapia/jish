@@ -8,8 +8,8 @@
     <ProjectGuid>{DA40C9AF-D43B-4E01-B89F-B249AC28C031}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>js.net.repl</RootNamespace>
-    <AssemblyName>js.net.repl</AssemblyName>
+    <RootNamespace>js.net.jish</RootNamespace>
+    <AssemblyName>js.net.jish</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -47,8 +47,8 @@
     <Compile Include="ICommandLineInterpreter.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="REPL.cs" />
-    <Compile Include="REPLTypeImporter.cs" />
+    <Compile Include="Jish.cs" />
+    <Compile Include="TypeImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\js.net\js.net.csproj">

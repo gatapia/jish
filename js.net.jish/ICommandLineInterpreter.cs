@@ -1,4 +1,4 @@
-﻿namespace js.net.repl
+﻿namespace js.net.jish
 {
   public interface ICommandLineInterpreter
   {

@@ -1,6 +1,6 @@
 ﻿using js.net.Engine;
 
-namespace js.net.tests.REPL
+namespace js.net.tests.jish
 {
   public class TestingConsole : JSConsole
   {

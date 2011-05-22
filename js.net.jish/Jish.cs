@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace js.net.repl
+namespace js.net.jish
 {
-  public class REPL
+  public class Jish
   {
     private readonly ICommandLineInterpreter interpretter;
 
-    public REPL(ICommandLineInterpreter interpretter)
+    public Jish(ICommandLineInterpreter interpretter)
     {
       this.interpretter = interpretter;
     }
