@@ -63,6 +63,7 @@
     <Compile Include="jish\MultiLineTests.cs" />
     <Compile Include="jish\TestingConsole.cs" />
     <Compile Include="jish\LoadAndUsingTests.cs" />
+    <Compile Include="Node\NodeTestSuite.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
     <Compile Include="TestAdapters\JSCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />

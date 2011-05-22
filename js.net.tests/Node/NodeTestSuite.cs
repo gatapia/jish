@@ -4,7 +4,7 @@ using js.net.Engine;
 using js.net.NodeFacade;
 using NUnit.Framework;
 
-namespace js.net.node.tests
+namespace js.net.tests.Node
 {
   [TestFixture, Ignore("Ignore, as node stuff is totally experimental and broken")] public class NodeTestSuite
   {
