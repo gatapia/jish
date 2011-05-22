@@ -11,8 +11,6 @@ namespace js.net.TestAdapters.Jasmine
   {
     private readonly string jasminJsFile;
 
-    public bool Silent { get; set; }
-
     public JasmineTestAdapter(SimpleDOMAdapter js, string jasminJsFile) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(jasminJsFile));

@@ -61,6 +61,7 @@
     <Compile Include="Engine\IEngineFactory.cs" />
     <Compile Include="FrameworkAdapters\PathLoader.cs" />
     <Compile Include="TestAdapters\AbstractTestAdapter.cs" />
+    <Compile Include="TestAdapters\Closure\ClosureTestsConsoleScrapper.cs" />
     <Compile Include="TestAdapters\CoverageResultsBase.cs" />
     <Compile Include="TestAdapters\ICoverageAdapterFactory.cs" />
     <Compile Include="TestAdapters\ICoverageAdapter.cs" />
@@ -71,15 +72,14 @@
     <Compile Include="TestAdapters\Jasmine\JasmineTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\TotalCoverageResults.cs" />
     <Compile Include="TestAdapters\FileCoverageResults.cs" />
-    <Compile Include="TestAdapters\JsCoverage\JsCoverageTestAdapter.cs" />
-    <Compile Include="TestAdapters\JsCoverage\JsCoverageTestAdapterFactory.cs" />
-    <Compile Include="TestAdapters\JsUnit\JsUnitTestAdapter.cs" />
-    <Compile Include="TestAdapters\JsUnit\JsUnitTestAdapterFactory.cs" />
+    <Compile Include="TestAdapters\JSCoverage\JSCoverageTestAdapter.cs" />
+    <Compile Include="TestAdapters\JSCoverage\JSCoverageTestAdapterFactory.cs" />
+    <Compile Include="TestAdapters\JSUnit\JSUnitTestAdapter.cs" />
+    <Compile Include="TestAdapters\JSUnit\JSUnitTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\QUnit\QUnitTestAdapter.cs" />
     <Compile Include="TestAdapters\QUnit\QUnitTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\TestResults.cs" />
     <Compile Include="TestAdapters\Closure\ClosureTestAdapter.cs" />
-    <Compile Include="TestAdapters\Closure\ClosureTestsConsoleScrapper.cs" />
     <Compile Include="TestAdapters\TestResultsStringFormatter.cs" />
     <Compile Include="TestAdapters\TestSuiteResults.cs" />
     <Compile Include="Engine\IEngine.cs" />
@@ -108,15 +108,9 @@
     <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
     <EmbeddedResource Include="resources\env.therubyracer.js" />
     <EmbeddedResource Include="resources\window.js" />
-    <EmbeddedResource Include="resources\jscoverage.parser.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <Content Include="resources\jasmine.reporter.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\jsunit.testmanager.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="resources\jscoverage.parser.js" />
+    <EmbeddedResource Include="resources\jasmine.reporter.js" />
+    <EmbeddedResource Include="resources\jsunit.testmanager.js" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

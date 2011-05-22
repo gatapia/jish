@@ -5,8 +5,8 @@ using js.net.FrameworkAdapters.Closure;
 using js.net.TestAdapters;
 using js.net.TestAdapters.Closure;
 using js.net.TestAdapters.Jasmine;
-using js.net.TestAdapters.JsCoverage;
-using js.net.TestAdapters.JsUnit;
+using js.net.TestAdapters.JSCoverage;
+using js.net.TestAdapters.JSUnit;
 using js.net.TestAdapters.QUnit;
 
 namespace js.net
@@ -15,16 +15,16 @@ namespace js.net
   public static class JSNet
   {
     static JSNet()
-    {      
+    {            
       DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
       def.AssertUiEnabled = false; // No silly dialogs
       Trace.Listeners.Clear();
       Trace.Listeners.Add(def);
     }
 
-    public static ICoverageAdapter JsCoverage(ITestAdapter testAdapter)
+    public static ICoverageAdapter JSCoverage(ITestAdapter testAdapter)
     {
-      JsCoverageTestAdapter jsCoverage = new JsCoverageTestAdapter(testAdapter);
+      JSCoverageTestAdapter jsCoverage = new JSCoverageTestAdapter(testAdapter);
       return jsCoverage;
     }
 
@@ -43,12 +43,12 @@ namespace js.net
 
     public static ITestAdapter JSUnit(string jsUnitCoreFile)
     {
-      return new JsUnitTestAdapter(GetSimpleDOMAdapter(), jsUnitCoreFile);
+      return new JSUnitTestAdapter(GetSimpleDOMAdapter(), jsUnitCoreFile);
     }
 
     public static TestSuiteRunner JSUnitTestSuiteRunner(string jsUnitCoreFile)
     {
-      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
+      JSUnitTestAdapterFactory fact = new JSUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 

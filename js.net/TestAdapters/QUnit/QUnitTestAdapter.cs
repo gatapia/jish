@@ -10,8 +10,6 @@ namespace js.net.TestAdapters.QUnit
   {
     private readonly string qUnitJs;
 
-    public bool Silent { get; set; }
-
     public QUnitTestAdapter(SimpleDOMAdapter js, string qUnitJs) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));

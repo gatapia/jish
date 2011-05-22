@@ -9,6 +9,7 @@ namespace js.net.Util
   {
     public string ReadEmbeddedResourceTextContents(string resourceName)
     {
+      Console.WriteLine(String.Join(", ", Assembly.GetExecutingAssembly().GetManifestResourceNames()));
       Trace.Assert(Array.IndexOf(Assembly.GetExecutingAssembly().GetManifestResourceNames(), resourceName) >= 0, 
         String.Join(", ", Assembly.GetExecutingAssembly().GetManifestResourceNames()));
 

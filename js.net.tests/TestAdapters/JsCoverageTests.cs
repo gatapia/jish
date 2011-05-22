@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters
 {
-  [TestFixture] public class JsCoverageTests
+  [TestFixture] public class JSCoverageTests
   {
     const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";    
 
@@ -60,7 +60,7 @@ namespace js.net.tests.TestAdapters
     [Test] public void TestRunCoverageWithProperAdapter()
     {
       TestInstrument();
-      using (ICoverageAdapter adapter = JSNet.JsCoverage(JSNet.ClosureLibrary(basejsfile)))
+      using (ICoverageAdapter adapter = JSNet.JSCoverage(JSNet.ClosureLibrary(basejsfile)))
       {        
         adapter.LoadSourceFile(@"resources\jscoverage\instrumented\jscoverage_source.js"); 
         ICoverageResults results = adapter.RunCoverage(@"resources\jscoverage\jscoverage_test.js");         

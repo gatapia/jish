@@ -3,12 +3,12 @@ using System.IO;
 using System.Linq;
 using js.net.Engine;
 using js.net.TestAdapters;
-using js.net.TestAdapters.JsUnit;
+using js.net.TestAdapters.JSUnit;
 using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters
 {
-  [TestFixture] public class JsUnitTests
+  [TestFixture] public class JSUnitTests
   {
     private const string jsUnitCoreFile = @"C:\dev\libs\jsunit\app\jsUnitCore.js";
 
@@ -42,7 +42,7 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunEntireJSUnitTestSuite()
     {
-      JsUnitTestAdapterFactory fact = new JsUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
+      JSUnitTestAdapterFactory fact = new JSUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
       string[] files = GetTestSuiteFiles();
       TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
       Assert.IsNotNull(results);

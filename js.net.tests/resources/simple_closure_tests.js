@@ -745,7 +745,7 @@ function testGlobalEval() {
   assertEquals('Global should not have changed', 125, goog.global.foofoofoo);
 
   // NOTE(user): foofoofoo would normally be available in the function scope,
-  // via the scope chain, but the JsUnit framework seems to do something weird
+  // via the scope chain, but the JSUnit framework seems to do something weird
   // which makes it not work.
 }
 

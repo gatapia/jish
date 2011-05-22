@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using js.net.Engine;
 
-namespace js.net.TestAdapters.JsCoverage
+namespace js.net.TestAdapters.JSCoverage
 {
-  public class JsCoverageTestAdapter : ICoverageAdapter
+  public class JSCoverageTestAdapter : ICoverageAdapter
   {
     private readonly ITestAdapter testAdapter;
 
-    public JsCoverageTestAdapter(ITestAdapter testAdapter)
+    public JSCoverageTestAdapter(ITestAdapter testAdapter)
     {
       Trace.Assert(testAdapter != null);
 

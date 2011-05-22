@@ -57,10 +57,10 @@
     <Compile Include="Engine\JSNetEngineTests.cs" />
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
-    <Compile Include="TestAdapters\JsCoverageTests.cs" />
+    <Compile Include="TestAdapters\JSCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />
     <Compile Include="TestAdapters\QUnitTests.cs" />
-    <Compile Include="TestAdapters\JsUnitTests.cs" />
+    <Compile Include="TestAdapters\JSUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

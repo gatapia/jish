@@ -9,8 +9,6 @@ namespace js.net.TestAdapters.Closure
   {
     private ClosureTestsConsoleScrapper scrapper;
 
-    public bool Silent { get; set; }    
-
     public ClosureTestAdapter(ClosureAdapter js) : base(js) {}            
 
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
@@ -19,7 +17,7 @@ namespace js.net.TestAdapters.Closure
       Trace.Assert(File.Exists(sourceFile));
 
       string fileName = new FileInfo(sourceFile).Name;
-      scrapper = new ClosureTestsConsoleScrapper(fileName, Silent);        
+      scrapper = new ClosureTestsConsoleScrapper(fileName, true);        
       js.SetGlobal("console", scrapper); // Intercept console.log calls               
       js.Run("goog.require('goog.testing.jsunit');");
       js.Run(GetTestingJSFromFile(sourceFile)); // Load the file        

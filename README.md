@@ -9,7 +9,7 @@ Currently js.net supports several JavaScript unit testing frameworks:
 - [qUnit](http://docs.jquery.com/Qunit)
 - [jsUnit](http://www.jsunit.net/)
 - [Jasmine](http://pivotal.github.com/jasmine/)
-- [JsCoverage](http://siliconforks.com/jscoverage/)
+- [JSCoverage](http://siliconforks.com/jscoverage/)
 
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 
@@ -77,7 +77,7 @@ Example:
         // Code must be instrumented first (use the native instrumenter).
         Process p = Process.Start("jscoverage.exe", "src\ instrumented\").WaitForExit();
 
-        using (ICoverageAdapter adapter = JSNet.JsCoverage(JSNet.ClosureLibrary(basejsfile)))
+        using (ICoverageAdapter adapter = JSNet.JSCoverage(JSNet.ClosureLibrary(basejsfile)))
         {        
           adapter.LoadSourceFile(@"instrumented\instrumentedSourceFile.js"); 
           ICoverageResults results = adapter.RunCoverage(@"src\tests\sourceFileTests.js");         

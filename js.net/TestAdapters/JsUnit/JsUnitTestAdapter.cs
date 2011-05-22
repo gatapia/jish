@@ -5,15 +5,13 @@ using System.IO;
 using js.net.FrameworkAdapters;
 using js.net.Util;
 
-namespace js.net.TestAdapters.JsUnit
+namespace js.net.TestAdapters.JSUnit
 {
-  public class JsUnitTestAdapter : AbstractTestAdapter
+  public class JSUnitTestAdapter : AbstractTestAdapter
   {
     private readonly string jsUnitCoreFile;
 
-    public bool Silent { get; set; }
-
-    public JsUnitTestAdapter(SimpleDOMAdapter js, string jsUnitCoreFile) : base(js)
+    public JSUnitTestAdapter(SimpleDOMAdapter js, string jsUnitCoreFile) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
       Trace.Assert(File.Exists(jsUnitCoreFile));
