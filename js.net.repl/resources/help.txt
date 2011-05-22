@@ -1,0 +1,4 @@
+﻿.break  Sometimes you get stuck, this gets you out
+.clear  Break, and also clear the local context
+.exit   Exit the repl
+.help   Show repl options

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using js.net.Engine;
+using js.net.Util;
 
 namespace js.net.repl
 {
@@ -22,17 +23,47 @@ namespace js.net.repl
 
     public bool ReadAndExecuteCommand()
     {
-      Console.Write("js.net> ");
+      Console.Write("> ");
       string input = Console.ReadLine().Trim();
-      if (input.Equals(".exit")) { return false; }
+      if (InterceptSpecialCommands(input)) { return true;  }
+
       try
       {
         object val = engine.Run(input);
-        if (val != null) console.log(val);
+        if (val != null && val != String.Empty) console.log(val);
       }
       catch (Exception e)
       {
         Console.WriteLine(e.Message);
+      }
+      return true;
+    }
+
+    private bool InterceptSpecialCommands(string input)
+    {
+      if (input.Equals(".exit"))
+      {
+        Environment.Exit(0);        
+      } else if (input.Equals(".break"))
+      {
+        Console.WriteLine("Not implemented...");
+      } else if (input.Equals(".help"))
+      {
+        Console.WriteLine(new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.repl.resources.help.txt", GetType().Assembly));
+      } else if (input.Equals(".clear"))
+      {
+        Console.WriteLine("Clearing context...");
+        engine.Run(
+@"
+for (var i in this) {
+  if (i === 'console' || i === 'global') continue;
+  delete this[i];
+};
+"
+);        
+      } else
+      {
+        return false;
       }
       return true;
     }
