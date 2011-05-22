@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace js.net
 {
@@ -17,21 +18,47 @@ namespace js.net
     {
       Trace.Assert(message != null);
 
-      if (message is IDictionary<string, object>)
-      {
-        PrintObjectMessage((IDictionary<string, object>) message);
-      } else
-      {
-        Console.WriteLine(message);
-      }
+      Console.WriteLine(GetMessageObjectDescription(message));      
     }
 
-    private void PrintObjectMessage(IDictionary<string, object> objectMessage)
+    private string GetMessageObjectDescription(object msg)
     {
+      if (msg == null)
+      {
+        return String.Empty; 
+      }
+
+      if (msg is object[])
+      {
+        return GetArrayDescription(msg);
+      }
+
+      if (msg is IDictionary<string, object>)
+      {
+        return GetDictionaryDescription(msg);
+      }
+
+      return msg.ToString();
+    }
+
+    
+    private string GetArrayDescription(object msg)
+    {
+      object[] arr = (object[]) msg;
+      return String.Join(", ", arr.Select(GetMessageObjectDescription));
+    }
+
+    private string GetDictionaryDescription(object msg)
+    {
+      var objectMessage = (IDictionary<string, object>) msg;
+      var obj = new StringBuilder('{');
       foreach (var prop in objectMessage)
       {
-        Console.WriteLine(prop.Key + " - " + prop.Value);
+        obj.Append("\n ").Append(prop.Key).Append(": ");
+        obj.Append(GetMessageObjectDescription(prop.Value));        
       }
+      obj.Append("\n}");
+      return obj.ToString();
     }
   }
 }
