@@ -6,4 +6,4 @@
 
 - REPL
   - Add multi line support
-  - Add bindings to File helper finctions and others
+  - Allow creating of binded (using) objects
