@@ -25,12 +25,13 @@ namespace js.net.repl
     {
       Console.Write("> ");
       string input = Console.ReadLine().Trim();
-      if (InterceptSpecialCommands(input)) { return true;  }
-
+      if (String.IsNullOrWhiteSpace(input) || InterceptSpecialCommands(input)) { return true;  }
+      
       try
       {
         object val = engine.Run(input);
         if (val != null && val != String.Empty) console.log(val);
+        if (val != null) engine.SetGlobal("_", val);
       }
       catch (Exception e)
       {
