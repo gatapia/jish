@@ -1,20 +1,51 @@
-# js.net #
+# js.net - JavaScript the .Net way #
 
 ## Overview ##
-js.net provides a mechanism for running JavaScript from .net code.  It also 
-allows for JavaScript unit testing to be performed directly from Visual Studio.
-Currently js.net supports several JavaScript unit testing frameworks:
+js.net provides several tools for working with JavaScript in a '.Net' kind of 
+way:
+- A wrapper around V8:  Include js.net.dll in your project and you can run 
+ JavaScript straight from your .Net programs
+- A command line interface and JavaScript file interpreter for running 
+ JavaScript straight from your console.
+- A set of unit testing bindings for different JavaScript frameoworks that
+ allows you tu run your JavaScript tests straight from Visual Studio or your
+ favourite CI tools.
 
+## Using js.net in your code ##
+To use js.net simply add a reference to the js.net.dll in your project and
+initialise the Engine.
+
+Example:
+  
+    using (IEngine engine = new new JSNetEngine()) {
+      Console.WriteLine("Answer Is: " + engine.Run("1 + 1"));
+    }
+
+## Jish ##
+The JavaScript Interactive SHell is js.net's answer to Node.js's REPL.  It is 
+basically a command line interface to write JavaScript and interpret javascript 
+files.  To run Jish simple execute jish.exe
+
+Example:
+
+    jish.exe
+    > 1 + 1
+    2
+    > console.log('Hello World');
+    Hello World
+    >.exit
+    
+## Unit Testing
+One of js.net's primary and most stable feature is JavaScript unit testing 
+support (including tests that rely on the DOM).  Current supported frameworks 
+are:
 - [Closure](http://closure-library.googlecode.com/svn/docs/closure_goog_testing_jsunit.js.html)
 - [qUnit](http://docs.jquery.com/Qunit)
 - [jsUnit](http://www.jsunit.net/)
 - [Jasmine](http://pivotal.github.com/jasmine/)
 - [JSCoverage](http://siliconforks.com/jscoverage/)
 
-## Unit Testing
-One of js.net's primary and most stable feature is JavaScript unit testing 
-support (including tests that rely on the DOM).  To unit test your JavaScript 
-simply follow these steps:
+To unit test your JavaScript simply follow these steps:
 
 - Change the target framework of your unit test project to x86
   (Project Properties -> Build -> Playform Target -> x86)

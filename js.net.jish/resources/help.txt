@@ -2,5 +2,5 @@
 .clear                       Break, and also clear the local context
 .using(namespace.ClassName)  Imports all static functions into the global scope
 .load(assemblyLocation)      Loads a .Net assembly, you can then use .using to use types
-.exit                        Exit the repl
-.help                        Show repl options
+.exit                        Exit Jish
+.help                        Show Jish options

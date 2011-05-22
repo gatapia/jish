@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using js.net.Engine;
 
 namespace js.net.jish
 {
   /// <summary>
-  /// Note: This Jish is a straight clone from Node.js's Jish, cloned without
+  /// Note: This Jish is a straight clone from Node.js's REPL, cloned without
   /// premission or ceremony.  I'm sure they won't mind.
   /// 
   /// From the node.js (http://nodejs.org/docs/v0.4.8/api/repl.html) docs.
@@ -39,14 +42,44 @@ namespace js.net.jish
   public class MainRunner
   {
     static MainRunner()
-    {            
+    {                    
       DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
       def.AssertUiEnabled = false; // No silly dialogs
       Trace.Listeners.Clear();
-      Trace.Listeners.Add(def);
+      Trace.Listeners.Add(def);      
+
+      // No need to include the js.net.dll, just load the embedded resource.
+      CopyAssemblyToExecutable("js.net.dll", "js.net.jish.resources.js.net.dll", typeof(MainRunner).Assembly); 
     }
 
-    private static void Main(string[] args)
+    // This is copied from js.net.Util.EmbeddedResourcesUtils as at this stage 
+    // it is actually not available (as it lives in the js.net.dll)
+    private static void CopyAssemblyToExecutable(string fileName, string resourceName, Assembly assembly = null)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(fileName));
+      Trace.Assert(!String.IsNullOrWhiteSpace(resourceName));
+      if (assembly == null) assembly = Assembly.GetExecutingAssembly();
+
+      Trace.Assert(Array.IndexOf(assembly.GetManifestResourceNames(), resourceName) >= 0, 
+        String.Join(", ", assembly.GetManifestResourceNames()));
+
+      if (File.Exists(fileName))
+      {
+        return;
+      }
+
+      using (Stream s = assembly.GetManifestResourceStream(resourceName))
+      {        
+        using (FileStream fs = new FileStream(fileName, FileMode.Create))
+        {
+          byte[] b = new byte[s.Length];
+          s.Read(b, 0, b.Length);
+          fs.Write(b, 0, b.Length);
+        }
+      }            
+    }
+
+    [STAThread] private static void Main(string[] args)
     {
       using (IEngine engine = new JSNetEngine())
       {
@@ -56,14 +89,14 @@ namespace js.net.jish
         CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
         cli.InitialiseConsole();
 
-        var repl = new Jish(cli);
+        var jish = new Jish(cli);
         if (args == null || args.Length == 0)
         {
-          repl.StartREPL();
+          jish.StartJish();
         }
         else
         {
-          repl.ExecuteArgs(args);
+          jish.ExecuteArgs(args);
         }
       }
     }

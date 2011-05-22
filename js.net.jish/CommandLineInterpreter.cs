@@ -45,7 +45,7 @@ namespace js.net.jish
       try
       {        
         object val = engine.Run(input);
-        if (val != null && val != String.Empty) console.log(val);
+        if (val != null && (!(val is string) || (string) val != String.Empty)) console.log(val);
         if (val != null) engine.SetGlobal("_", val);
       }
       catch (Exception e)
@@ -120,7 +120,7 @@ namespace js.net.jish
     private void Help()
     {
       console.log(new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents(
-        "js.net.repl.resources.help.txt", GetType().Assembly));
+        "js.net.jish.resources.help.txt", GetType().Assembly));
     }
 
     private void ClearGlobalContext()

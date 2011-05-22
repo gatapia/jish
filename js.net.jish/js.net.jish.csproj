@@ -59,7 +59,13 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\help.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\js.net.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy $(SolutionDir)js.net\bin\js.net.dll $(ProjectDir)resources\</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

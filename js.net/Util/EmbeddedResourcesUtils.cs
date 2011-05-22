@@ -22,19 +22,21 @@ namespace js.net.Util
       }
     }
 
-    public void CopyAssemblyToExecutable(string fileName, string resourceName)
+    public void CopyAssemblyToExecutable(string fileName, string resourceName, Assembly assembly = null)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(fileName));
       Trace.Assert(!String.IsNullOrWhiteSpace(resourceName));
-      Trace.Assert(Array.IndexOf(Assembly.GetExecutingAssembly().GetManifestResourceNames(), resourceName) >= 0, 
-        String.Join(", ", Assembly.GetExecutingAssembly().GetManifestResourceNames()));
+      if (assembly == null) assembly = Assembly.GetExecutingAssembly();
+
+      Trace.Assert(Array.IndexOf(assembly.GetManifestResourceNames(), resourceName) >= 0, 
+        String.Join(", ", assembly.GetManifestResourceNames()));
 
       if (File.Exists(fileName))
       {
         return;
       }
 
-      using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+      using (Stream s = assembly.GetManifestResourceStream(resourceName))
       {
         using (FileStream fs = new FileStream(fileName, FileMode.Create))
         {

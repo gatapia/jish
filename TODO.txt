@@ -1,4 +1,3 @@
-- JSCoverage support
 - More libs
 - Fork the JavaScript.Net project as it appears to have died. Can we make it c#?
 - Find a way of getting more fail information from tests.

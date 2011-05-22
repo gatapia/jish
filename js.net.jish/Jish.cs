@@ -12,7 +12,7 @@ namespace js.net.jish
       this.interpretter = interpretter;
     }
 
-    public void StartREPL()
+    public void StartJish()
     {   
       while (true)
       {
