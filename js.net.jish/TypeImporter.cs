@@ -4,23 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using js.net.Engine;
 
 namespace js.net.jish
 {
   public class TypeImporter
   {    
-    private readonly IDictionary<string, Assembly> additionalLoadedAssemblies;
-    private readonly IEngine engine;
+    private readonly ICommandLineInterpreter cli;
     private readonly JSConsole console;
     private readonly string typeName;    
 
-    public TypeImporter(IDictionary<string, Assembly> additionalLoadedAssemblies, IEngine engine, string typeName, JSConsole console)
+    public TypeImporter(ICommandLineInterpreter cli, string typeName, JSConsole console)
     {
-      this.additionalLoadedAssemblies = additionalLoadedAssemblies;
       this.typeName = typeName;
       this.console = console;
-      this.engine = engine;
+      this.cli = cli;
     }
 
     public void ImportType()
@@ -35,7 +32,7 @@ namespace js.net.jish
       }
       var dyn = new Dictionary<string, object>();
       ScrapeMethods(t, dyn);
-      engine.SetGlobal(className, dyn);
+      cli.SetGlobal(className, dyn);
       console.log(typeNameWithoutAssembly + " imported.  Use like: " + className + ".Method(args);");
     }
 
@@ -44,9 +41,9 @@ namespace js.net.jish
       if (typeName.IndexOf(',') > 0)
       {
         string assembly = typeName.Substring(typeName.IndexOf(',') + 1).Trim();
-        if (additionalLoadedAssemblies.ContainsKey(assembly))
+        if (cli.GetLoadedAssemblies().ContainsKey(assembly))
         {
-          return additionalLoadedAssemblies[assembly].GetType(typeName.Substring(0, typeName.IndexOf(',')));
+          return cli.GetLoadedAssemblies()[assembly].GetType(typeName.Substring(0, typeName.IndexOf(',')));
         }
       }
       return Type.GetType(typeName);

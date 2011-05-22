@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.jish;
 using NUnit.Framework;
 

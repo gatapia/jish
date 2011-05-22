@@ -1,6 +1,0 @@
-﻿.break                       Sometimes you get stuck, this gets you out
-.clear                       Break, and also clear the local context
-.using(namespace.ClassName)  Imports all static functions into the global scope
-.load(assemblyLocation)      Loads a .Net assembly, you can then use .using to use types
-.exit                        Exit Jish
-.help                        Show Jish options

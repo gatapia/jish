@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using js.net.Engine;
-using js.net.Util;
+using js.net.jish.Command;
 using Noesis.Javascript;
 
 namespace js.net.jish
 {
   public class CommandLineInterpreter : ICommandLineInterpreter
   {
-    
-    private readonly IDictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
+    private readonly IList<ICommand> commands = new List<ICommand>();
+    protected IDictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
 
     private readonly JSConsole console;
     private readonly IEngine engine;
+    private string bufferedCommand = String.Empty;
 
     public CommandLineInterpreter(IEngine engine, JSConsole console)
     {
@@ -26,7 +28,17 @@ namespace js.net.jish
       this.engine = engine;
       this.console = console;
       
+      Initialise();
+
       console.log("Type '.help' for options.");
+    }
+
+    private void Initialise()
+    {
+      foreach (Type t in GetType().Assembly.GetTypes().Where(t => t != typeof (ICommand) && typeof (ICommand).IsAssignableFrom(t)))
+      {
+        commands.Add((ICommand) Activator.CreateInstance(t, this, console));
+      }
     }
 
     public virtual string ReadCommand()
@@ -39,11 +51,15 @@ namespace js.net.jish
       }
       return input;      
     }
-
-    private string bufferedCommand = String.Empty;
+    
     public void ExecuteCommand(string input)
     {  
-      if (InterceptSpecialCommands(input)) { return; }
+      if (input.IndexOf('.') == 0)
+      {
+        InterceptSpecialCommands(input);
+        return;
+      }
+
       try
       {
         bufferedCommand += input + '\n';
@@ -93,10 +109,30 @@ namespace js.net.jish
       engine.Run(File.ReadAllText(file));
     }
 
+    public void ClearBufferedCommand()
+    {
+      bufferedCommand = String.Empty;      
+    }
+
+    public IEnumerable<ICommand> GetCommands()
+    {
+      return commands;
+    }
+
+    public IDictionary<string, Assembly> GetLoadedAssemblies()
+    {
+      return loadedAssemblies;
+    } 
+
+    public void SetGlobal(string name, object valud)
+    {
+      engine.SetGlobal(name, valud);
+    }
+
     public void InitialiseConsole()
     {
       Console.TreatControlCAsInput = false;
-      Console.CancelKeyPress += (s, e) => Exit();
+      Console.CancelKeyPress += (s, e) => Environment.Exit(0);
     }    
 
     private void PrintExceptionMessage(Exception e)
@@ -108,85 +144,17 @@ namespace js.net.jish
       console.log(msg);
     }
 
-    private bool InterceptSpecialCommands(string input)
+    private void InterceptSpecialCommands(string input)
     {
-      if (input.Equals(".exit"))
-      {
-        Exit();
-      }
-      else if (input.Equals(".break"))
-      {
-        Break();
-      }
-      else if (input.Equals(".help"))
-      {
-        Help();
-      }
-      else if (input.Equals(".clear"))
-      {
-        ClearGlobalContext();
-      }
-      else if (input.StartsWith(".using"))
-      {
-        ImportClassIntoGlobalNamespace(input.Substring(input.IndexOf('(')));
-      }
-      else if (input.StartsWith(".load"))
-      {
-        LoadAssembly(input.Substring(input.IndexOf('(')));
-      }
-      else
-      {
-        return false;
-      }
-      return true;
-    }
 
-    private void Exit()
-    {
-      Environment.Exit(0);
-    }
-
-    private void Break()
-    {
-      bufferedCommand = String.Empty;
-    }
-
-    private void Help()
-    {
-      console.log(new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents(
-        "js.net.jish.resources.help.txt", GetType().Assembly));
-    }
-
-    private void ClearGlobalContext()
-    {
-      console.log("Clearing context...");
-      engine.Run(
-        @"
-for (var i in this) {
-  if (i === 'console' || i === 'global') continue;
-  delete this[i];
-};
-"
-        );
-    }
-
-    private void LoadAssembly(string input)
-    {
-      string assemblyFileName = ParseFileOrTypeName(input);
-      Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      loadedAssemblies[assembly.GetName().Name] = assembly;
-      console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
-    }    
-
-    private void ImportClassIntoGlobalNamespace(string input)
-    {
-      string nameSpaceAndClass = ParseFileOrTypeName(input);
-      new TypeImporter(loadedAssemblies, engine, nameSpaceAndClass, console).ImportType();
-    }
-    
-    private string ParseFileOrTypeName(string input)
-    {
-      return new Regex(@"([A-z0-9\., ])+").Match(input).Captures[0].Value.Trim();
-    }
+      string commandName = new Regex(@"\.([A-z0-9])+").Match(input).Captures[0].Value.Substring(1).Trim();
+      foreach (ICommand command in commands)
+      {
+        if (!command.GetName().Equals(commandName)) continue;
+        command.Execute(input);
+        return;
+      }
+      console.log("Could not find command: " + input);                  
+    }      
   }
 }

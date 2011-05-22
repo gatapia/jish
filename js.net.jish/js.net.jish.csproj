@@ -60,6 +60,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineInterpreter.cs" />
+    <Compile Include="Command\BreakCommand.cs" />
+    <Compile Include="Command\ClearCommand.cs" />
+    <Compile Include="Command\LoadCommand.cs" />
+    <Compile Include="Command\ParseInputCommand.cs" />
+    <Compile Include="Command\UsingCommand.cs" />
+    <Compile Include="Command\HelpCommand.cs" />
+    <Compile Include="Command\ExitCommand.cs" />
+    <Compile Include="Command\ICommand.cs" />
     <Compile Include="ICommandLineInterpreter.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,9 +79,6 @@
       <Project>{78104D21-D04B-468F-924E-5649C5ED52CE}</Project>
       <Name>js.net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resources\help.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\js.net.dll" />
