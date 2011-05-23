@@ -21,7 +21,7 @@ namespace js.net.FrameworkAdapters.Closure
     {
       base.Initialise();
 
-      new ClosureDependencies(this, baseJsFile, loader).Initialise();
+      new ClosureDependencies(this, baseJsFile, pathLoader).Initialise();
       LoadJSFile(baseJsFile);
     }
   }

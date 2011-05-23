@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using js.net.Engine;
+using js.net.FrameworkAdapters;
 using js.net.jish;
 using NUnit.Framework;
 
@@ -19,7 +20,7 @@ namespace js.net.tests.jish
       engine = new JSNetEngine();
       console = new TestingConsole(engine);      
       cli = new CommandLineInterpreter(engine, console);
-      new JSGlobal(engine).BindToGlobalScope();              
+      new JSGlobal(engine, new CWDFileLoader(engine)).BindToGlobalScope();              
     }
 
     [TestFixtureTearDown] public void TestFixtureTearDown()

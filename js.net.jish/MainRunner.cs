@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using js.net.Engine;
+using js.net.FrameworkAdapters;
 
 namespace js.net.jish
 {
@@ -84,7 +85,7 @@ namespace js.net.jish
       using (IEngine engine = new JSNetEngine())
       {
         JSConsole console = new JSConsole(engine);
-        new JSGlobal(engine).BindToGlobalScope();        
+        new JSGlobal(engine, new CWDFileLoader(engine)).BindToGlobalScope();        
 
         CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
         cli.InitialiseConsole();

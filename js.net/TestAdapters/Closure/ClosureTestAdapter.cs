@@ -17,7 +17,7 @@ namespace js.net.TestAdapters.Closure
       Trace.Assert(File.Exists(sourceFile));
 
       string fileName = new FileInfo(sourceFile).Name;
-      scrapper = new ClosureTestsConsoleScrapper(fileName, true, GetInternalEngine());        
+      scrapper = new ClosureTestsConsoleScrapper(fileName, GetInternalEngine());        
       js.Run("goog.require('goog.testing.jsunit');");
       js.Run(GetTestingJSFromFile(sourceFile)); // Load the file        
       js.Run(

@@ -9,13 +9,11 @@ namespace js.net.TestAdapters.Closure
   public class ClosureTestsConsoleScrapper : JSConsole
   {
     private readonly TestResults results;
-    private readonly bool silent;
-    public ClosureTestsConsoleScrapper(string testFixtureName, bool silent, IEngine engine) : base(engine)
+    public ClosureTestsConsoleScrapper(string testFixtureName, IEngine engine) : base(engine)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));      
 
       results = new TestResults(testFixtureName);
-      this.silent = silent;
     }
 
     public TestResults GetResults()
@@ -27,7 +25,7 @@ namespace js.net.TestAdapters.Closure
     {
       Trace.Assert(message != null);
 
-      if (!silent) base.log(message, newline);
+      base.log(message, newline);
 
       string msg = message as string;
       if (!String.IsNullOrEmpty(msg)) ScrapeResultInformationFromMessage(msg);

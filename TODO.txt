@@ -1,9 +1,9 @@
-- Node interface
 - More unit testing frameworks
 - Fork the JavaScript.Net project as it appears to have died. Can we make it c#?
 - Find a way of getting more fail information from tests.
 - Blogs or Wikis for each framewor that will enable promotion better
 - Use linked assemblies instead of internal embedded referrence for deployment
+- Node interface
 
 - jish
   - Allow JS creating of bound objects, i.e new FileIO('file,txt');

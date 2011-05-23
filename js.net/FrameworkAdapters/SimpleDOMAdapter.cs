@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using js.net.Engine;
 using js.net.Util;
 
@@ -9,14 +7,16 @@ namespace js.net.FrameworkAdapters
 {
   public class SimpleDOMAdapter : IEngine
   {
-    protected readonly PathLoader loader = new PathLoader();
+    protected readonly PathLoader pathLoader = new PathLoader();
+    protected readonly CWDFileLoader fileLoader;
     protected IEngine engine;
 
     public SimpleDOMAdapter(IEngine engine)
     {
       Trace.Assert(engine != null);
 
-      this.engine = engine;                  
+      this.engine = engine;
+      fileLoader = new CWDFileLoader(engine);
     }
 
     public virtual void Initialise()
@@ -25,29 +25,16 @@ namespace js.net.FrameworkAdapters
       Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.env.therubyracer.js"));
       Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.window.js"));
 
-      new JSGlobal(engine).BindToGlobalScope();
+      new JSGlobal(engine, fileLoader).BindToGlobalScope();
       new JSConsole(engine);
     }
 
-
     public object LoadJSFile(string file)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(file));
-      Trace.Assert(File.Exists(file), "Could not find file: " + file);
-
-      string scriptContent = loader.LoadScriptContent(file);
-      if (String.IsNullOrWhiteSpace(scriptContent)) return null;
-      
-      try
-      {
-        return Run(scriptContent);
-      } catch (Exception e)
-      {
-        Console.WriteLine("Error running file: " + file + " - " + e.Message);
-        throw;
-      }
+      object returnValue = engine.Run(fileLoader.LoadJSFile(file));
+      fileLoader.ScriptFinnished();
+      return returnValue;
     }
-    
 
     public object Run(string script)
     {

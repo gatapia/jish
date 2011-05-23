@@ -51,9 +51,12 @@
     <Compile Include="Engine\IronJSEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FrameworkAdapters\CWDFileLoader.cs" />
+    <Compile Include="FrameworkAdapters\JSDomAdapter.cs" />
     <Compile Include="FrameworkAdapters\SimpleDOMAdapter.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureAdapter.cs" />
     <Compile Include="JSNet.cs" />
+    <Compile Include="NodeFacade\Modules\Buffer.cs" />
     <Compile Include="TestAdapters\AbstractTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\Closure\ClosureTestAdapterFactory.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureInterceptor.cs" />
