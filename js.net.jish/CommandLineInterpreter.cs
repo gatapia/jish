@@ -83,13 +83,13 @@ namespace js.net.jish
       returnValue = null;
       try
       {
-        returnValue = engine.Run("(" + bufferedCommand + ")");
+        returnValue = engine.Run("(" + bufferedCommand + ")", "jish");
         bufferedCommand = String.Empty;
       }  catch (JavascriptException)
       {
         try
         {
-          returnValue = engine.Run(bufferedCommand);
+          returnValue = engine.Run(bufferedCommand, "jish");
           bufferedCommand = String.Empty;
         } catch (JavascriptException ex2)
         {
@@ -106,7 +106,7 @@ namespace js.net.jish
 
     public void RunFile(string file)
     {
-      engine.Run(File.ReadAllText(file));
+      engine.Run(File.ReadAllText(file), new FileInfo(file).Name);
     }
 
     public void ClearBufferedCommand()

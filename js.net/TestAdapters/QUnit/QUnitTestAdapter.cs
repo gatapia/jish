@@ -27,11 +27,16 @@ namespace js.net.TestAdapters.QUnit
       // Initialise Framework
       js.Initialise(); 
       // Pre - qunit.js load
-      js.Run(@"location.protocol = 'file:';");
+      js.Run(@"
+location.protocol = 'file:';
+// Required as QUnit will not extend the window object if this is not set 
+// to undefined.
+exports = undefined; 
+", "QUniteTestAdapter.PreLoadFile");
       // Load qunit.js
-      js.LoadJSFile(qUnitJs);
+      js.LoadJSFile(qUnitJs, false);
       // Load <testfile>.js
-      js.Run(GetTestingJSFromFile(sourceFile)); 
+      js.Run(GetTestingJSFromFile(sourceFile), new FileInfo(sourceFile).Name); 
       // window.onload
       js.Run(
 @"
@@ -43,7 +48,7 @@ var event = document.createEvent('HTMLEvent');
 event.initEvent('load');
 window.dispatchEvent(event);
 "
-);
+, "QUniteTestAdapter.PostLoadFile");
     }
 
     protected override TestResults GetResults(string testFixtureName)

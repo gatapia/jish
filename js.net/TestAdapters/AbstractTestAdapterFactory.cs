@@ -14,9 +14,9 @@ namespace js.net.TestAdapters
 
     protected AbstractTestAdapterFactory(string frameworkJsFile, IEngineFactory engineFactory)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(frameworkJsFile));
-      Trace.Assert(File.Exists(frameworkJsFile));
-      Trace.Assert(engineFactory != null);
+      Trace.Assert(!String.IsNullOrWhiteSpace(frameworkJsFile), "frameworkJsFile required");
+      Trace.Assert(File.Exists(frameworkJsFile), "frameworkJsFile does not exist");
+      Trace.Assert(engineFactory != null, "engineFactory is null");
 
       this.frameworkJsFile = frameworkJsFile;
       this.engineFactory = engineFactory;
@@ -24,7 +24,7 @@ namespace js.net.TestAdapters
 
     public ITestAdapter CreateAdapter()
     {
-      Trace.Assert(engine == null);
+      Trace.Assert(engine == null, "Engine is null");
 
       engine = engineFactory.CreateEngine();      
       ITestAdapter adapter = CreateTestAdapter(engine, frameworkJsFile);

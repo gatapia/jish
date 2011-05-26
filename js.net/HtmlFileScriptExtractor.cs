@@ -25,7 +25,7 @@ namespace js.net
         html = html.Substring(html.IndexOf(">", html.IndexOf("<script")) + 1);
         js += "\n" + html.Substring(0, html.IndexOf("</script>"));
       }
-      File.WriteAllText(file.Replace(".html", ".debug.js").Replace(".htm", ".debug.js"), js);      
+      // File.WriteAllText(file.Replace(".html", ".debug.js").Replace(".htm", ".debug.js"), js);      
       return js;
     }
   }

@@ -21,13 +21,13 @@ namespace js.net.tests.Engine
 
     [Test] public void SimpleAddition()
     {      
-      Assert.AreEqual(2, engine.Run("1 + 1"));
+      Assert.AreEqual(2, engine.Run("1 + 1", "AbstractEngineTests.SimpleAddition"));
     }
 
     [Test] public void AccrossMultipleSessions()
     {      
-      engine.Run("var x = 1");
-      Assert.AreEqual(2, engine.Run("x + 1"));
+      engine.Run("var x = 1", "AbstractEngineTests.AccrossMultipleSessions");
+      Assert.AreEqual(2, engine.Run("x + 1", "AbstractEngineTests.AccrossMultipleSessions"));
     }
 
     [Test] public void ArrayReduce()
@@ -37,13 +37,13 @@ namespace js.net.tests.Engine
 [0,1,2,3,4].reduce(function(previousValue, currentValue, index, array){
   return previousValue + currentValue;
 });
-"));
+", "AbstractEngineTests.ArrayReduce"));
     }
 
     [Test] public void TestSetModifyAndGetGlobal()
     {
       engine.SetGlobal("x", 10);
-      engine.Run("x *= x;");
+      engine.Run("x *= x;", "AbstractEngineTests.TestSetModifyAndGetGlobal");
       Assert.AreEqual(100, engine.GetGlobal("x"));
     }
   }

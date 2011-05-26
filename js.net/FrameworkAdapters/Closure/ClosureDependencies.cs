@@ -41,24 +41,25 @@ namespace js.net.FrameworkAdapters.Closure
 
     private void LoadClosureBaseFile()
     {
-      ctx.LoadJSFile(baseJsFile);
+      ctx.LoadJSFile(baseJsFile, false);
     }
 
     private void InterceptWriteScript()
     {      
       ctx.SetGlobal("interceptor", interceptor);
       ctx.Run(
-@"goog.writeScriptTag_ = function(filename) {  
+@"
+goog.writeScriptTag_ = function(filename) {  
   var src = interceptor.GetScriptContentIfNotLoaded(null, filename);
   // null 'src' means already loaded, ignore
   if (src) { eval(src); } 
   return false;
-};");
+};", "ClosureDependencies.InterceptWriteScript");
     }
 
     private void LoadGoogDeps()
     {      
-      ctx.LoadJSFile(Path.Combine(basedir, "deps.js"));
+      ctx.LoadJSFile(Path.Combine(basedir, "deps.js"), false);
     }
   }
 }

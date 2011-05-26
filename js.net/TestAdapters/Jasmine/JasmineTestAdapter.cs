@@ -24,10 +24,10 @@ namespace js.net.TestAdapters.Jasmine
       Trace.Assert(File.Exists(testFile));
 
       js.Initialise();
-      js.LoadJSFile(jasminJsFile);
-      js.Run(GetTestingJSFromFile(testFile) + "; null;"); // Load tests into memory
+      js.LoadJSFile(jasminJsFile, false);
+      js.Run(GetTestingJSFromFile(testFile) + "; null;", new FileInfo(testFile).Name); // Load tests into memory
       string jasmineReporter = new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.resources.jasmine.reporter.js");
-      js.Run(jasmineReporter);
+      js.Run(jasmineReporter, "js.net.resources.jasmine.reporter.js");
     }
 
     protected override TestResults GetResults(string testFixtureName)

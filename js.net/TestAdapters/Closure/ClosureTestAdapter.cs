@@ -9,24 +9,35 @@ namespace js.net.TestAdapters.Closure
   {
     private ClosureTestsConsoleScrapper scrapper;
 
-    public ClosureTestAdapter(ClosureAdapter js) : base(js) {}            
+    public ClosureTestAdapter(ClosureAdapter js) : base(js) {}
 
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
       Trace.Assert(File.Exists(sourceFile));
 
-      string fileName = new FileInfo(sourceFile).Name;
-      scrapper = new ClosureTestsConsoleScrapper(fileName, GetInternalEngine());        
-      js.Run("goog.require('goog.testing.jsunit');");
-      js.Run(GetTestingJSFromFile(sourceFile)); // Load the file        
+      string fileName = new FileInfo(sourceFile).Name;      
+      scrapper = new ClosureTestsConsoleScrapper(fileName, GetInternalEngine());      
+      js.Run(@"
+var window = global.exports.html().createWindow(); 
+var top = window;
+var document = window.document;
+window.location = {
+  search: '',
+  href: '" + fileName + @"'
+};
+window.console = console;
+
+goog.require('goog.testing.jsunit');
+", "ClosureTestAdapter.PreLoadFile");            
+      js.Run(GetTestingJSFromFile(sourceFile), fileName); // Load the file        
       js.Run(
 @"
 var test = new goog.testing.TestCase('" + fileName + @"');
 test.autoDiscoverTests();
 G_testRunner.initialize(test);
 G_testRunner.execute();
-"); 
+", "ClosureTestAdapter.PostLoadFile"); 
     }
 
     protected override TestResults GetResults(string testFixtureName)

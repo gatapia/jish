@@ -24,10 +24,10 @@ namespace js.net.TestAdapters.JSUnit
       Trace.Assert(File.Exists(testFile));
 
       js.Initialise();
-      js.LoadJSFile(jsUnitCoreFile);
-      js.Run(GetTestingJSFromFile(testFile)); // Load tests into memory
+      js.LoadJSFile(jsUnitCoreFile, false);
+      js.Run(GetTestingJSFromFile(testFile), new FileInfo(testFile).Name); // Load tests into memory
       string testManager = new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.resources.jsunit.testmanager.js");
-      js.Run(testManager);
+      js.Run(testManager, "js.net.resources.jsunit.testmanager.js");
     }
 
     protected override TestResults GetResults(string testFixtureName)

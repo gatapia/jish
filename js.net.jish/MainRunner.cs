@@ -85,7 +85,7 @@ namespace js.net.jish
       using (IEngine engine = new JSNetEngine())
       {
         JSConsole console = new JSConsole(engine);
-        new JSGlobal(engine, new CWDFileLoader(engine)).BindToGlobalScope();        
+        new JSGlobal(engine, new CWDFileLoader(), new JSConsole(engine)).BindToGlobalScope();        
 
         CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
         cli.InitialiseConsole();

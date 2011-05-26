@@ -5,11 +5,11 @@ using js.net.Engine;
 
 namespace js.net.FrameworkAdapters.Closure
 {
-  public class ClosureAdapter : SimpleDOMAdapter
+  public class ClosureAdapter : JSDomAdapter
   {    
     private readonly string baseJsFile;
 
-    public ClosureAdapter(string baseJsFile, IEngine engine) : base(engine)
+    public ClosureAdapter(string baseJsFile, string jsDomSourceFile, IEngine engine) : base(engine, jsDomSourceFile)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(baseJsFile));
       Trace.Assert(File.Exists(baseJsFile));
@@ -22,7 +22,6 @@ namespace js.net.FrameworkAdapters.Closure
       base.Initialise();
 
       new ClosureDependencies(this, baseJsFile, pathLoader).Initialise();
-      LoadJSFile(baseJsFile);
     }
   }
 }

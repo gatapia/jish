@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using js.net.Engine;
 using js.net.TestAdapters;
@@ -9,6 +10,14 @@ namespace js.net.tests.TestAdapters
 {
   [TestFixture] public class QUnitTests
   {
+    static QUnitTests()
+    {
+      DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
+      def.AssertUiEnabled = false; // No silly dialogs
+      Trace.Listeners.Clear();
+      Trace.Listeners.Add(def);
+    }
+
     private const string qUnitJS = @"C:\dev\libs\qunit\qunit\qunit.js";
 
     [Test] public void RunSingleTestFile()

@@ -22,7 +22,7 @@ namespace js.net.Engine
       ctx = new CSharp.Context();
     }
 
-    public override object Run(string script)
+    public override object Run(string script, string fileName)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(script));
       Trace.Assert(ctx != null);

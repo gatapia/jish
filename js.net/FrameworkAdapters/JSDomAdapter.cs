@@ -1,7 +1,4 @@
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using js.net.Engine;
 using js.net.Util;
 
@@ -19,10 +16,9 @@ namespace js.net.FrameworkAdapters
     }
 
     public override void Initialise()
-    {
-      new JSConsole(engine);
-      new JSGlobal(engine, fileLoader).BindToGlobalScope();
-      LoadJSFile(jsDomSrcFile);
+    {      
+      new JSGlobal(engine, fileLoader, new JSConsole(engine)).BindToGlobalScope();
+      LoadJSFile(jsDomSrcFile, true);
     }    
   }
 }

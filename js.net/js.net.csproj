@@ -56,7 +56,6 @@
     <Compile Include="FrameworkAdapters\SimpleDOMAdapter.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureAdapter.cs" />
     <Compile Include="JSNet.cs" />
-    <Compile Include="NodeFacade\Modules\Buffer.cs" />
     <Compile Include="TestAdapters\AbstractTestAdapterFactory.cs" />
     <Compile Include="TestAdapters\Closure\ClosureTestAdapterFactory.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureInterceptor.cs" />
@@ -90,17 +89,6 @@
     <Compile Include="JSConsole.cs" />
     <Compile Include="JSGlobal.cs" />
     <Compile Include="HtmlFileScriptExtractor.cs" />
-    <Compile Include="NodeFacade\Modules\AbstractNodeModule.cs" />
-    <Compile Include="NodeFacade\Modules\Constants.cs" />
-    <Compile Include="NodeFacade\Modules\Evals.cs" />
-    <Compile Include="NodeFacade\NodeContext.cs" />
-    <Compile Include="NodeFacade\NodeExports.cs" />
-    <Compile Include="NodeFacade\NodeGlobalFunctions.cs" />
-    <Compile Include="NodeFacade\Modules\IOWatcher.cs" />
-    <Compile Include="NodeFacade\Modules\Natives.cs" />
-    <Compile Include="NodeFacade\NodeProcess.cs" />
-    <Compile Include="NodeFacade\Modules\StdIO.cs" />
-    <Compile Include="NodeFacade\Modules\Timer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAdapters\ITestAdapter.cs" />
     <Compile Include="TestAdapters\TestSuiteRunner.cs" />

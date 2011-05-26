@@ -2,41 +2,33 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using js.net.Engine;
 
 namespace js.net.FrameworkAdapters
 {
   public class CWDFileLoader
   {
     private string currentWorkingDirectory = String.Empty;
+
     private readonly Stack<string> oldWorkingDirectories = new Stack<string>();
-    private readonly IEngine engine;
 
-    public CWDFileLoader(IEngine engine)
+    public string GetFilePathFromCwdIfRequired(string file)
     {
-      this.engine = engine;
+      return GetFilePathFromCwdIfRequired(file, true); 
     }
 
-    public string LoadJSFile(string file)
-    {
-      return LoadJSFile(file, true); 
-    }
-
-    public string LoadJSFile(string file, bool setCwd)
+    public string GetFilePathFromCwdIfRequired(string file, bool setCwd)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
-      if (!String.IsNullOrWhiteSpace(currentWorkingDirectory))
-      {
-        file = Path.Combine(currentWorkingDirectory, file);
-      }
-      Trace.Assert(File.Exists(file), "Could not find file: " + file);
-      FileInfo fi = new FileInfo(file);
+      string currentFile = GetFilePath(file);
+      Trace.Assert(File.Exists(currentFile), "Could not find file: " + currentFile);
+
+      FileInfo fi = new FileInfo(currentFile);
       if (setCwd)
       {
         oldWorkingDirectories.Push(currentWorkingDirectory);
         currentWorkingDirectory = fi.Directory.FullName;
       }
-      string scriptContent = File.ReadAllText(file);
+      string scriptContent = File.ReadAllText(currentFile);
       if (String.IsNullOrWhiteSpace(scriptContent))
       {
         return null;
@@ -48,6 +40,27 @@ namespace js.net.FrameworkAdapters
     public void ScriptFinnished()
     {
       currentWorkingDirectory = oldWorkingDirectories.Pop();
+    }
+
+    public string GetFilePath(string file)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(file));
+      
+      if (file.Equals("cssom"))
+      {
+        file = @"C:\dev\libs\CSSOM\lib\index.js";
+      } else if (file.Equals("node-htmlparser/lib/node-htmlparser"))
+      {
+        file = @"C:\dev\libs\node-htmlparser\node-htmlparser.js";
+      }
+      if (String.IsNullOrWhiteSpace(new FileInfo(file).Extension)) { file += ".js"; }
+
+      string currentFile = file;
+      if (!String.IsNullOrWhiteSpace(currentWorkingDirectory) && file.IndexOf(':') < 0)
+      {
+        currentFile = Path.Combine(currentWorkingDirectory, file);
+      }
+      return currentFile;
     }
   }
 }

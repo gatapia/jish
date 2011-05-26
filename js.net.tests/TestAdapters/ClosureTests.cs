@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using js.net.TestAdapters;
 using NUnit.Framework;
@@ -9,22 +8,22 @@ namespace js.net.tests.TestAdapters
   [TestFixture] public class ClosureTests
   {
     const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";    
+    const string jsdomJsFile = @"C:\dev\libs\jsdom\lib\jsdom.js";
 
     [Test] public void RunJSFileTest()
     {
-      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile, jsdomJsFile))
       {
         ITestResults results = adapter.RunTest(@"resources\simple_closure_tests.js");         
 
-        // 7 tests known to fail
-        Assert.AreEqual(7, results.Failed.Count(), results.ToString());
-        Assert.Greater(results.Passed.Count(), 0, results.ToString());
+        Assert.AreEqual(0, results.Failed.Count(), results.ToString());
+        Assert.AreEqual(66, results.Passed.Count(), results.ToString());
       }            
     }    
 
     [Test] public void RunHtmlFileTest()
     {
-      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile, jsdomJsFile))
       {        
         ITestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
         
@@ -36,7 +35,7 @@ namespace js.net.tests.TestAdapters
     [Test, Ignore("Runs out of memory")] public void RunEntireClosureTestSuite()
     {
       string[] files = GetTestSuiteFiles();
-      TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile);      
+      TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile, jsdomJsFile);      
       TestSuiteResults results = runner.TestFiles(files);
 
       Assert.AreEqual(0, results.Failed.Count(), results.ToString());

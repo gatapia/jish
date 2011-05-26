@@ -33,7 +33,7 @@ namespace js.net.TestAdapters
       Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
       Trace.Assert(File.Exists(sourceFile));
 
-      js.LoadJSFile(sourceFile);
+      js.LoadJSFile(sourceFile, false);
     }
 
     public ITestResults RunTest(string testFile)
@@ -49,6 +49,7 @@ namespace js.net.TestAdapters
       {
         TestResults tr = new TestResults(fileName);
         tr.AddFailedTest(fileName + " - " + GetNiceExceptionMessage(ex));
+        Console.WriteLine("Exception: " + ex);
         return tr;
       }
       return GetResults(fileName);

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using js.net.Engine;
 using js.net.Util;
 
@@ -16,31 +17,30 @@ namespace js.net.FrameworkAdapters
       Trace.Assert(engine != null);
 
       this.engine = engine;
-      fileLoader = new CWDFileLoader(engine);
+      fileLoader = new CWDFileLoader();
     }
 
     public virtual void Initialise()
     {
       EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();
-      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.env.therubyracer.js"));
-      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.window.js"));
+      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.env.therubyracer.js"), "js.net.resources.env.therubyracer.js");
+      Run(embedded.ReadEmbeddedResourceTextContents("js.net.resources.window.js"), "js.net.resources.window.js");
 
-      new JSGlobal(engine, fileLoader).BindToGlobalScope();
-      new JSConsole(engine);
+      new JSGlobal(engine, fileLoader, new JSConsole(engine)).BindToGlobalScope();      
     }
 
-    public object LoadJSFile(string file)
-    {
-      object returnValue = engine.Run(fileLoader.LoadJSFile(file));
-      fileLoader.ScriptFinnished();
+    public object LoadJSFile(string file, bool setCwd)
+    {      
+      object returnValue = engine.Run(fileLoader.GetFilePathFromCwdIfRequired(file, setCwd), new FileInfo(file).Name);
+      if (setCwd) fileLoader.ScriptFinnished();
       return returnValue;
     }
 
-    public object Run(string script)
+    public object Run(string script, string fileName)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(script), "Script is empty");
 
-      return engine.Run(script);
+      return engine.Run(script, fileName);
     }
 
     public void SetGlobal(string name, object value)

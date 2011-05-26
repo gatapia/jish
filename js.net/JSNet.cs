@@ -28,16 +28,16 @@ namespace js.net
       return jsCoverage;
     }
 
-    public static ITestAdapter ClosureLibrary(string baseJsFile)
+    public static ITestAdapter ClosureLibrary(string baseJsFile, string jsDomSourceFile)
     {
-      ClosureAdapter adapter = new ClosureAdapter(baseJsFile, new JSNetEngine());
+      ClosureAdapter adapter = new ClosureAdapter(baseJsFile, jsDomSourceFile, new JSNetEngine());
       adapter.Initialise();
       return new ClosureTestAdapter(adapter);
     }
 
-    public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile)
+    public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile, string jsDomSourceFile)
     {
-      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, new DefaultEngineFactory());
+      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, jsDomSourceFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 

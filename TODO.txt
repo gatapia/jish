@@ -4,6 +4,7 @@
 - Blogs or Wikis for each framewor that will enable promotion better
 - Use linked assemblies instead of internal embedded referrence for deployment
 - Node interface
+- Better place for the Trace listener initialisation
 
 - jish
   - Allow JS creating of bound objects, i.e new FileIO('file,txt');

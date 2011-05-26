@@ -5,11 +5,15 @@ namespace js.net.TestAdapters.Closure
 {
   public class ClosureTestAdapterFactory : AbstractTestAdapterFactory
   {
-    public ClosureTestAdapterFactory(string baseJsFile, IEngineFactory engineFactory) : base(baseJsFile, engineFactory) {}
+    private readonly string jsDomSourceFile;
+    public ClosureTestAdapterFactory(string baseJsFile, string jsDomSourceFile, IEngineFactory engineFactory) : base(baseJsFile, engineFactory)
+    {
+      this.jsDomSourceFile = jsDomSourceFile;
+    }
 
     protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      ClosureAdapter closure = new ClosureAdapter(frameworkJsFile, engine);
+      ClosureAdapter closure = new ClosureAdapter(frameworkJsFile, jsDomSourceFile, engine);
       closure.Initialise();
       return new ClosureTestAdapter(closure);
     }

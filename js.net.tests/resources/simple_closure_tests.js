@@ -13,12 +13,10 @@ function tearDown() {
   goog.setCssNameMapping(undefined);
   stubs.reset();
   goog.bind = originalGoogBind;
-  console.log('tearDown');
 }
 
 function testLibrary() {
   assertNotUndefined("'goog' not loaded", goog);  
-  console.log('testLibrary passed');
 }
 
 function testProvide() {
@@ -33,22 +31,6 @@ function testProvide() {
   goog.provide('goog.test.name');
 
   delete goog.test;
-  
-  console.log('testProvide passed');
-}
-
-function testProvideStrictness() {
-  goog.provide('goog.xy');
-  assertProvideFails('goog.xy');
-
-  goog.provide('goog.xy.z');
-  assertProvideFails('goog.xy');
-
-  window['goog']['xyz'] = 'Bob';
-  assertProvideFails('goog.xyz');
-
-  delete goog.xy;
-  delete goog.xyz;
 }
 
 function assertProvideFails(namespace) {
@@ -177,32 +159,6 @@ function testTypeOf() {
   assertEquals('object', goog.typeOf(document.getElementsByName('*')));
 }
 
-function testTypeOfFramed() {
-  assertEquals('array', goog.typeOf(framedVars.array));
-  assertEquals('string', goog.typeOf(framedVars.string));
-  assertEquals('number', goog.typeOf(framedVars.number));
-  assertEquals('null', goog.typeOf(framedVars.nullVar));
-  assertEquals('undefined', goog.typeOf(framedVars.undefinedVar));
-  assertEquals('object', goog.typeOf(framedVars.object));
-  assertEquals('function', goog.typeOf(framedVars.functionVar));
-
-  // Opera throws when trying to do cross frame typeof on node lists.
-  // IE behaves very strange when it comes to DOM nodes on disconnected frames.
-}
-
-function testTypeOfFramed2() {
-  assertEquals('array', goog.typeOf(framedVars2.array));
-  assertEquals('string', goog.typeOf(framedVars2.string));
-  assertEquals('number', goog.typeOf(framedVars2.number));
-  assertEquals('null', goog.typeOf(framedVars2.nullVar));
-  assertEquals('undefined', goog.typeOf(framedVars2.undefinedVar));
-  assertEquals('object', goog.typeOf(framedVars2.object));
-  assertEquals('function', goog.typeOf(framedVars2.functionVar));
-
-  // Opera throws when trying to do cross frame typeof on node lists.
-  // IE behaves very strange when it comes to DOM nodes on disconnected frames.
-}
-
 function testIsDef() {
   var defined = 'foo';
   var nullVar = null;
@@ -242,8 +198,6 @@ function testIsArray() {
   var object = {a: 1, b: 2, c: 3};
   var nullVar = null;
   var notDefined;
-  var elem = document.getElementById('elem');
-  var text = document.getElementById('text').firstChild;
   var impostor = document.body.getElementsByTagName('BOGUS');
   impostor.push = Array.prototype.push;
   impostor.pop = Array.prototype.pop;
@@ -258,10 +212,6 @@ function testIsArray() {
   assertFalse('object should not be an array', goog.isArray(object));
   assertFalse('null should not be an array', goog.isArray(nullVar));
   assertFalse('undefined should not be an array', goog.isArray(notDefined));
-  assertFalse('NodeList should not be an array', goog.isArray(elem.childNodes));
-  assertFalse('TextNode should not be an array', goog.isArray(text));
-  assertTrue('Array of nodes should be an array',
-             goog.isArray([elem.firstChild, elem.lastChild]));
   assertFalse('An impostor should not be an array', goog.isArray(impostor));
 }
 
@@ -310,8 +260,6 @@ function testIsArrayLike() {
   var object = {a: 1, b: 2};
   var nullVar = null;
   var notDefined;
-  var elem = document.getElementById('elem');
-  var text = document.getElementById('text').firstChild;
 
   assertTrue('array should be array-like', goog.isArrayLike(array));
   assertTrue('obj w/numeric length should be array-like',
@@ -322,12 +270,6 @@ function testIsArrayLike() {
   assertFalse('null should not be array-like', goog.isArrayLike(nullVar));
   assertFalse('undefined should not be array-like',
       goog.isArrayLike(notDefined));
-  assertTrue('NodeList should be array-like',
-      goog.isArrayLike(elem.childNodes));
-  // TODO(user): Fix isArrayLike to return false for text nodes!
-  // assertFalse('TextNode should not be array-like', goog.isArrayLike(text));
-  assertTrue('Array of nodes should be array-like',
-      goog.isArrayLike([elem.firstChild, elem.lastChild]));
 }
 
 
@@ -655,7 +597,7 @@ function testBindJs() {
 
 function testBindNative() {
   if (Function.prototype.bind &&
-      Function.prototype.bind.toString().indexOf('native code') != -1) {
+      Function.prototype.bind.toString().indexOf('native code') != -1) {      
     assertEquals(
         1, goog.bindNative_(add, {valueOf: function() { return 1; }})());
     assertEquals(3, goog.bindNative_(add, null, 1, 2)());
@@ -833,21 +775,6 @@ function testInHtmlDocument() {
     assertFalse(goog.inHtmlDocument_());
     goog.global.document.write = function() {};
     assertTrue(goog.inHtmlDocument_());
-  } finally {
-    // Restore context to respect other tests.
-    goog.global = savedGoogGlobal;
-  }
-}
-
-function testLoadInNonHtmlNotThrows() {
-  var savedGoogGlobal = goog.global;
-  try {
-    goog.global = {};
-    goog.global.document = {};
-    assertFalse(goog.inHtmlDocument_());
-    // The goog code which is executed at load.
-    goog.findBasePath_();
-    goog.writeScriptTag_(goog.basePath + 'deps.js');
   } finally {
     // Restore context to respect other tests.
     goog.global = savedGoogGlobal;

@@ -9,6 +9,7 @@ namespace js.net.tests.jish
   [TestFixture] public class GlobalTests
   {
     const string command = "console.log('success');";
+
     private const string TEST_FILE = "test.js";
 
     private IEngine engine;
@@ -20,7 +21,7 @@ namespace js.net.tests.jish
       engine = new JSNetEngine();
       console = new TestingConsole(engine);      
       cli = new CommandLineInterpreter(engine, console);
-      new JSGlobal(engine, new CWDFileLoader(engine)).BindToGlobalScope();              
+      new JSGlobal(engine, new CWDFileLoader(), new JSConsole(engine)).BindToGlobalScope();              
     }
 
     [TestFixtureTearDown] public void TestFixtureTearDown()

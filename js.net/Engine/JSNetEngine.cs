@@ -20,12 +20,12 @@ namespace js.net.Engine
       ctx = new JavascriptContext();
     }
 
-    public override object Run(string script)
+    public override object Run(string script, string fileName)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(script));
       Trace.Assert(ctx != null);
 
-      return ctx.Run(script);
+      return ctx.Run(script, fileName);
     }
 
     public override void SetGlobal(string name, object value)
