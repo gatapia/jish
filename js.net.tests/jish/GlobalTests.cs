@@ -21,7 +21,7 @@ namespace js.net.tests.jish
       engine = new JSNetEngine();
       console = new TestingConsole(engine);      
       cli = new CommandLineInterpreter(engine, console);
-      new JSGlobal(engine, new CWDFileLoader(), new JSConsole(engine)).BindToGlobalScope();              
+      new JSGlobal(engine, new CWDFileLoader(), console).BindToGlobalScope();              
     }
 
     [TestFixtureTearDown] public void TestFixtureTearDown()
@@ -33,6 +33,7 @@ namespace js.net.tests.jish
     {      
       File.WriteAllText(TEST_FILE, command);
     }
+
     [TearDown] public void TearDown()
     {
       if (File.Exists(TEST_FILE)) File.Delete(TEST_FILE);

@@ -28,9 +28,7 @@ namespace js.net.jish
       this.engine = engine;
       this.console = console;
       
-      Initialise();
-
-      console.log("Type '.help' for options.");
+      Initialise();      
     }
 
     private void Initialise()
@@ -65,7 +63,7 @@ namespace js.net.jish
         bufferedCommand += input + '\n';
         object returnValue;
         if (!AttemptToRunCommand(out returnValue)) { return; } // Is multi-line
-        if (returnValue != null && (!(returnValue is string) || (string) returnValue != String.Empty))
+        if (IsLoggableReturnValue(returnValue))
         {
           console.log(returnValue);
         }
@@ -76,6 +74,14 @@ namespace js.net.jish
         bufferedCommand = String.Empty;
         PrintExceptionMessage(e);
       }
+    }
+
+    private bool IsLoggableReturnValue(object returnValue)
+    {
+      if (returnValue == null) return false;
+      if (returnValue is string && returnValue == String.Empty) return false;
+      if (returnValue is IDictionary<string, object> && !((IDictionary<string, object>)returnValue).Any()) return false;
+      return true;
     }
 
     private bool AttemptToRunCommand(out object returnValue)

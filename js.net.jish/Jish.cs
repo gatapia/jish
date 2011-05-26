@@ -29,7 +29,7 @@ namespace js.net.jish
         Console.WriteLine("Could not find " + file);
         return;
       }
-      interpretter.RunFile(file);      
+      interpretter.RunFile(file);            
     }    
   }
 }
