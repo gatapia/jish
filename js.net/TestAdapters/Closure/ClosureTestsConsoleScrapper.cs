@@ -19,7 +19,7 @@ namespace js.net.TestAdapters.Closure
       return results;
     }
 
-    public override string log(object message, bool newline)
+    public override void log(object message, bool newline)
     {
       Trace.Assert(message != null);
 
@@ -27,7 +27,6 @@ namespace js.net.TestAdapters.Closure
 
       string msg = message as string;
       if (!String.IsNullOrEmpty(msg)) ScrapeResultInformationFromMessage(msg);
-      return msg;
     }
 
     private void ScrapeResultInformationFromMessage(string message)

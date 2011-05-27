@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
-  [TestFixture] public class GlobalTests : AbstractJishTest
+  [TestFixture] public class MiscCommandsTests : AbstractJishTest
   {
     const string command = "console.log('success');";
 
@@ -22,6 +22,7 @@ namespace js.net.tests.jish
       if (File.Exists(TEST_FILE)) File.Delete(TEST_FILE);
     }
 
+ 
     [Test] public void TestReplRunFile()
     {
       cli.RunFile(TEST_FILE);

@@ -8,7 +8,7 @@ namespace js.net.FrameworkAdapters
 {
   public class CWDFileLoader
   {
-    private EmbeddedResourcesUtils resources = new EmbeddedResourcesUtils();
+    private readonly EmbeddedResourcesUtils resources = new EmbeddedResourcesUtils();
     private string currentWorkingDirectory = String.Empty;
 
     private readonly Stack<string> oldWorkingDirectories = new Stack<string>();
@@ -68,7 +68,12 @@ namespace js.net.FrameworkAdapters
         file = "js.net.resources.dom.CSSOM.lib.index.js";
       } else if (file.Equals("node-htmlparser/lib/node-htmlparser"))
       {
-        file = "js.net.resources.dom.node-htmlparser.node-htmlparser.js";
+        file = "js.net.resources.dom.node_htmlparser.node_htmlparser.js";
+      }
+      if (file.StartsWith("js.net.resources."))
+      {
+        currentWorkingDirectory = "js.net.resources.";
+        file = file.Replace(currentWorkingDirectory, "");
       }
       if (String.IsNullOrWhiteSpace(new FileInfo(file).Extension)) { file += ".js"; }
 
@@ -77,21 +82,24 @@ namespace js.net.FrameworkAdapters
       {        
         if (currentWorkingDirectory.StartsWith("js.net.")) // Is Resouce
         {
-          Console.WriteLine("currentWorkingDirectory: " + currentWorkingDirectory + " file: " + file);
+          // TODO: This is super ugly
           string tmpCurrentWorkingDirectory = currentWorkingDirectory.Replace('.', '\\');
           file = file.Replace("../", "{BACK}").Replace("./", "").Replace('/', '\\').Replace('.', '\\').Replace("{BACK}", "..\\");
-          Console.WriteLine("2 - tmpCurrentWorkingDirectory: " + tmpCurrentWorkingDirectory + " file: " + file);
           currentFile = Path.Combine(tmpCurrentWorkingDirectory, file);
-          Console.WriteLine("currentFile: " + currentFile);          
           currentFile = Path.GetFullPath(currentFile).Replace(Path.GetFullPath("."), "").Replace('\\', '.').Substring(1);
           currentFile = currentFile.Replace('\\', '.');
-          Console.WriteLine("done: " + currentFile);
+          if (Array.IndexOf(GetType().Assembly.GetManifestResourceNames(), currentFile) < 0) { throw new ApplicationException("Could not find resource: " + currentFile); }
         } else
         {
           currentFile = Path.Combine(currentWorkingDirectory, file);
         }
       }
       return currentFile;
+    }
+
+    public void ResetCwd()
+    {
+      currentWorkingDirectory = String.Empty;
     }
   }
 }

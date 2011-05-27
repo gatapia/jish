@@ -36,7 +36,7 @@ namespace js.net.jish
       console.log(typeNameWithoutAssembly + " imported.  Use like: " + className + ".Method(args);");
     }
 
-    private Type LoadType()
+    public Type LoadType()
     {
       if (typeName.IndexOf(',') > 0)
       {

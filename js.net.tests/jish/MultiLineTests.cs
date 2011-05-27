@@ -1,28 +1,10 @@
-﻿using js.net.Engine;
-using js.net.jish;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
-  [TestFixture] public class MultiLineTests
+  [TestFixture] public class MultiLineTests : AbstractJishTest
   {
-    private IEngine engine;
-    private ICommandLineInterpreter cli;
-    private TestingConsole console;
     
-    [SetUp] public void SetUp()
-    {
-      engine = new JSNetEngine();
-      console = new TestingConsole();      
-      engine.SetGlobal("console", console);
-      cli = new CommandLineInterpreter(engine, console);
-    }
-
-    [TearDown] public void TearDown()
-    {
-      engine.Dispose();
-    }
-
     [Test] public void TestProbelmaticCommand()
     {
       cli.ExecuteCommand("{a : 1}");      

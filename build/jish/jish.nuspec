@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>jish</id>
+    <version>0.0.1</version>
+    <authors>gatapia</authors>
+    <owners>gatapia</owners>
+    <licenseUrl>https://github.com/gatapia/js.net/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/gatapia/js.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+<description>
+jish - JavaScript Interactive Shell
+
+Build ontop of js.net, Jish aims to provide some shell utilities to run
+and interpret JavaScript commands and files.
+
+Jish also provides a way of loading .Net framework libraries into your scripts.
+</description>
+    <tags>JavaScript Shell</tags>    
+  </metadata>
+</package>

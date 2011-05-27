@@ -23,7 +23,7 @@
 
     public void Execute(string input)
     {
-      string nameSpaceAndClass = ParseFileOrTypeName(input);
+      string nameSpaceAndClass = ParseFileOrTypeName(input).Replace("\"", "").Replace("'", "").Trim();
       new TypeImporter(cli, nameSpaceAndClass, console).ImportType();
     }
   }

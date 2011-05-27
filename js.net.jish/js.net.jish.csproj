@@ -62,6 +62,7 @@
     <Compile Include="CommandLineInterpreter.cs" />
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
+    <Compile Include="Command\CreateCommand.cs" />
     <Compile Include="Command\LoadCommand.cs" />
     <Compile Include="Command\ParseInputCommand.cs" />
     <Compile Include="Command\UsingCommand.cs" />

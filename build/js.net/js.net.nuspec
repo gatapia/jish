@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>js.net</id>
+    <version>0.0.1</version>
+    <authors>gatapia</authors>
+    <owners>gatapia</owners>
+    <licenseUrl>https://github.com/gatapia/js.net/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/gatapia/js.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+<description>
+js.net provides several tools for working with JavaScript in a '.Net' kind of 
+way: 
+
+- A wrapper around V8: Include js.net.dll in your project and you can run 
+JavaScript straight from your .Net programs 
+- A set of unit testing bindings for different JavaScript frameoworks that 
+allows you to run your JavaScript tests straight from Visual Studio or your 
+favourite CI tools.
+</description>
+    <tags>JavaScript JSCovergage JSUnit Closure QUnit Jasmin</tags>    
+  </metadata>
+</package>

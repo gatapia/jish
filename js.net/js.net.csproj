@@ -103,45 +103,43 @@
     <EmbeddedResource Include="resources\jsglobal.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\dom\CSSOM\lib\clone.js">
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\clone.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSImportRule.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSImportRule.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSMediaRule.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSMediaRule.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSOM.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSOM.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSRule.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSRule.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSStyleDeclaration.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSStyleDeclaration.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSStyleRule.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSStyleRule.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\CSSStyleSheet.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\CSSStyleSheet.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\index.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\index.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\MediaList.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\MediaList.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\parse.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\parse.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\lib\StyleSheet.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\dom\CSSOM\lib\StyleSheet.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\CSSOM\MIT-LICENSE.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
+    <Content Include="resources\dom\CSSOM\MIT-LICENSE.txt" />
     <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom.js" />
     <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\domtohtml.js" />
     <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\htmlencoding.js" />
@@ -161,7 +159,7 @@
     <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\selectors\index.js" />
     <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\selectors\sizzle.js" />
     <EmbeddedResource Include="resources\dom\jsdom\LICENSE.txt" />
-    <EmbeddedResource Include="resources\dom\node-htmlparser\node-htmlparser.js" />
+    <EmbeddedResource Include="resources\dom\node_htmlparser\node_htmlparser.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\dom\jsdom\package.json" />

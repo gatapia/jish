@@ -8,7 +8,7 @@ namespace js.net.FrameworkAdapters
   public class JSDomAdapter : IEngine
   {
     protected readonly PathLoader pathLoader = new PathLoader();
-    protected readonly CWDFileLoader fileLoader;
+    protected readonly CWDFileLoader fileLoader = new CWDFileLoader();
     protected IEngine engine;
 
     public JSDomAdapter(IEngine engine)
@@ -16,13 +16,13 @@ namespace js.net.FrameworkAdapters
       Trace.Assert(engine != null);
 
       this.engine = engine;
-      fileLoader = new CWDFileLoader();
     }
 
     public virtual void Initialise()
     {
       new JSGlobal(engine, fileLoader, new JSConsole()).BindToGlobalScope();
       LoadJSFile("js.net.resources.dom.jsdom.lib.jsdom.js", true);
+      fileLoader.ResetCwd();
     }
 
     public object LoadJSFile(string file, bool setCwd)

@@ -8,11 +8,10 @@ namespace js.net.tests.jish
   {
     private readonly IList<string> messages = new List<string>();
 
-    public override string log(object message, bool newline)
+    public override void log(object message, bool newline)
     {
-      string realMessage = base.log(message, newline);
-      messages.Add(realMessage);
-      return realMessage;
+      base.log(message, newline);
+      messages.Add(message.ToString());
     }
 
     public string GetLastMessage()

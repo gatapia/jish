@@ -7,7 +7,7 @@ namespace js.net.jish.Command
     protected string ParseFileOrTypeName(string input)
     {
       input = input.Substring(input.IndexOf('('));
-      return new Regex(@"([A-z0-9\., ])+").Match(input).Captures[0].Value.Trim();
+      return new Regex(@"([A-z0-9\.\\, '""])+").Match(input).Captures[0].Value.Trim();
     }
   }
 }

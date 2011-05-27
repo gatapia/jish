@@ -1,34 +1,23 @@
-﻿using js.net.Engine;
-using js.net.jish;
+﻿using System.IO;
 using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
-  [TestFixture] public class LoadAndUsingTests
-  {
-    private IEngine engine;
-    private ICommandLineInterpreter cli;
-    private TestingConsole console;
-    
-    [SetUp] public void SetUp()
-    {
-      engine = new JSNetEngine();
-      console = new TestingConsole();
-      engine.SetGlobal("console", console);
-      cli = new CommandLineInterpreter(engine, console);
-    }
-
-    [TearDown] public void TearDown()
-    {
-      engine.Dispose();
-    }
-
-    [Test] public void TestUsingRecognisedRegardlessOfParenthesisOrQuotes(
-      [Values(".using(System.IO.File)", ".using('System.IO.File')", ".using(\"System.IO.File\")", ".using ('System.IO.File\")")] string input)
-    {       
-      // Values attribute not supported in the current resharper.
-      cli.ExecuteCommand(input);
+  [TestFixture] public class LoadAndUsingTests : AbstractJishTest
+  {    
+    [Test] public void TestUsingRecognisedRegardlessOfParenthesisOrQuotes() 
+    {             
+      cli.ExecuteCommand(".using(System.IO.File)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
+      console.Reset();
+
+      cli.ExecuteCommand(".using('System.IO.File')");
+      Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
+      console.Reset();
+
+      cli.ExecuteCommand(".using (\"System.IO.File\")");
+      Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
+      console.Reset();
     }
 
     [Test] public void TestUsingFullyQualifiedName()
@@ -56,6 +45,6 @@ namespace js.net.tests.jish
 
       cli.ExecuteCommand(".using(PicNet2.CollectionUtils, PicNet2)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("PicNet2.CollectionUtils imported"));
-    }
+    }    
   }
 }
