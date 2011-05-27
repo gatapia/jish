@@ -142,69 +142,29 @@
     <Content Include="resources\dom\CSSOM\MIT-LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\browser\domtohtml.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\browser\htmlencoding.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\browser\htmltodom.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\browser\index.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level1\core.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\core.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\events.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\index.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\languages\javascript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level2\style.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level3\core.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level3\events.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level3\html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\level3\index.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\selectors\index.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\lib\jsdom\selectors\sizzle.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\dom\jsdom\LICENSE.txt" />
-    <Content Include="resources\dom\node-htmlparser\node-htmlparser.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\domtohtml.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\htmlencoding.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\htmltodom.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\browser\index.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level1\core.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\core.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\events.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\html.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\index.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\languages\javascript.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level2\style.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level3\core.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level3\events.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level3\html.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\level3\index.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\selectors\index.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\lib\jsdom\selectors\sizzle.js" />
+    <EmbeddedResource Include="resources\dom\jsdom\LICENSE.txt" />
+    <EmbeddedResource Include="resources\dom\node-htmlparser\node-htmlparser.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\dom\jsdom\package.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="resources\dom\jsdom\package.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

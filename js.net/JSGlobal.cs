@@ -30,7 +30,7 @@ namespace js.net
     
     public string LoadFileContents(string file, bool setCwd)
     {            
-      return fileLoader.GetFilePathFromCwdIfRequired(file, setCwd);
+      return fileLoader.GetFileContentFromCwdIfRequired(file, setCwd);
     }
 
     public string GetFilePath(string file)

@@ -22,13 +22,12 @@ namespace js.net.FrameworkAdapters
     public virtual void Initialise()
     {
       new JSGlobal(engine, fileLoader, new JSConsole()).BindToGlobalScope();
-      if (!File.Exists(@"resources\dom\jsdom\lib\jsdom.js")) Console.WriteLine("Could not find: " + new FileInfo(@"resources\dom\jsdom\lib\jsdom.js").FullName);
-      LoadJSFile(@"resources\dom\jsdom\lib\jsdom.js", true);
+      LoadJSFile("js.net.resources.dom.jsdom.lib.jsdom.js", true);
     }
 
     public object LoadJSFile(string file, bool setCwd)
     {      
-      object returnValue = engine.Run(fileLoader.GetFilePathFromCwdIfRequired(file, setCwd), new FileInfo(file).Name);
+      object returnValue = engine.Run(fileLoader.GetFileContentFromCwdIfRequired(file, setCwd), new FileInfo(file).Name);
       if (setCwd) fileLoader.ScriptFinnished();
       return returnValue;
     }
