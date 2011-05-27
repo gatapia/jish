@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using js.net.Engine;
 
 namespace js.net
 {
   public class JSConsole
   {
-    public JSConsole(IEngine engine)
-    {
-      engine.SetGlobal("console", this);
-    }
-
     public void print(string error) { log(error); }
     public void error(string error) { log(error); }
     public void debug(string message) { log(message); }

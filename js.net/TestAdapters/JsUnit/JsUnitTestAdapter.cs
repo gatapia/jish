@@ -11,7 +11,7 @@ namespace js.net.TestAdapters.JSUnit
   {
     private readonly string jsUnitCoreFile;
 
-    public JSUnitTestAdapter(SimpleDOMAdapter js, string jsUnitCoreFile) : base(js)
+    public JSUnitTestAdapter(JSDomAdapter js, string jsUnitCoreFile) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
       Trace.Assert(File.Exists(jsUnitCoreFile));

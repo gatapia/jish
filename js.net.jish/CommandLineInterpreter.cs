@@ -79,7 +79,7 @@ namespace js.net.jish
     private bool IsLoggableReturnValue(object returnValue)
     {
       if (returnValue == null) return false;
-      if (returnValue is string && returnValue == String.Empty) return false;
+      if (returnValue is string && (string) returnValue == String.Empty) return false;
       if (returnValue is IDictionary<string, object> && !((IDictionary<string, object>)returnValue).Any()) return false;
       return true;
     }

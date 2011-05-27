@@ -10,7 +10,8 @@ namespace js.net.TestAdapters.QUnit
 
     protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engine);
+      JSDomAdapter domAdapter = new JSDomAdapter(engine);
+      domAdapter.Initialise();
       return new QUnitTestAdapter(domAdapter, frameworkJsFile);
     }
   }

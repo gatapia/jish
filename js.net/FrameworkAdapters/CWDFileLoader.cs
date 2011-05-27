@@ -48,10 +48,10 @@ namespace js.net.FrameworkAdapters
       
       if (file.Equals("cssom"))
       {
-        file = @"C:\dev\libs\CSSOM\lib\index.js";
+        file = new FileInfo(@"resources\dom\CSSOM\lib\index.js").FullName;
       } else if (file.Equals("node-htmlparser/lib/node-htmlparser"))
       {
-        file = @"C:\dev\libs\node-htmlparser\node-htmlparser.js";
+        file = new FileInfo(@"resources\dom\node-htmlparser\node-htmlparser.js").FullName;
       }
       if (String.IsNullOrWhiteSpace(new FileInfo(file).Extension)) { file += ".js"; }
 

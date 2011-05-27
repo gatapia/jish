@@ -19,7 +19,8 @@ namespace js.net.tests.jish
     [TestFixtureSetUp] public void TestFixtureSetUp()
     {
       engine = new JSNetEngine();
-      console = new TestingConsole(engine);      
+      console = new TestingConsole();      
+      engine.SetGlobal("console", console);
       cli = new CommandLineInterpreter(engine, console);
       new JSGlobal(engine, new CWDFileLoader(), console).BindToGlobalScope();              
     }

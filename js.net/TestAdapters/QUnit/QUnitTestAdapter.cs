@@ -10,7 +10,7 @@ namespace js.net.TestAdapters.QUnit
   {
     private readonly string qUnitJs;
 
-    public QUnitTestAdapter(SimpleDOMAdapter js, string qUnitJs) : base(js)
+    public QUnitTestAdapter(JSDomAdapter js, string qUnitJs) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));
       Trace.Assert(File.Exists(qUnitJs));
@@ -35,20 +35,17 @@ exports = undefined;
 ", "QUniteTestAdapter.PreLoadFile");
       // Load qunit.js
       js.LoadJSFile(qUnitJs, false);
-      // Load <testfile>.js
-      js.Run(GetTestingJSFromFile(sourceFile), new FileInfo(sourceFile).Name); 
-      // window.onload
+      // Override testDone
       js.Run(
 @"
 var globalResults = {};
 QUnit.testDone = function(testResults) {
   globalResults[testResults.name] = testResults.failed;
 };
-var event = document.createEvent('HTMLEvent');
-event.initEvent('load');
-window.dispatchEvent(event);
 "
 , "QUniteTestAdapter.PostLoadFile");
+      // Load <testfile>.js
+      js.Run(GetTestingJSFromFile(sourceFile), new FileInfo(sourceFile).Name); 
     }
 
     protected override TestResults GetResults(string testFixtureName)

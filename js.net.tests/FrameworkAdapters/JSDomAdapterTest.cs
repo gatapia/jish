@@ -6,12 +6,10 @@ namespace js.net.tests.FrameworkAdapters
 {
   [TestFixture] public class JSDomAdapterTest
   {
-    private const string jsDomSource = @"C:\dev\libs\jsdom\lib\jsdom.js";
-
-    [Test] public void TestLoad()
+    [Test] public void TestLoadJSDomAdapter()
     {
       IEngine engine = new JSNetEngine();
-      JSDomAdapter adapter = new JSDomAdapter(engine, jsDomSource);
+      JSDomAdapter adapter = new JSDomAdapter(engine);
       adapter.Initialise();
     }
   }

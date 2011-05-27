@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using js.net.Engine;
 
 namespace js.net.TestAdapters.Closure
 {
-  // TODO: We should not need a console scrapper to get results, we should
-  // just plug into the test runner.
   public class ClosureTestsConsoleScrapper : JSConsole
   {
     private readonly TestResults results;
-    public ClosureTestsConsoleScrapper(string testFixtureName, IEngine engine) : base(engine)
+
+    public ClosureTestsConsoleScrapper(string testFixtureName)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));      
 

@@ -53,7 +53,6 @@
     </Compile>
     <Compile Include="FrameworkAdapters\CWDFileLoader.cs" />
     <Compile Include="FrameworkAdapters\JSDomAdapter.cs" />
-    <Compile Include="FrameworkAdapters\SimpleDOMAdapter.cs" />
     <Compile Include="FrameworkAdapters\Closure\ClosureAdapter.cs" />
     <Compile Include="JSNet.cs" />
     <Compile Include="TestAdapters\AbstractTestAdapterFactory.cs" />
@@ -97,17 +96,125 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
-    <EmbeddedResource Include="resources\env.therubyracer.js" />
-    <EmbeddedResource Include="resources\window.js" />
     <EmbeddedResource Include="resources\jscoverage.parser.js" />
     <EmbeddedResource Include="resources\jasmine.reporter.js" />
     <EmbeddedResource Include="resources\jsunit.testmanager.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="resources\jsglobal.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\dom\CSSOM\lib\clone.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSImportRule.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSMediaRule.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSOM.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSRule.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSStyleDeclaration.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSStyleRule.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\CSSStyleSheet.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\MediaList.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\parse.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\lib\StyleSheet.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\CSSOM\MIT-LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\browser\domtohtml.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\browser\htmlencoding.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\browser\htmltodom.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\browser\index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level1\core.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\core.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\events.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\html.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\languages\javascript.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level2\style.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level3\core.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level3\events.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level3\html.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\level3\index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\selectors\index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\lib\jsdom\selectors\sizzle.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\dom\jsdom\LICENSE.txt" />
+    <Content Include="resources\dom\node-htmlparser\node-htmlparser.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\dom\jsdom\package.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

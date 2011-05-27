@@ -9,7 +9,7 @@ namespace js.net.FrameworkAdapters.Closure
   {    
     private readonly string baseJsFile;
 
-    public ClosureAdapter(string baseJsFile, string jsDomSourceFile, IEngine engine) : base(engine, jsDomSourceFile)
+    public ClosureAdapter(string baseJsFile, IEngine engine) : base(engine)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(baseJsFile));
       Trace.Assert(File.Exists(baseJsFile));

@@ -23,9 +23,7 @@ namespace js.net.TestAdapters
     }
 
     public ITestAdapter CreateAdapter()
-    {
-      Trace.Assert(engine == null, "Engine is null");
-
+    {      
       engine = engineFactory.CreateEngine();      
       ITestAdapter adapter = CreateTestAdapter(engine, frameworkJsFile);
       return adapter;

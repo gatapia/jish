@@ -8,11 +8,10 @@ namespace js.net.tests.TestAdapters
   [TestFixture] public class ClosureTests
   {
     const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";    
-    const string jsdomJsFile = @"C:\dev\libs\jsdom\lib\jsdom.js";
 
     [Test] public void RunJSFileTest()
     {
-      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile, jsdomJsFile))
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {
         ITestResults results = adapter.RunTest(@"resources\simple_closure_tests.js");         
 
@@ -23,23 +22,23 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunHtmlFileTest()
     {
-      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile, jsdomJsFile))
+      using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {        
         ITestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
         
         Assert.AreEqual(0, results.Failed.Count(), results.ToString());
-        Assert.Greater(results.Passed.Count(), 0, results.ToString());
+        Assert.AreEqual(71, results.Passed.Count(), results.ToString());
       }
     }    
         
     [Test, Ignore("Runs out of memory")] public void RunEntireClosureTestSuite()
     {
       string[] files = GetTestSuiteFiles();
-      TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile, jsdomJsFile);      
+      TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile);      
       TestSuiteResults results = runner.TestFiles(files);
 
       Assert.AreEqual(0, results.Failed.Count(), results.ToString());
-      Assert.Greater(results.Passed.Count(), 0, results.ToString());
+      Assert.AreEqual(500, results.Passed.Count(), results.ToString());
     }
 
     private string[] GetTestSuiteFiles()

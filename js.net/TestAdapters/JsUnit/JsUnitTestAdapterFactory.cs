@@ -9,7 +9,8 @@ namespace js.net.TestAdapters.JSUnit
 
     protected override ITestAdapter CreateTestAdapter(IEngine engine, string frameworkJsFile)
     {
-      SimpleDOMAdapter domAdapter = new SimpleDOMAdapter(engine);
+      JSDomAdapter domAdapter = new JSDomAdapter(engine);
+      domAdapter.Initialise();
       return new JSUnitTestAdapter(domAdapter, frameworkJsFile);
     }
   }

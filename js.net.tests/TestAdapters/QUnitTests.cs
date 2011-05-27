@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using js.net.Engine;
 using js.net.TestAdapters;
@@ -10,14 +9,6 @@ namespace js.net.tests.TestAdapters
 {
   [TestFixture] public class QUnitTests
   {
-    static QUnitTests()
-    {
-      DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
-      def.AssertUiEnabled = false; // No silly dialogs
-      Trace.Listeners.Clear();
-      Trace.Listeners.Add(def);
-    }
-
     private const string qUnitJS = @"C:\dev\libs\qunit\qunit\qunit.js";
 
     [Test] public void RunSingleTestFile()
@@ -26,12 +17,8 @@ namespace js.net.tests.TestAdapters
       {
         ITestResults results = adapter.RunTest(@"C:\dev\libs\qunit\test\test.js"); 
         
-        //Tests 'sync', 'setup' and 'basics' fail
-        Assert.AreEqual(3, results.Failed.Count());
-        Assert.AreEqual(22, results.Passed.Count());
-
-        Assert.IsNotNull(results);
-        Console.WriteLine(results);
+        Assert.AreEqual(2, results.Failed.Count());
+        Assert.AreEqual(23, results.Passed.Count());
       }            
     }
 
@@ -40,8 +27,9 @@ namespace js.net.tests.TestAdapters
       QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJS, new DefaultEngineFactory());
       string[] files = GetTestSuiteFiles();
       TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
-      Assert.IsNotNull(results);
-      Console.WriteLine(results); 
+      
+      Assert.AreEqual(2, results.Failed.Count());
+      Assert.AreEqual(38, results.Passed.Count());
     }
 
     private string[] GetTestSuiteFiles()

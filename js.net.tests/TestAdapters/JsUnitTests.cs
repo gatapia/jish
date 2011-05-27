@@ -45,8 +45,9 @@ namespace js.net.tests.TestAdapters
       JSUnitTestAdapterFactory fact = new JSUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
       string[] files = GetTestSuiteFiles();
       TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
-      Assert.IsNotNull(results);
-      Console.WriteLine(results); 
+            
+      Assert.AreEqual(51, results.Passed.Count());
+      Assert.AreEqual(22, results.Failed.Count());
     }
 
     private string[] GetTestSuiteFiles()

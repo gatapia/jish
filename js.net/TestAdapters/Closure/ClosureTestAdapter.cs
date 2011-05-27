@@ -17,17 +17,11 @@ namespace js.net.TestAdapters.Closure
       Trace.Assert(File.Exists(sourceFile));
 
       string fileName = new FileInfo(sourceFile).Name;      
-      scrapper = new ClosureTestsConsoleScrapper(fileName, GetInternalEngine());      
+      scrapper = new ClosureTestsConsoleScrapper(fileName);      
+      // Override default console
+      js.SetGlobal("console", scrapper); 
       js.Run(@"
-var window = global.exports.html().createWindow(); 
-var top = window;
-var document = window.document;
-window.location = {
-  search: '',
-  href: '" + fileName + @"'
-};
 window.console = console;
-
 goog.require('goog.testing.jsunit');
 ", "ClosureTestAdapter.PreLoadFile");            
       js.Run(GetTestingJSFromFile(sourceFile), fileName); // Load the file        

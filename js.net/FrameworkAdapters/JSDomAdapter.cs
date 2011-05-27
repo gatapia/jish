@@ -1,24 +1,62 @@
+using System;
 using System.Diagnostics;
+using System.IO;
 using js.net.Engine;
-using js.net.Util;
 
 namespace js.net.FrameworkAdapters
 {
-  public class JSDomAdapter : SimpleDOMAdapter
+  public class JSDomAdapter : IEngine
   {
-    private readonly string jsDomSrcFile;
+    protected readonly PathLoader pathLoader = new PathLoader();
+    protected readonly CWDFileLoader fileLoader;
+    protected IEngine engine;
 
-    public JSDomAdapter(IEngine engine, string jsDomSrcFile) : base(engine)
+    public JSDomAdapter(IEngine engine)
     {
       Trace.Assert(engine != null);
 
-      this.jsDomSrcFile = jsDomSrcFile;
+      this.engine = engine;
+      fileLoader = new CWDFileLoader();
     }
 
-    public override void Initialise()
+    public virtual void Initialise()
+    {
+      new JSGlobal(engine, fileLoader, new JSConsole()).BindToGlobalScope();
+      if (!File.Exists(@"resources\dom\jsdom\lib\jsdom.js")) Console.WriteLine("Could not find: " + new FileInfo(@"resources\dom\jsdom\lib\jsdom.js").FullName);
+      LoadJSFile(@"resources\dom\jsdom\lib\jsdom.js", true);
+    }
+
+    public object LoadJSFile(string file, bool setCwd)
     {      
-      new JSGlobal(engine, fileLoader, new JSConsole(engine)).BindToGlobalScope();
-      LoadJSFile(jsDomSrcFile, true);
-    }    
+      object returnValue = engine.Run(fileLoader.GetFilePathFromCwdIfRequired(file, setCwd), new FileInfo(file).Name);
+      if (setCwd) fileLoader.ScriptFinnished();
+      return returnValue;
+    }
+
+    public object Run(string script, string fileName)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(script), "Script is empty");
+
+      return engine.Run(script, fileName);
+    }
+
+    public void SetGlobal(string name, object value)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+
+      engine.SetGlobal(name, value);
+    }
+
+    public object GetGlobal(string name)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
+
+      return engine.GetGlobal(name);
+    }
+
+    public void Dispose()
+    {
+      if (engine != null) engine.Dispose();
+    }
   }
 }

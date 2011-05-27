@@ -43,12 +43,7 @@ namespace js.net.jish
   public class MainRunner
   {
     static MainRunner()
-    {                    
-      DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
-      def.AssertUiEnabled = false; // No silly dialogs
-      Trace.Listeners.Clear();
-      Trace.Listeners.Add(def);      
-
+    {                          
       // No need to include the js.net.dll, just load the embedded resource.
       CopyAssemblyToExecutable("js.net.dll", "js.net.jish.resources.js.net.dll", typeof(MainRunner).Assembly); 
     }
@@ -84,8 +79,8 @@ namespace js.net.jish
     {
       using (IEngine engine = new JSNetEngine())
       {
-        JSConsole console = new JSConsole(engine);
-        new JSGlobal(engine, new CWDFileLoader(), new JSConsole(engine)).BindToGlobalScope();        
+        JSConsole console = new JSConsole();
+        new JSGlobal(engine, new CWDFileLoader(), console).BindToGlobalScope();        
 
         CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
         cli.InitialiseConsole();

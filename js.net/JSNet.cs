@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using js.net.Engine;
+﻿using js.net.Engine;
 using js.net.FrameworkAdapters;
 using js.net.FrameworkAdapters.Closure;
 using js.net.TestAdapters;
@@ -14,36 +13,28 @@ namespace js.net
   // A helper utility class for easy use of the entire project
   public static class JSNet
   {
-    static JSNet()
-    {            
-      DefaultTraceListener def = (DefaultTraceListener) Trace.Listeners[0];
-      def.AssertUiEnabled = false; // No silly dialogs
-      Trace.Listeners.Clear();
-      Trace.Listeners.Add(def);
-    }
-
     public static ICoverageAdapter JSCoverage(ITestAdapter testAdapter)
     {
       JSCoverageTestAdapter jsCoverage = new JSCoverageTestAdapter(testAdapter);
       return jsCoverage;
     }
 
-    public static ITestAdapter ClosureLibrary(string baseJsFile, string jsDomSourceFile)
+    public static ITestAdapter ClosureLibrary(string baseJsFile)
     {
-      ClosureAdapter adapter = new ClosureAdapter(baseJsFile, jsDomSourceFile, new JSNetEngine());
+      ClosureAdapter adapter = new ClosureAdapter(baseJsFile, new JSNetEngine());
       adapter.Initialise();
       return new ClosureTestAdapter(adapter);
     }
 
-    public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile, string jsDomSourceFile)
+    public static TestSuiteRunner ClosureLibraryTestSuiteRunner(string baseJsFile)
     {
-      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, jsDomSourceFile, new DefaultEngineFactory());
+      ClosureTestAdapterFactory fact = new ClosureTestAdapterFactory(baseJsFile, new DefaultEngineFactory());
       return new TestSuiteRunner(fact);
     }
 
     public static ITestAdapter JSUnit(string jsUnitCoreFile)
     {
-      return new JSUnitTestAdapter(GetSimpleDOMAdapter(), jsUnitCoreFile);
+      return new JSUnitTestAdapter(CreateJSDomAdapter(), jsUnitCoreFile);
     }
 
     public static TestSuiteRunner JSUnitTestSuiteRunner(string jsUnitCoreFile)
@@ -54,7 +45,7 @@ namespace js.net
 
     public static ITestAdapter QUnit(string qUnitJsFile)
     {
-      return new QUnitTestAdapter(GetSimpleDOMAdapter(), qUnitJsFile);
+      return new QUnitTestAdapter(CreateJSDomAdapter(), qUnitJsFile);
     }
 
     public static TestSuiteRunner QUnitTestSuiteRunner(string qUnitJsFile)
@@ -65,7 +56,7 @@ namespace js.net
 
     public static ITestAdapter Jasmine(string jasmineJsFile)
     {
-      return new JasmineTestAdapter(GetSimpleDOMAdapter(), jasmineJsFile);
+      return new JasmineTestAdapter(CreateJSDomAdapter(), jasmineJsFile);
     }
 
     public static TestSuiteRunner JasmineTestSuiteRunner(string jasmineJsFile)
@@ -74,9 +65,9 @@ namespace js.net
       return new TestSuiteRunner(fact);
     }
     
-    private static SimpleDOMAdapter GetSimpleDOMAdapter()
+    private static JSDomAdapter CreateJSDomAdapter()
     {
-      SimpleDOMAdapter adapter = new SimpleDOMAdapter(new JSNetEngine());
+      JSDomAdapter adapter = new JSDomAdapter(new JSNetEngine());
       adapter.Initialise();
       return adapter;
     }

@@ -9,9 +9,9 @@ namespace js.net.TestAdapters
 {
   public abstract class AbstractTestAdapter : ITestAdapter
   {
-    protected readonly SimpleDOMAdapter js;    
+    protected readonly JSDomAdapter js;    
 
-    protected AbstractTestAdapter(SimpleDOMAdapter js)
+    protected AbstractTestAdapter(JSDomAdapter js)
     {
       Trace.Assert(js != null);
 
@@ -44,6 +44,16 @@ namespace js.net.TestAdapters
       string fileName = new FileInfo(testFile).Name;
       try
       {
+        js.Run(@"
+var window = global.exports.html().createWindow(); 
+var top = window;
+var document = window.document;
+var location = window.location = {
+  search: '',
+  href: '" + fileName + @"'
+};
+window.console = console;
+", "AbstractTestAdapter.RunTest");  
         PrepareFrameworkAndRunTest(testFile);
       } catch (JavascriptException ex)
       {
