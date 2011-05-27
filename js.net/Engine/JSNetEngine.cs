@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using js.net.Util;
 using Noesis.Javascript;
 
 namespace js.net.Engine
 {
   public class JSNetEngine : AbstractEngine
-  {    
-    static JSNetEngine()
-    {
-      // No need to include 2 assemblies, just load the embedded resource.
-      new EmbeddedResourcesUtils().
-        CopyAssemblyToExecutable("Noesis.Javascript.dll", "js.net.resources.Noesis.Javascript.dll"); 
-    }
+  {        
     private readonly JavascriptContext ctx;
 
     public JSNetEngine()
