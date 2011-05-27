@@ -95,7 +95,6 @@
     <Compile Include="Util\EmbeddedResourcesUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
     <EmbeddedResource Include="resources\jscoverage.parser.js" />
     <EmbeddedResource Include="resources\jasmine.reporter.js" />
     <EmbeddedResource Include="resources\jsunit.testmanager.js" />
