@@ -1211,7 +1211,7 @@ define('HTMLScriptElement', {
   init: function() {
     this.addEventListener('DOMNodeInsertedIntoDocument', function() {
       if (this.src) {
-        core.resourceLoader.load(this, this.src, this._eval);
+        core.resourceLoader.assembly(this, this.src, this._eval);
       }
       else {
         var src = this.sourceLocation || {},
@@ -1589,7 +1589,7 @@ define('HTMLFrameElement', {
           documentRoot: this._ownerDocument._documentRoot
         });
 
-        core.resourceLoader.load(this, value, function(html, filename) {
+        core.resourceLoader.assembly(this, value, function(html, filename) {
           this._contentDocument.write(html);
           this._contentDocument.close();
         });

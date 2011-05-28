@@ -1,11 +1,11 @@
 ﻿namespace js.net.jish.Command
 {
-  public class UsingCommand : ParseInputCommand, ICommand
+  public class StaticCommand : ParseInputCommand, ICommand
   {
     private readonly ICommandLineInterpreter cli;
     private readonly JSConsole console;
 
-    public UsingCommand(ICommandLineInterpreter cli, JSConsole console)
+    public StaticCommand(ICommandLineInterpreter cli, JSConsole console)
     {
       this.cli = cli;
       this.console = console;
@@ -13,7 +13,7 @@
 
     public string GetName()
     {
-      return "using";
+      return "static";
     }
 
     public string GetHelpDescription()

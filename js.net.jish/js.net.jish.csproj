@@ -63,9 +63,9 @@
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
     <Compile Include="Command\CreateCommand.cs" />
-    <Compile Include="Command\LoadCommand.cs" />
+    <Compile Include="Command\AssemblyCommand.cs" />
     <Compile Include="Command\ParseInputCommand.cs" />
-    <Compile Include="Command\UsingCommand.cs" />
+    <Compile Include="Command\StaticCommand.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />
     <Compile Include="Command\ICommand.cs" />

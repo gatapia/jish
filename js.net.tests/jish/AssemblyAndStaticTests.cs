@@ -1,41 +1,40 @@
-﻿using System.IO;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
-  [TestFixture] public class LoadAndUsingTests : AbstractJishTest
+  [TestFixture] public class AssemblyAndStaticTests : AbstractJishTest
   {    
     [Test] public void TestUsingRecognisedRegardlessOfParenthesisOrQuotes() 
     {             
-      cli.ExecuteCommand(".using(System.IO.File)");
+      cli.ExecuteCommand(".static(System.IO.File)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
       console.Reset();
 
-      cli.ExecuteCommand(".using('System.IO.File')");
+      cli.ExecuteCommand(".static('System.IO.File')");
       Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
       console.Reset();
 
-      cli.ExecuteCommand(".using (\"System.IO.File\")");
+      cli.ExecuteCommand(".static (\"System.IO.File\")");
       Assert.IsTrue(console.GetLastMessage().StartsWith("System.IO.File imported"));
       console.Reset();
     }
 
     [Test] public void TestUsingFullyQualifiedName()
     {
-      cli.ExecuteCommand(".using(js.net.tests.jish.LoadAndUsingTests)");
-      Assert.AreEqual("Could not find type: js.net.tests.jish.LoadAndUsingTests", console.GetLastMessage());      
-      cli.ExecuteCommand(".using(js.net.tests.jish.LoadAndUsingTests, js.net.tests)");
-      Assert.IsTrue(console.GetLastMessage().StartsWith("js.net.tests.jish.LoadAndUsingTests imported"));
+      cli.ExecuteCommand(".static(js.net.tests.jish.AssemblyAndStaticTests)");
+      Assert.AreEqual("Could not find type: js.net.tests.jish.AssemblyAndStaticTests", console.GetLastMessage());      
+      cli.ExecuteCommand(".static(js.net.tests.jish.AssemblyAndStaticTests, js.net.tests)");
+      Assert.IsTrue(console.GetLastMessage().StartsWith("js.net.tests.jish.AssemblyAndStaticTests imported"));
     }
 
     
     [Test] public void TestAssemblyLoad()
     {
-      cli.ExecuteCommand(".using(PicNet2.CryptoUtils, PicNet2)");
+      cli.ExecuteCommand(".static(PicNet2.CryptoUtils, PicNet2)");
       Assert.AreEqual("Could not find type: PicNet2.CryptoUtils, PicNet2", console.GetLastMessage());
-      cli.ExecuteCommand(@".load(..\..\..\lib\PicNet2.dll)");
+      cli.ExecuteCommand(@".assembly(..\..\..\lib\PicNet2.dll)");
       Assert.AreEqual("Assembly 'PicNet2' loaded.", console.GetLastMessage());
-      cli.ExecuteCommand(".using(PicNet2.CryptoUtils, PicNet2)");
+      cli.ExecuteCommand(".static(PicNet2.CryptoUtils, PicNet2)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("PicNet2.CryptoUtils imported"));
     }
 
@@ -43,7 +42,7 @@ namespace js.net.tests.jish
     {
       TestAssemblyLoad();
 
-      cli.ExecuteCommand(".using(PicNet2.CollectionUtils, PicNet2)");
+      cli.ExecuteCommand(".static(PicNet2.CollectionUtils, PicNet2)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("PicNet2.CollectionUtils imported"));
     }    
   }

@@ -15,7 +15,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestNoArgsConstructor()
     {
-      cli.ExecuteCommand(@".load(js.net.tests.dll)");      
+      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
       cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'test')");
       cli.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("No Args", console.GetLastMessage());
@@ -23,7 +23,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestCreateWithMultipleconstructorArgs()
     {
-      cli.ExecuteCommand(@".load(js.net.tests.dll)");      
+      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
       cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str', '1', 'test')");
       cli.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("String[str] and Int[1] Arg", console.GetLastMessage());
@@ -31,7 +31,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestCreateWithMultiplePossibleConstructors()
     {
-      cli.ExecuteCommand(@".load(js.net.tests.dll)");      
+      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
       cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str1', 'str2', 'test')");
       cli.ExecuteCommand("console.log(test.GetConstructorType());");
       Assert.AreEqual("String[str1] and String[str2] Arg", console.GetLastMessage());

@@ -76,7 +76,7 @@ core.Document.prototype.__defineGetter__('styleSheets', function() {
  * @see http://dev.w3.org/csswg/cssom/#requirements-on-user-agents-implementing0
  */
 function fetchStylesheet(url, sheet) {
-  core.resourceLoader.load(this, url, function(data, filename) {
+  core.resourceLoader.assembly(this, url, function(data, filename) {
     // TODO: abort if the content-type is not text/css, and the document is
     // in strict mode
     evaluateStylesheet.call(this, data, sheet, url);
