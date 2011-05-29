@@ -3,6 +3,7 @@
 ## Overview ##
 js.net provides several tools for working with JavaScript in a '.Net' kind of 
 way:
+
 - A wrapper around V8:  Include js.net.dll in your project and you can run 
  JavaScript straight from your .Net programs
 - A command line interface and JavaScript file interpreter for running 
@@ -10,6 +11,8 @@ way:
 - A set of unit testing bindings for different JavaScript frameoworks that
  allows you tu run your JavaScript tests straight from Visual Studio or your
  favourite CI tools.
+
+For full details see the [wiki](https://github.com/gatapia/js.net/wiki/)
 
 ## Using js.net in your code ##
 To use js.net simply add a reference to the js.net.dll in your project and

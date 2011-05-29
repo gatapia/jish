@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace js.net.jish
@@ -7,6 +8,7 @@ namespace js.net.jish
   public class TypeImporter
   {    
     private readonly IJishInterpreter jish;
+    private readonly DelegateBuilder delegateBuilder = new DelegateBuilder();
 
     public TypeImporter(IJishInterpreter jish)
     {      
@@ -23,20 +25,29 @@ namespace js.net.jish
         jish.JavaScriptConsole.log("Could not find type: " + typeName);
         return;
       }
-      var dyn = new Dictionary<string, object>();
+      var dyn = new Dictionary<string, object>();      
       ScrapeMethods(t, dyn);
+      if (!dyn.Any())
+      {
+        jish.JavaScriptConsole.log("Could not import type: " + typeName);
+        return;
+      }
       jish.SetGlobal(className, dyn);
-      jish.JavaScriptConsole.log(typeNameWithoutAssembly + " imported.  Use like: " + className + ".Method(args);");
+      jish.JavaScriptConsole.log(typeNameWithoutAssembly + " imported.  Use like: " + className + "." + dyn.First().Key + "(args);");
     }    
 
     private void ScrapeMethods(Type targetType, IDictionary<string, object> methods)
     {
-      foreach (MethodInfo mi in targetType.GetMethods(BindingFlags.Public | BindingFlags.Static))
-      {        
-        // Note: Only adding one instance of each method (no overrides) and 
-        // ignoring generic methods
+      MethodInfo[] mis = targetType.GetMethods(BindingFlags.Public | BindingFlags.Static);
+      foreach (MethodInfo mi in mis)
+      {                
+        // TODO: ignoring generic methods
         if (methods.ContainsKey(mi.Name) || mi.GetGenericArguments().Length > 0) { continue; }
-        methods.Add(mi.Name, new DelegateBuilder().ToDelegate(mi, null));
+        MethodInfo[] allOverrides = mis.Where(minf => minf.Name.Equals(mi.Name)).ToArray();
+        Delegate del = allOverrides.Count() == 1 ? 
+          delegateBuilder.ToDelegate(mi, null) : 
+          delegateBuilder.ToOverridenMethodDelegate(allOverrides, null);
+        methods.Add(mi.Name, del);
       }
     }    
   }

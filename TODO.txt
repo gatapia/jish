@@ -1,16 +1,36 @@
 - More unit testing frameworks
-- Fork the JavaScript.Net project as it appears to have died. Can we make it c#?
-- Find a way of getting more fail information from tests.
-- Blogs or Wikis for each framewor that will enable promotion better
+- Fork the JavaScript.Net project as it appears to have died.
+- Find a way of getting more fail information from tests (exceptions).
 - Use linked assemblies instead of internal embedded referrence for deployment
 - Node interface
-- Better place for the Trace listener initialisation
-
-- Web Site
+- Improve the auto publish js to also update the git downloads
 
 - jish
-  - Alow importing static methods with overrides, and generics?
-  - Update readme, especially with hacks, i.e. Jish commands are executed at top 
-  regardless of position in files, clear, help not supported, etc
-  - Move as much code as possible to JavaScript (jish.js)
+  - Calling methods with overrides requires the [] syntax
+  - Allow importing generic methods
   - Commands should analyse input and parse into required argument types
+
+- Documentation (Web Site)
+  - Overview
+  - js.net
+    - Embedded JS interpretter
+  - unit testing / coverage
+    - Closure
+    - JSNet
+    - QUnit
+    - JSCoverage
+  - jish
+    - Shell
+    - Commands      
+    - Scripts
+    - Extensions
+      - ICommand (inc hacks, limitations, etc)
+      - IInlineCommand
+      - JavaScript modules
+    - Misc
+      - Calling overriden c# methods requires [] syntax
+  - misc
+    - TODO
+    - Contributing
+    - License
+    - Contact    

@@ -34,7 +34,7 @@ function updateNuGetBuildFiles() {
 
 function copyFile(from, to) {
   if (File.Exists(to)) File.Delete(to);
-  File.Copy(from, to);
+  File.Copy([from, to]);
 };
 
 function updateVersionNumberInNuGetConfigs() {
