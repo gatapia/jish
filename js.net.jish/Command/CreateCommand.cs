@@ -24,16 +24,16 @@ namespace js.net.jish.Command
       string[] split = Regex.Split(typeArgsAndGlobalName, ",(?=(?:[^']*'[^']*')*[^']*$)").Select(s => s.Trim().Replace("\"", "").Replace("'", "")).ToArray();
       string[] args = split.Skip(1).Take(split.Length - 2).ToArray();
       string typeStr = split[0];
-      Type t = new TypeImporter(JishEngine, typeStr, JavaScriptConsole).LoadType();
+      Type t = new TypeLoader().LoadType(typeStr, JishEngine.GetLoadedAssemblies());
       if (t == null)
       {
-        JavaScriptConsole.log("Could not find a matching type: " + typeStr);
+        JishEngine.JavaScriptConsole.log("Could not find a matching type: " + typeStr);
         return;
       }
       object[] realArgs = ConvertToActualArgs(args, t);
       if (realArgs == null)
       {
-        JavaScriptConsole.log("Could not find a matching constructor.");
+        JishEngine.JavaScriptConsole.log("Could not find a matching constructor.");
         return;
       }
       var instance = Activator.CreateInstance(t, realArgs);

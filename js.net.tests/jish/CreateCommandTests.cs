@@ -8,32 +8,32 @@ namespace js.net.tests.jish
     [Test] public void TestCreateFileInfoSuccess()
     {
       const string file = @"..\..\..\lib\PicNet2.dll";
-      cli.ExecuteCommand(".create(System.IO.FileInfo, '" + file + "', 'dllFile')");
-      cli.ExecuteCommand("console.log(dllFile.FullName);");
+      jish.ExecuteCommand(".create(System.IO.FileInfo, '" + file + "', 'dllFile')");
+      jish.ExecuteCommand("console.log(dllFile.FullName);");
       Assert.AreEqual(new FileInfo(file).FullName, console.GetLastMessage());
     }
 
     [Test] public void TestNoArgsConstructor()
     {
-      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
-      cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'test')");
-      cli.ExecuteCommand("console.log(test.ConstructorType);");
+      jish.ExecuteCommand(@".assembly(js.net.tests.dll)");      
+      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'test')");
+      jish.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("No Args", console.GetLastMessage());
     }
 
     [Test] public void TestCreateWithMultipleconstructorArgs()
     {
-      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
-      cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str', '1', 'test')");
-      cli.ExecuteCommand("console.log(test.ConstructorType);");
+      jish.ExecuteCommand(@".assembly(js.net.tests.dll)");      
+      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str', '1', 'test')");
+      jish.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("String[str] and Int[1] Arg", console.GetLastMessage());
     }
 
     [Test] public void TestCreateWithMultiplePossibleConstructors()
     {
-      cli.ExecuteCommand(@".assembly(js.net.tests.dll)");      
-      cli.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str1', 'str2', 'test')");
-      cli.ExecuteCommand("console.log(test.GetConstructorType());");
+      jish.ExecuteCommand(@".assembly(js.net.tests.dll)");      
+      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str1', 'str2', 'test')");
+      jish.ExecuteCommand("console.log(test.GetConstructorType());");
       Assert.AreEqual("String[str1] and String[str2] Arg", console.GetLastMessage());
     }
   }

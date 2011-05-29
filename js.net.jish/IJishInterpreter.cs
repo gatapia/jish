@@ -4,7 +4,7 @@ using js.net.jish.Command;
 
 namespace js.net.jish
 {
-  public interface ICommandLineInterpreter
+  public interface IJishInterpreter
   {
     string ReadCommand();
     void ExecuteCommand(string command);
@@ -13,5 +13,6 @@ namespace js.net.jish
     IEnumerable<ICommand> GetCommands();
     void SetGlobal(string name, object valud);
     IDictionary<string, Assembly> GetLoadedAssemblies();
+    JSConsole JavaScriptConsole { get; }
   }
 }

@@ -43,17 +43,17 @@ namespace js.net.jish
     {
       using (IEngine engine = new JSNetEngine())
       {
-        CommandLineInterpreter cli = new CommandLineInterpreter(engine, new JSConsole());
-        cli.InitialiseConsole();
+        JishInterpreter jish = new JishInterpreter(engine, new JSConsole());
+        jish.InitialiseConsole();
 
-        var jish = new Jish(cli);
+        var jishFacade = new Jish(jish);
         if (args == null || args.Length == 0)
         {
-          jish.StartJish();
+          jishFacade.StartJish();
         }
         else
         {
-          jish.ExecuteArgs(args);
+          jishFacade.ExecuteArgs(args);
         }
       }
     }

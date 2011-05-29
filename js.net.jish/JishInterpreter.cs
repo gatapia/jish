@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.jish.Command;
@@ -14,22 +13,22 @@ using Noesis.Javascript;
 
 namespace js.net.jish
 {
-  public class CommandLineInterpreter : ICommandLineInterpreter
+  public class JishInterpreter : IJishInterpreter
   {
     private readonly IList<ICommand> commands = new List<ICommand>();
     protected IDictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
 
-    private readonly JSConsole console;
+    private readonly JSConsole javaScriptConsole;
     private readonly IEngine engine;
     private string bufferedCommand = String.Empty;
 
-    public CommandLineInterpreter(IEngine engine, JSConsole console)
+    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole)
     {
       Trace.Assert(engine != null);
-      Trace.Assert(console != null);
+      Trace.Assert(javaScriptConsole != null);
 
       this.engine = engine;
-      this.console = console;
+      this.javaScriptConsole = javaScriptConsole;
       
       Initialise();      
     }
@@ -62,7 +61,6 @@ namespace js.net.jish
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(ICommand)))
       {
         ICommand command = (ICommand) Activator.CreateInstance(t);
-        command.JavaScriptConsole = console;
         command.JishEngine = this;
         commands.Add(command);
       }      
@@ -98,14 +96,14 @@ namespace js.net.jish
 
     private void LoadJavaScriptModule(string file)
     {
-      console.log("Loading JavaScript Module: " + file);
+      javaScriptConsole.log("Loading JavaScript Module: " + file);
       RunFile(file);
-      console.log("Successfully Imported JavaScript Module.");
+      javaScriptConsole.log("Successfully Imported JavaScript Module.");
     }
 
     public virtual string ReadCommand()
     {
-      console.log("> ", false);
+      javaScriptConsole.log("> ", false);
       string input = Console.ReadLine().Trim();
       if (String.IsNullOrWhiteSpace(input))
       {
@@ -129,7 +127,7 @@ namespace js.net.jish
         if (!AttemptToRunCommand(out returnValue)) { return; } // Is multi-line
         if (IsLoggableReturnValue(returnValue))
         {
-          console.log(returnValue);
+          javaScriptConsole.log(returnValue);
         }
         if (returnValue != null) engine.SetGlobal("_", returnValue);
       }
@@ -217,7 +215,12 @@ namespace js.net.jish
     public IDictionary<string, Assembly> GetLoadedAssemblies()
     {
       return loadedAssemblies;
-    } 
+    }
+
+    public JSConsole JavaScriptConsole
+    {
+      get { return javaScriptConsole; }
+    }
 
     public void SetGlobal(string name, object valud)
     {
@@ -236,7 +239,7 @@ namespace js.net.jish
       if (msg.IndexOf(": ") > 0) msg = msg.Substring(msg.IndexOf(": ") + 2);
       if (msg.IndexOf('(') > 0) msg = msg.Substring(0, msg.IndexOf('('));
 
-      console.log(msg);
+      javaScriptConsole.log(msg);
     }
 
     private void InterceptSpecialCommands(string input)
@@ -249,7 +252,7 @@ namespace js.net.jish
         command.Execute(input);
         return;
       }
-      console.log("Could not find command: " + input);                  
+      javaScriptConsole.log("Could not find command: " + input);                  
     }      
   }
 }

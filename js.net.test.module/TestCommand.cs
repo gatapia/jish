@@ -1,5 +1,4 @@
-﻿using js.net.jish;
-using js.net.jish.Command;
+﻿using js.net.jish.Command;
 
 namespace js.net.test.module
 {
@@ -17,7 +16,7 @@ namespace js.net.test.module
 
     public override void Execute(string input)
     {
-      JavaScriptConsole.log("test command executed");
+      JishEngine.JavaScriptConsole.log("test command executed");
     }
   }
 }

@@ -63,8 +63,8 @@ namespace js.net.jish.Command
         process.Start();
         string err = process.StandardError.ReadToEnd();
         string output = process.StandardOutput.ReadToEnd();
-        if (!String.IsNullOrWhiteSpace(err)) JavaScriptConsole.log(err);
-        if (!String.IsNullOrWhiteSpace(output)) JavaScriptConsole.log(output);
+        if (!String.IsNullOrWhiteSpace(err)) JishEngine.JavaScriptConsole.log(err);
+        if (!String.IsNullOrWhiteSpace(output)) JishEngine.JavaScriptConsole.log(output);
         process.WaitForExit();
 
         if (process.ExitCode != 0)

@@ -28,9 +28,9 @@ function testFunction(arg1) {
 
     [Test] public void TestModuleLoaded()
     {
-      cli.ExecuteCommand("var x = testFunction(123);");
+      jish.ExecuteCommand("var x = testFunction(123);");
       Assert.AreEqual("arg1: 123", console.GetLastMessage());
-      cli.ExecuteCommand("console.log('x: ' + x);");
+      jish.ExecuteCommand("console.log('x: ' + x);");
       Assert.AreEqual("x: 123", console.GetLastMessage());
     }
   }

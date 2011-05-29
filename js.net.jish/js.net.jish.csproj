@@ -60,7 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyNameComparer.cs" />
-    <Compile Include="CommandLineInterpreter.cs" />
+    <Compile Include="DelegateBuilder.cs" />
+    <Compile Include="JishInterpreter.cs" />
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
     <Compile Include="Command\EmptyCommand.cs" />
@@ -72,12 +73,13 @@
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
-    <Compile Include="ICommandLineInterpreter.cs" />
+    <Compile Include="IJishInterpreter.cs" />
     <Compile Include="InlineCommand\IInlineCommand.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Jish.cs" />
     <Compile Include="TypeImporter.cs" />
+    <Compile Include="TypeLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\js.net\js.net.csproj">

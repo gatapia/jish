@@ -21,7 +21,7 @@ namespace js.net.jish.Command
       string assemblyFileName = ParseFileOrTypeName(input);      
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
       JishEngine.GetLoadedAssemblies()[assembly.GetName().Name] = assembly;
-      JavaScriptConsole.log("Assembly '" + assembly.GetName().Name + "' loaded.");
+      JishEngine.JavaScriptConsole.log("Assembly '" + assembly.GetName().Name + "' loaded.");
     }
   }
 }

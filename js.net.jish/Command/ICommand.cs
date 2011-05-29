@@ -2,8 +2,7 @@
 {
   public interface ICommand
   {
-    ICommandLineInterpreter JishEngine { get; set; }
-    JSConsole JavaScriptConsole { get; set; }
+    IJishInterpreter JishEngine { get; set; }
 
     string GetName();
     string GetHelpDescription();

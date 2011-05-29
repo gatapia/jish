@@ -7,7 +7,7 @@ namespace js.net.tests.jish
   public abstract class AbstractJishTest
   {
     private IEngine engine;
-    protected ICommandLineInterpreter cli;
+    protected IJishInterpreter jish;
     protected TestingConsole console;
 
     [SetUp] public virtual void SetUp()
@@ -15,7 +15,7 @@ namespace js.net.tests.jish
       engine = new JSNetEngine();
       console = new TestingConsole();      
       engine.SetGlobal("console", console);
-      cli = new CommandLineInterpreter(engine, console);
+      jish = new JishInterpreter(engine, console);
     }
 
     [TearDown] public virtual void TearDown()

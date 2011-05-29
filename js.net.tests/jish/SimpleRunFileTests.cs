@@ -25,15 +25,15 @@ namespace js.net.tests.jish
  
     [Test] public void TestRunFile()
     {
-      cli.RunFile(TEST_FILE);
+      jish.RunFile(TEST_FILE);
       Assert.AreEqual("success args[]", console.GetLastMessage());
     }
 
     [Test] public void TestRunFileWithArgs()
     {
-      cli.RunFile(TEST_FILE, new [] {"arg1", "arg2"});      
+      jish.RunFile(TEST_FILE, new [] {"arg1", "arg2"});      
       Assert.AreEqual("success args[arg1,arg2]", console.GetLastMessage());
-      cli.ExecuteCommand("console.log('idx: ' + args.indexOf('arg2'));");
+      jish.ExecuteCommand("console.log('idx: ' + args.indexOf('arg2'));");
       Assert.AreEqual("idx: 1", console.GetLastMessage());
     }
   }  

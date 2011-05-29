@@ -23,7 +23,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestExecutingTestInlineCommand()
     {
-      cli.ExecuteCommand("console.log(inline_command.Add(1, 2));");
+      jish.ExecuteCommand("console.log(inline_command.Add(1, 2));");
       Assert.AreEqual("3", console.GetLastMessage());
     }
   }

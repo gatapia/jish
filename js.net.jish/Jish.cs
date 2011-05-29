@@ -6,9 +6,9 @@ namespace js.net.jish
 {
   public class Jish
   {
-    private readonly ICommandLineInterpreter interpretter;
+    private readonly IJishInterpreter interpretter;
 
-    public Jish(ICommandLineInterpreter interpretter)
+    public Jish(IJishInterpreter interpretter)
     {
       this.interpretter = interpretter;
     }

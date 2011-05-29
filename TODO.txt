@@ -9,8 +9,6 @@
 - Web Site
 
 - jish
-  - Loaded assemblies need its own container, not back and forths between the 
-    CommandLineInterface and its commands
   - Alow importing static methods with overrides, and generics?
   - Update readme, especially with hacks, i.e. Jish commands are executed at top 
   regardless of position in files, clear, help not supported, etc

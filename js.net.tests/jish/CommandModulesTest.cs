@@ -23,13 +23,13 @@ namespace js.net.tests.jish
 
     [Test] public void TestExecutingTestModule()
     {
-      cli.ExecuteCommand(".testcommand");
+      jish.ExecuteCommand(".testcommand");
       Assert.AreEqual("test command executed", console.GetLastMessage());
     }
 
     [Test] public void TestTestModuleHasHelp()
     {
-      cli.ExecuteCommand(".help");
+      jish.ExecuteCommand(".help");
       Assert.IsTrue(console.GetLastMessage().IndexOf(".testcommand - test command help") >= 0, console.GetLastMessage());
     }
   }

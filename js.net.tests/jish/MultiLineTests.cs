@@ -7,27 +7,27 @@ namespace js.net.tests.jish
     
     [Test] public void TestProbelmaticCommand()
     {
-      cli.ExecuteCommand("{a : 1}");      
+      jish.ExecuteCommand("{a : 1}");      
     }
 
     [Test] public void TestSingleLineMultiExpressions()
     {
-      cli.ExecuteCommand("for (var i = 0; i < 10; i++) console.log(i);");
+      jish.ExecuteCommand("for (var i = 0; i < 10; i++) console.log(i);");
       Assert.AreEqual("9", console.GetLastMessage());
     }
 
     [Test] public void TestMultiLineExpression()
     {
-      cli.ExecuteCommand("for (var i = 0; i < 10; i++)");
-      cli.ExecuteCommand(" console.log(i);");
+      jish.ExecuteCommand("for (var i = 0; i < 10; i++)");
+      jish.ExecuteCommand(" console.log(i);");
       Assert.AreEqual("9", console.GetLastMessage());
     }
 
     [Test] public void TestBreakMultiLineExpression()
     {
-      cli.ExecuteCommand("for (var i = 0; i < 10; i++)");
-      cli.ExecuteCommand(".break");
-      cli.ExecuteCommand("console.log(i);");
+      jish.ExecuteCommand("for (var i = 0; i < 10; i++)");
+      jish.ExecuteCommand(".break");
+      jish.ExecuteCommand("console.log(i);");
       Assert.AreEqual("i is not defined", console.GetLastMessage());
     }
   }

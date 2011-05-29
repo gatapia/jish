@@ -18,7 +18,7 @@ namespace js.net.jish.Command
     {
       foreach (ICommand command in JishEngine.GetCommands())
       {
-        JavaScriptConsole.log("." + command.GetName() + " - " + command.GetHelpDescription());
+        JishEngine.JavaScriptConsole.log("." + command.GetName() + " - " + command.GetHelpDescription());
       }
     }
   }

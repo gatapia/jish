@@ -15,7 +15,7 @@
     public override void Execute(string input)
     {
       string nameSpaceAndClass = ParseFileOrTypeName(input).Replace("\"", "").Replace("'", "").Trim();
-      new TypeImporter(JishEngine, nameSpaceAndClass, JavaScriptConsole).ImportType();
+      new TypeImporter(JishEngine).ImportType(nameSpaceAndClass);
     }
   }
 }
