@@ -63,6 +63,7 @@
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="FrameworkAdapters\JSDomAdapterTest.cs" />
     <Compile Include="jish\AbstractJishTest.cs" />
+    <Compile Include="jish\CommandModulesTest.cs" />
     <Compile Include="jish\CreateCommandTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
     <Compile Include="jish\JavaScriptModulesTest.cs" />
@@ -98,7 +99,7 @@
   <ItemGroup>
     <ProjectReference Include="..\js.net.jish\js.net.jish.csproj">
       <Project>{DA40C9AF-D43B-4E01-B89F-B249AC28C031}</Project>
-      <Name>js.net.repl</Name>
+      <Name>js.net.jish</Name>
     </ProjectReference>
     <ProjectReference Include="..\js.net\js.net.csproj">
       <Project>{78104D21-D04B-468F-924E-5649C5ED52CE}</Project>

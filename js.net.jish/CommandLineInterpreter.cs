@@ -34,14 +34,24 @@ namespace js.net.jish
 
     private void Initialise()
     {
-      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+      Assembly[] assemblies = LoadAllAssemblies();
       Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
       Array.ForEach(assemblies, a => loadedAssemblies.Add(a.GetName().Name, a));
       // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?
       EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();      
       engine.Run(embedded.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
       LoadJavaScriptModules();
-    }    
+    }
+
+    private Assembly[] LoadAllAssemblies()
+    {
+      Assembly[] defaultAssemlies = AppDomain.CurrentDomain.GetAssemblies();
+      if (!Directory.Exists("modules")) return defaultAssemlies;
+      string[] assemblyFiles = Directory.GetFiles("modules", "*.dll", SearchOption.AllDirectories);
+      if (assemblyFiles.Length == 0) return defaultAssemlies;
+      IEnumerable<Assembly> moduleAssemblies = assemblyFiles.Select(Assembly.LoadFrom);
+      return defaultAssemlies.Concat(moduleAssemblies).ToArray();
+    }
 
     private void LoadAllCommandsFromAssembly(Assembly assembly)
     {

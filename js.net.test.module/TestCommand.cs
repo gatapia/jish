@@ -1,13 +1,14 @@
-﻿using System;
+﻿using js.net.jish;
+using js.net.jish.Command;
 
-namespace js.net.jish.Command
+namespace js.net.test.module
 {
-  public class ExitCommand : ICommand
+  public class TestCommand : ICommand
   {
     private readonly ICommandLineInterpreter cli;
     private readonly JSConsole console;
 
-    public ExitCommand(ICommandLineInterpreter cli, JSConsole console)
+    public TestCommand(ICommandLineInterpreter cli, JSConsole console)
     {
       this.cli = cli;
       this.console = console;
@@ -15,17 +16,17 @@ namespace js.net.jish.Command
 
     public string GetName()
     {
-      return "exit";
+      return "testcommand";
     }
 
     public string GetHelpDescription()
     {
-      return "Exit Jish.";
+      return "test command help";
     }
 
     public void Execute(string input)
     {
-      Environment.Exit(0);
+      console.log("test command executed");
     }
   }
 }
