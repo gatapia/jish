@@ -39,14 +39,11 @@ namespace js.net.jish
   /// </summary>
   public class MainRunner
   {
-    [STAThread] private static void Main(string[] args)
+    [STAThread] public static void Main(string[] args)
     {
       using (IEngine engine = new JSNetEngine())
       {
-        JSConsole console = new JSConsole();
-        new JSGlobal(engine, new CWDFileLoader(), console).BindToGlobalScope();        
-
-        CommandLineInterpreter cli = new CommandLineInterpreter(engine, console);
+        CommandLineInterpreter cli = new CommandLineInterpreter(engine, new JSConsole());
         cli.InitialiseConsole();
 
         var jish = new Jish(cli);

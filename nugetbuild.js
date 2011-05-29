@@ -1,24 +1,69 @@
 // Use jish.exe to execute this file
 
 // Load required .Net statics and objects
-
-
+.static(System.IO.File);
+.create('System.Diagnostics.Process, System', 'process');
 
 // Run!
 updateNuGetBuildFiles();
-updateVersionNumberInNuGetConfigs();
+if (args.indexOf('updatever') >= 0) {
+  updateVersionNumberInNuGetConfigs();
+} else {
+  console.log('Not updating version numbers. To update versions please execute with "updatever" argument');
+}
 packNuGetPacakges();
-pushNuGetPackages();
+if (args.indexOf('push') >= 0) {
+  pushNuGetPackages();
+} else {
+  console.log('Not "pushing". To push please execute with "push" argmuent');
+}
 
 function updateNuGetBuildFiles() {
-  
+  // jish
+  copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\jish\\tools\\Noesis.Javascript.dll');
+  copyFile('js.net.jish\\bin\\js.net.dll', 'build\\jish\\tools\\js.net.dll');
+  copyFile('js.net.jish\\bin\\jish.exe', 'build\\jish\\tools\\jish.exe');
+
+  // js.net
+  copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll');
+  copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+};
+
+function copyFile(from, to) {
+  if (File.Exists(to)) File.Delete(to);
+  File.Copy(from, to);
 };
 
 function updateVersionNumberInNuGetConfigs() {
+  // TODO.  Needs also to update version in pushNuGetPackages
 };
 
 function packNuGetPacakges() {
+  // TODO: Running .process does not work as all commands are executed prior to 
+  // any other code.
+  runProcess('build\\NuGet.exe', 'Pack build\\js.net\\js.net.nuspec');
+  runProcess('build\\NuGet.exe', 'Pack build\\jish\\jish.nuspec');
 };
 
 function pushNuGetPackages() {
+  runProcess('build\\NuGet.exe', 'Push build\\js.net\\js.net.0.0.1.nupkg');
+  runProcess('build\\NuGet.exe', 'Push build\\jish\\jish.0.0.1.nupkg');
 };
+
+function runProcess(command, args) {
+  process.StartInfo.FileName = command;
+  process.StartInfo.Arguments = args;
+  process.StartInfo.UseShellExecute = false;
+  process.StartInfo.RedirectStandardOutput = true;
+  process.StartInfo.RedirectStandardError = true;
+  process.Start();
+  var err = process.StandardError.ReadToEnd();
+  var output = process.StandardOutput.ReadToEnd();
+  if (err) console.log(err);
+  if (output) console.log(output);
+  process.WaitForExit();
+  if (process.ExitCode != 0)
+  {
+    throw new Error('Process ' + commandAndArgs + ' exited with code: ' + process.ExitCode);
+  }
+}

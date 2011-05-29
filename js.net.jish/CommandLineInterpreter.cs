@@ -37,6 +37,7 @@ namespace js.net.jish
       {
         commands.Add((ICommand) Activator.CreateInstance(t, this, console));
       }
+      Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), a => loadedAssemblies.Add(a.GetName().Name, a));
     }
 
     public virtual string ReadCommand()
@@ -52,7 +53,7 @@ namespace js.net.jish
     
     public void ExecuteCommand(string input)
     {  
-      if (input.IndexOf('.') == 0)
+      if (input.StartsWith("."))
       {
         InterceptSpecialCommands(input);
         return;
@@ -110,9 +111,32 @@ namespace js.net.jish
       return true;
     }
 
-    public void RunFile(string file)
+    public void RunFile(string file, string[] args)
     {
-      engine.Run(File.ReadAllText(file), new FileInfo(file).Name);
+      engine.SetGlobal("args", args);
+      FileInfo fi = new FileInfo(file);
+      Directory.SetCurrentDirectory(fi.Directory.FullName);
+      IList<string> lines = File.ReadAllLines(fi.Name).Select(l => l.Trim()).ToList();            
+      RunAllJishCommands(lines);
+      RunRestOfFile(file, lines);
+    }    
+
+    private void RunAllJishCommands(IEnumerable<string> lines)
+    {
+      List<string> jishCommands = lines.Where(l => l.StartsWith(".")).ToList();
+      if (jishCommands.Any(c => c.StartsWith(".clear") || c.StartsWith(".help")))
+      {
+        throw new ApplicationException(".clear and .help commands are not allowed when running jish files.");
+      }      
+      jishCommands.ForEach(InterceptSpecialCommands);
+    }
+
+    private void RunRestOfFile(string file, IEnumerable<string> lines)
+    {
+      // Do not loose line numbers
+      IEnumerable<string> nonCommands = lines.Select(l => l.StartsWith(".") ? "" : l); 
+      string nonCommandsInline = String.Join("\n", nonCommands);
+      engine.Run(nonCommandsInline, new FileInfo(file).Name);
     }
 
     public void ClearBufferedCommand()

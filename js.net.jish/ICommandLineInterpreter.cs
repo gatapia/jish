@@ -8,7 +8,7 @@ namespace js.net.jish
   {
     string ReadCommand();
     void ExecuteCommand(string command);
-    void RunFile(string file);
+    void RunFile(string file, string[] args);
     void ClearBufferedCommand();
     IEnumerable<ICommand> GetCommands();
     void SetGlobal(string name, object valud);

@@ -24,7 +24,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestReplRunFile()
     {
-      cli.RunFile(TEST_FILE);
+      cli.RunFile(TEST_FILE, new string[] {});
       Assert.AreEqual("success", console.GetLastMessage());
     }
 

@@ -14,6 +14,10 @@ namespace js.net.tests.jish
       messages.Add(message.ToString());
     }
 
+    public IEnumerable<string> GetAllMessages()
+    {
+      return messages;
+    }
     public string GetLastMessage()
     {
       return messages.Last();

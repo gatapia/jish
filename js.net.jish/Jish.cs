@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace js.net.jish
 {
@@ -29,7 +30,7 @@ namespace js.net.jish
         Console.WriteLine("Could not find " + file);
         return;
       }
-      interpretter.RunFile(file);            
+      interpretter.RunFile(file, args.Skip(1).ToArray());            
     }    
   }
 }

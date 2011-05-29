@@ -65,8 +65,9 @@
     <Compile Include="jish\AbstractJishTest.cs" />
     <Compile Include="jish\CreateCommandTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
-    <Compile Include="jish\MiscCommandsTests.cs" />
+    <Compile Include="jish\SimpleRunFileTests.cs" />
     <Compile Include="jish\MultiLineTests.cs" />
+    <Compile Include="jish\RunJishFileTests.cs" />
     <Compile Include="jish\TestingConsole.cs" />
     <Compile Include="jish\AssemblyAndStaticTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />

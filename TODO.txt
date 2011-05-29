@@ -7,4 +7,8 @@
 - Better place for the Trace listener initialisation
 
 - jish
-  - Allow JS creating of bound objects, i.e new FileIO('file,txt');
+  - Loaded assemblies need its own container, not back and forths between the 
+    CommandLineInterface and its commands
+  - Alow importing static methods with overrides, and generics?
+  - Update readme, especially with hacks, i.e. Jish commands are executed at top 
+  regardless of position in files, clear, help not supported, etc
