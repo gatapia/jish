@@ -34,7 +34,7 @@ namespace js.net.jish
 
     private void Initialise()
     {
-      Assembly[] assemblies = LoadAllAssemblies();
+      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
       Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
       Array.ForEach(assemblies, a => loadedAssemblies.Add(a.GetName().Name, a));
       // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?
@@ -43,14 +43,14 @@ namespace js.net.jish
       LoadJavaScriptModules();
     }
 
-    private Assembly[] LoadAllAssemblies()
+    private IEnumerable<Assembly> LoadAllAssemblies()
     {
       Assembly[] defaultAssemlies = AppDomain.CurrentDomain.GetAssemblies();
       if (!Directory.Exists("modules")) return defaultAssemlies;
       string[] assemblyFiles = Directory.GetFiles("modules", "*.dll", SearchOption.AllDirectories);
       if (assemblyFiles.Length == 0) return defaultAssemlies;
       IEnumerable<Assembly> moduleAssemblies = assemblyFiles.Select(Assembly.LoadFrom);
-      return defaultAssemlies.Concat(moduleAssemblies).ToArray();
+      return defaultAssemlies.Concat(moduleAssemblies);
     }
 
     private void LoadAllCommandsFromAssembly(Assembly assembly)

@@ -11,7 +11,7 @@ namespace js.net.tests.jish
     public override void SetUp()
     {
       if (!Directory.Exists("modules")) { Directory.CreateDirectory("modules"); }
-      File.Copy(sourceCommandDll, targetCommandDll);
+      File.Copy(sourceCommandDll, targetCommandDll, true);
       base.SetUp();
     }
 
@@ -21,10 +21,16 @@ namespace js.net.tests.jish
       base.TearDown();
     }
 
-    [Test] public void TestModuleLoaded()
+    [Test] public void TestExecutingTestModule()
     {
       cli.ExecuteCommand(".testcommand");
       Assert.AreEqual("test command executed", console.GetLastMessage());
+    }
+
+    [Test] public void TestTestModuleHasHelp()
+    {
+      cli.ExecuteCommand(".help");
+      Assert.IsTrue(console.GetLastMessage().IndexOf(".testcommand - test command help") >= 0, console.GetLastMessage());
     }
   }
 }
