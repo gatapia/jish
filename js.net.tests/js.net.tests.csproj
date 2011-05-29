@@ -64,6 +64,7 @@
     <Compile Include="FrameworkAdapters\JSDomAdapterTest.cs" />
     <Compile Include="jish\AbstractJishTest.cs" />
     <Compile Include="jish\CommandModulesTest.cs" />
+    <Compile Include="jish\InlineCommandModulesTest.cs" />
     <Compile Include="jish\CreateCommandTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
     <Compile Include="jish\JavaScriptModulesTest.cs" />

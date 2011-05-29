@@ -14,7 +14,5 @@
   - Alow importing static methods with overrides, and generics?
   - Update readme, especially with hacks, i.e. Jish commands are executed at top 
   regardless of position in files, clear, help not supported, etc
-  - Add modules to jish.exe so people can extend jish with js files.
   - Move as much code as possible to JavaScript (jish.js)
   - Commands should analyse input and parse into required argument types
-  - Commands should inherit EmptyCommand and remove constructor requirements

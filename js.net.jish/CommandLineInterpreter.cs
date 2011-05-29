@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.jish.Command;
+using js.net.jish.InlineCommand;
 using js.net.Util;
 using Noesis.Javascript;
 
@@ -36,12 +38,14 @@ namespace js.net.jish
     {
       Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
       Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
+      Array.ForEach(assemblies, LoadAllInlineCommandsFromAssembly);      
       Array.ForEach(assemblies, a => loadedAssemblies.Add(a.GetName().Name, a));
       // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?
       EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();      
       engine.Run(embedded.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
       LoadJavaScriptModules();
     }
+    
 
     private IEnumerable<Assembly> LoadAllAssemblies()
     {
@@ -55,7 +59,7 @@ namespace js.net.jish
 
     private void LoadAllCommandsFromAssembly(Assembly assembly)
     {
-      foreach (Type t in assembly.GetTypes().Where(t => t != typeof (ICommand) && !t.IsAbstract && typeof (ICommand).IsAssignableFrom(t)))
+      foreach (Type t in GetAllTypesThatImplement(assembly, typeof(ICommand)))
       {
         ICommand command = (ICommand) Activator.CreateInstance(t);
         command.JavaScriptConsole = console;
@@ -63,6 +67,27 @@ namespace js.net.jish
         commands.Add(command);
       }      
     }
+    
+    private void LoadAllInlineCommandsFromAssembly(Assembly assembly)
+    {
+      foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
+      {
+        IInlineCommand icommand = (IInlineCommand) Activator.CreateInstance(t);
+        string ns = icommand.GetNameSpace();
+        if (String.IsNullOrWhiteSpace(ns)) { throw new ApplicationException("Could not load inline command from type[" + t.FullName + "].  No namespace specified.");}
+        if (ns.IndexOf('.') > 0)
+        {
+          throw new ApplicationException("Nested namespaces (namespaces with '.' in them) are not supported.");
+        }
+        engine.SetGlobal(ns, icommand);
+      }
+    }
+
+    private IEnumerable<Type> GetAllTypesThatImplement(Assembly assembly, Type iface)
+    {
+      return assembly.GetTypes().Where(t => !t.IsAbstract && iface.IsAssignableFrom(t));
+    }
+
 
     private void LoadJavaScriptModules()
     {

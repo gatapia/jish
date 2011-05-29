@@ -5,7 +5,7 @@ namespace js.net.tests.Engine
 {
   public abstract class AbstractEngineTests
   {
-    private IEngine engine;    
+    protected IEngine engine;    
 
     protected abstract IEngine CreateEngine();
 
