@@ -2,6 +2,9 @@
 
 // Load required .Net statics and objects
 .static(System.IO.File);
+// We are creating and reusing an instance of process because using .process
+// means that it will be executed at the start of the file which is not 
+// acceptable here
 .create('System.Diagnostics.Process, System', 'process');
 
 // Run!
@@ -38,9 +41,7 @@ function updateVersionNumberInNuGetConfigs() {
   // TODO.  Needs also to update version in pushNuGetPackages
 };
 
-function packNuGetPacakges() {
-  // TODO: Running .process does not work as all commands are executed prior to 
-  // any other code.
+function packNuGetPacakges() {  
   runProcess('build\\NuGet.exe', 'Pack build\\js.net\\js.net.nuspec');
   runProcess('build\\NuGet.exe', 'Pack build\\jish\\jish.nuspec');
 };

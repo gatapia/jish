@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.jish.Command;
+using js.net.Util;
 using Noesis.Javascript;
 
 namespace js.net.jish
@@ -33,11 +34,35 @@ namespace js.net.jish
 
     private void Initialise()
     {
-      foreach (Type t in GetType().Assembly.GetTypes().Where(t => t != typeof (ICommand) && typeof (ICommand).IsAssignableFrom(t)))
+      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+      Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
+      Array.ForEach(assemblies, a => loadedAssemblies.Add(a.GetName().Name, a));
+      // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?
+      EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();      
+      engine.Run(embedded.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
+      LoadJavaScriptModules();
+    }    
+
+    private void LoadAllCommandsFromAssembly(Assembly assembly)
+    {
+      foreach (Type t in assembly.GetTypes().Where(t => t != typeof (ICommand) && typeof (ICommand).IsAssignableFrom(t)))
       {
         commands.Add((ICommand) Activator.CreateInstance(t, this, console));
-      }
-      Array.ForEach(AppDomain.CurrentDomain.GetAssemblies(), a => loadedAssemblies.Add(a.GetName().Name, a));
+      }      
+    }
+
+    private void LoadJavaScriptModules()
+    {
+      if (!Directory.Exists("modules")) return;
+      string[] modules = Directory.GetFiles("modules", "*.js", SearchOption.AllDirectories);
+      Array.ForEach(modules, LoadJavaScriptModule);
+    }
+
+    private void LoadJavaScriptModule(string file)
+    {
+      console.log("Loading JavaScript Module: " + file);
+      RunFile(file);
+      console.log("Successfully Imported JavaScript Module.");
     }
 
     public virtual string ReadCommand()
@@ -111,9 +136,9 @@ namespace js.net.jish
       return true;
     }
 
-    public void RunFile(string file, string[] args)
+    public void RunFile(string file, string[] args = null)
     {
-      engine.SetGlobal("args", args);
+      engine.SetGlobal("args", args ?? new string[] {});
       FileInfo fi = new FileInfo(file);
       Directory.SetCurrentDirectory(fi.Directory.FullName);
       IList<string> lines = File.ReadAllLines(fi.Name).Select(l => l.Trim()).ToList();            

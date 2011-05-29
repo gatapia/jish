@@ -25,7 +25,7 @@ namespace js.net.tests.jish
  
     [Test] public void TestRunFile()
     {
-      cli.RunFile(TEST_FILE, new string[] {});
+      cli.RunFile(TEST_FILE);
       Assert.AreEqual("success args[]", console.GetLastMessage());
     }
 
