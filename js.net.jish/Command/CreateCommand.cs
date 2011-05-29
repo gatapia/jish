@@ -6,47 +6,38 @@ using System.Text.RegularExpressions;
 
 namespace js.net.jish.Command
 {
-  public class CreateCommand : ParseInputCommand, ICommand
+  public class CreateCommand : ParseInputCommand
   {
-    private readonly ICommandLineInterpreter cli;
-    private readonly JSConsole console;
-
-    public CreateCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.cli = cli;
-      this.console = console;
-    }
-
-    public string GetName()
+    public override string GetName()
     {
       return "create";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "Creates an instance of an object and stores it in the specified global name.";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
       string typeArgsAndGlobalName = ParseFileOrTypeName(input);
       string[] split = Regex.Split(typeArgsAndGlobalName, ",(?=(?:[^']*'[^']*')*[^']*$)").Select(s => s.Trim().Replace("\"", "").Replace("'", "")).ToArray();
       string[] args = split.Skip(1).Take(split.Length - 2).ToArray();
       string typeStr = split[0];
-      Type t = new TypeImporter(cli, typeStr, console).LoadType();
+      Type t = new TypeImporter(JishEngine, typeStr, JavaScriptConsole).LoadType();
       if (t == null)
       {
-        console.log("Could not find a matching type: " + typeStr);
+        JavaScriptConsole.log("Could not find a matching type: " + typeStr);
         return;
       }
       object[] realArgs = ConvertToActualArgs(args, t);
       if (realArgs == null)
       {
-        console.log("Could not find a matching constructor.");
+        JavaScriptConsole.log("Could not find a matching constructor.");
         return;
       }
       var instance = Activator.CreateInstance(t, realArgs);
-      cli.SetGlobal(split.Last(), instance);
+      JishEngine.SetGlobal(split.Last(), instance);
     }
 
     private object[] ConvertToActualArgs(string[] args, Type type)

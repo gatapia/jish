@@ -3,28 +3,19 @@ using System.Diagnostics;
 
 namespace js.net.jish.Command
 {
-  public class ProcessCommand : ParseInputCommand, ICommand
+  public class ProcessCommand : ParseInputCommand
   {
-    private readonly JSConsole console;
-
-    public ProcessCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.console = console;
-    }
-
-    #region ICommand Members
-
-    public string GetName()
+    public override string GetName()
     {
       return "process";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "Executes the command in a separate Process.";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
       string commandAndArgs = GetCommandAndArgsFromInput(input);
 
@@ -32,8 +23,6 @@ namespace js.net.jish.Command
       ParseCommandAndArguments(commandAndArgs, out command, out args);
       RunCommandWithArgs(commandAndArgs, command, args);
     }
-
-    #endregion
 
     private string GetCommandAndArgsFromInput(string input)
     {
@@ -74,8 +63,8 @@ namespace js.net.jish.Command
         process.Start();
         string err = process.StandardError.ReadToEnd();
         string output = process.StandardOutput.ReadToEnd();
-        if (!String.IsNullOrWhiteSpace(err)) console.log(err);
-        if (!String.IsNullOrWhiteSpace(output)) console.log(output);
+        if (!String.IsNullOrWhiteSpace(err)) JavaScriptConsole.log(err);
+        if (!String.IsNullOrWhiteSpace(output)) JavaScriptConsole.log(output);
         process.WaitForExit();
 
         if (process.ExitCode != 0)

@@ -55,9 +55,12 @@ namespace js.net.jish
 
     private void LoadAllCommandsFromAssembly(Assembly assembly)
     {
-      foreach (Type t in assembly.GetTypes().Where(t => t != typeof (ICommand) && typeof (ICommand).IsAssignableFrom(t)))
+      foreach (Type t in assembly.GetTypes().Where(t => t != typeof (ICommand) && !t.IsAbstract && typeof (ICommand).IsAssignableFrom(t)))
       {
-        commands.Add((ICommand) Activator.CreateInstance(t, this, console));
+        ICommand command = (ICommand) Activator.CreateInstance(t);
+        command.JavaScriptConsole = console;
+        command.JishEngine = this;
+        commands.Add(command);
       }      
     }
 
@@ -150,10 +153,12 @@ namespace js.net.jish
     {
       engine.SetGlobal("args", args ?? new string[] {});
       FileInfo fi = new FileInfo(file);
+      string cwd = Directory.GetCurrentDirectory();
       Directory.SetCurrentDirectory(fi.Directory.FullName);
       IList<string> lines = File.ReadAllLines(fi.Name).Select(l => l.Trim()).ToList();            
       RunAllJishCommands(lines);
       RunRestOfFile(file, lines);
+      Directory.SetCurrentDirectory(cwd);
     }    
 
     private void RunAllJishCommands(IEnumerable<string> lines)

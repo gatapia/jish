@@ -40,8 +40,6 @@ namespace js.net.tests.jish
 
     [Test] public void TestUsingStaticsWithGenericsWhichAreIgnored()
     {
-      TestAssemblyLoad();
-
       cli.ExecuteCommand(".static(PicNet2.CollectionUtils, PicNet2)");
       Assert.IsTrue(console.GetLastMessage().StartsWith("PicNet2.CollectionUtils imported"));
     }    

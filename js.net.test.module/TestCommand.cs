@@ -3,30 +3,21 @@ using js.net.jish.Command;
 
 namespace js.net.test.module
 {
-  public class TestCommand : ICommand
+  public class TestCommand : EmptyCommand
   {
-    private readonly ICommandLineInterpreter cli;
-    private readonly JSConsole console;
-
-    public TestCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.cli = cli;
-      this.console = console;
-    }
-
-    public string GetName()
+    public override string GetName()
     {
       return "testcommand";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "test command help";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
-      console.log("test command executed");
+      JavaScriptConsole.log("test command executed");
     }
   }
 }

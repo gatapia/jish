@@ -2,32 +2,23 @@
 
 namespace js.net.jish.Command
 {
-  public class HelpCommand : ICommand
+  public class HelpCommand : EmptyCommand
   {
-    private readonly ICommandLineInterpreter cli;
-    private readonly JSConsole console;
-
-    public HelpCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.cli = cli;
-      this.console = console;
-    }
-
-    public string GetName()
+    public override string GetName()
     {
       return "help";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "Displays this screen.";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
-      foreach (ICommand command in cli.GetCommands())
+      foreach (ICommand command in JishEngine.GetCommands())
       {
-        console.log("." + command.GetName() + " - " + command.GetHelpDescription());
+        JavaScriptConsole.log("." + command.GetName() + " - " + command.GetHelpDescription());
       }
     }
   }

@@ -1,30 +1,21 @@
 ﻿namespace js.net.jish.Command
 {
-  public class StaticCommand : ParseInputCommand, ICommand
+  public class StaticCommand : ParseInputCommand
   {
-    private readonly ICommandLineInterpreter cli;
-    private readonly JSConsole console;
-
-    public StaticCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.cli = cli;
-      this.console = console;
-    }
-
-    public string GetName()
+    public override string GetName()
     {
       return "static";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "Loads all static members of a .Net utility class and makes them available to you in Jish.";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
       string nameSpaceAndClass = ParseFileOrTypeName(input).Replace("\"", "").Replace("'", "").Trim();
-      new TypeImporter(cli, nameSpaceAndClass, console).ImportType();
+      new TypeImporter(JishEngine, nameSpaceAndClass, JavaScriptConsole).ImportType();
     }
   }
 }

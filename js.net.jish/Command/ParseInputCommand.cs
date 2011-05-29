@@ -2,7 +2,7 @@
 
 namespace js.net.jish.Command
 {
-  public class ParseInputCommand
+  public abstract class ParseInputCommand : EmptyCommand
   {    
     protected string ParseFileOrTypeName(string input)
     {

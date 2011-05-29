@@ -1,29 +1,20 @@
 ﻿namespace js.net.jish.Command
 {
-  public class BreakCommand : ICommand
+  public class BreakCommand : EmptyCommand
   {
-    private readonly ICommandLineInterpreter cli;
-    private readonly JSConsole console;
-
-    public BreakCommand(ICommandLineInterpreter cli, JSConsole console)
-    {
-      this.cli = cli;
-      this.console = console;
-    }
-
-    public string GetName()
+    public override string GetName()
     {
       return "break";
     }
 
-    public string GetHelpDescription()
+    public override string GetHelpDescription()
     {
       return "Cancels the execution of a multi-line command.";
     }
 
-    public void Execute(string input)
+    public override void Execute(string input)
     {
-      cli.ClearBufferedCommand();
+      JishEngine.ClearBufferedCommand();
     }
   }
 }
