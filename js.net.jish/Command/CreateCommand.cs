@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -36,12 +37,19 @@ namespace js.net.jish.Command
         JishEngine.JavaScriptConsole.log("Could not find a matching constructor.");
         return;
       }
-      var instance = Activator.CreateInstance(t, realArgs);
+      object instance;
+      if (t.GetConstructors(BindingFlags.Public).Length == 0)
+      {
+
+      } else
+      {
+        instance = Activator.CreateInstance(t, realArgs);
+      }
       JishEngine.SetGlobal(split.Last(), instance);
     }
 
     private object[] ConvertToActualArgs(string[] args, Type type)
-    {
+    {      
       if (args.Length == 0) return new object[] {};
       IEnumerable<ConstructorInfo> possibleConstructors = type.GetConstructors().Where(c => c.GetParameters().Length == args.Length);      
       foreach (ConstructorInfo ci in possibleConstructors)

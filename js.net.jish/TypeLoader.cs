@@ -12,7 +12,7 @@ namespace js.net.jish
       {
         string assembly = typeName.Substring(typeName.IndexOf(',') + 1).Trim();
         if (assemblies.ContainsKey(assembly))
-        {
+        {          
           return assemblies[assembly].GetType(typeName.Substring(0, typeName.IndexOf(',')));
         }
       }
