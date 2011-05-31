@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using js.net.jish.Command;
+using Ninject;
 
 namespace js.net.jish
 {
@@ -11,8 +11,8 @@ namespace js.net.jish
     void RunFile(string file, string[] args = null);
     void ClearBufferedCommand();
     IEnumerable<ICommand> GetCommands();
-    void SetGlobal(string name, object valud);
-    IDictionary<string, Assembly> GetLoadedAssemblies();
-    JSConsole JavaScriptConsole { get; }
+    void SetGlobal(string name, object valud);    
+    void InitialiseDependencies(IKernel kernel);
+    void InitialiseInputConsole();
   }
 }

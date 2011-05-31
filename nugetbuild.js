@@ -1,7 +1,7 @@
 // Use jish.exe to execute this file
 
 // Load required .Net statics and objects
-.static(System.IO.File);
+.create('System.IO.File', 'file');
 // We are creating and reusing an instance of process because using .process
 // means that it will be executed at the start of the file which is not 
 // acceptable here
@@ -32,9 +32,8 @@ function updateNuGetBuildFiles() {
   copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
 };
 
-function copyFile(from, to) {
-  if (File.Exists(to)) File.Delete(to);
-  File.Copy([from, to]);
+function copyFile(from, to) {  
+  file.Copy(from, to, true);
 };
 
 function updateVersionNumberInNuGetConfigs() {

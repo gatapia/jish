@@ -1,11 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace js.net.jish.Command
 {
   public class AssemblyCommand : ParseInputCommand
-  {    
+  {
+    private readonly LoadedAssembliesBucket loadedAssemblies;
+    private readonly JSConsole console;
+
+    public AssemblyCommand(LoadedAssembliesBucket loadedAssemblies, JSConsole console)
+    {
+      this.loadedAssemblies = loadedAssemblies;
+      this.console = console;
+    }
+
     public override string GetName()
     {
       return "assembly";
@@ -13,15 +20,15 @@ namespace js.net.jish.Command
 
     public override string GetHelpDescription()
     {
-      return "Loads a .Net assembly in preparation for .static calls.";
+      return "Loads a .Net assembly in preparation for .create calls.";
     }
 
     public override void Execute(string input)
     {
       string assemblyFileName = ParseFileOrTypeName(input);      
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      JishEngine.GetLoadedAssemblies()[assembly.GetName().Name] = assembly;
-      JishEngine.JavaScriptConsole.log("Assembly '" + assembly.GetName().Name + "' loaded.");
+      loadedAssemblies.AddAssembly(assembly);
+      console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
     }
   }
 }

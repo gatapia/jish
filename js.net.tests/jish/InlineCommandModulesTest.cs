@@ -15,10 +15,9 @@ namespace js.net.tests.jish
       base.SetUp();
     }
 
-    public override void TearDown()
+    public void TearDown()
     {
       if (File.Exists(targetCommandDll)) File.Delete(targetCommandDll);
-      base.TearDown();
     }
 
     [Test] public void TestExecutingTestInlineCommand()

@@ -8,15 +8,21 @@ using System.Reflection;
 namespace js.net.jish
 {
   public class DelegateBuilder
-  {
+  {    
+    private readonly TypeLoader typeLoader;
+
+    public DelegateBuilder(TypeLoader typeLoader)
+    {
+      this.typeLoader = typeLoader;
+    }
+
     public Delegate ToDelegate(MethodInfo mi, object target)
     {
       Trace.Assert(mi != null);
       
 
       Type delegateType;
-      List<Type> typeArgs = mi.GetParameters().Select(p => p.ParameterType).ToList();      
-      // builds a delegate type
+      List<Type> typeArgs = mi.GetParameters().Select(p => p.ParameterType).ToList();            
       if (mi.ReturnType == typeof (void))
       {
         delegateType = Expression.GetActionType(typeArgs.ToArray());
@@ -27,12 +33,23 @@ namespace js.net.jish
         delegateType = Expression.GetFuncType(typeArgs.ToArray());
       }
 
+      if (mi.IsGenericMethod)
+      {
+        var del = new Func<string[], Delegate>(types => Delegate.CreateDelegate(mi.DeclaringType, mi.MakeGenericMethod(GetTypesFromNames(types))));
+        return del;
+      }
+
       // creates a binded delegate if target is supplied
       Delegate result = (target == null)
                           ? Delegate.CreateDelegate(delegateType, mi)
                           : Delegate.CreateDelegate(delegateType, target, mi);
 
       return result;
+    }
+
+    private Type[] GetTypesFromNames(string[] types)
+    {
+      return types.Select(tstr => typeLoader.LoadType(tstr)).ToArray();
     }
 
     public Delegate ToOverridenMethodDelegate(IEnumerable<MethodInfo> mis, object target)

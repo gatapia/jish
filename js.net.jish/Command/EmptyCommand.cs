@@ -2,7 +2,7 @@
 {
   public abstract class EmptyCommand : ICommand
   {
-    public IJishInterpreter JishEngine { get; set; }
+    public IJishInterpreter JishEngine { get; set; }    
 
     public abstract string GetName();
     public abstract string GetHelpDescription();

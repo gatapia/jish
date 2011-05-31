@@ -4,6 +4,13 @@ namespace js.net.test.module
 {
   public class TestCommand : EmptyCommand
   {
+    private readonly JSConsole console;
+
+    public TestCommand(JSConsole console)
+    {
+      this.console = console;
+    }
+
     public override string GetName()
     {
       return "testcommand";
@@ -16,7 +23,7 @@ namespace js.net.test.module
 
     public override void Execute(string input)
     {
-      JishEngine.JavaScriptConsole.log("test command executed");
+      console.log("test command executed");
     }
   }
 }

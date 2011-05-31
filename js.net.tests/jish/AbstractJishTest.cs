@@ -1,26 +1,27 @@
 ﻿using js.net.Engine;
 using js.net.jish;
+using Ninject;
 using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
   public abstract class AbstractJishTest
   {
-    private IEngine engine;
     protected IJishInterpreter jish;
     protected TestingConsole console;
 
     [SetUp] public virtual void SetUp()
     {
-      engine = new JSNetEngine();
+      StandardKernel kernel = new StandardKernel();
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
+      kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
+      IEngine engine = new JSNetEngine();
+      kernel.Bind<IEngine>().ToConstant(engine);      
       console = new TestingConsole();      
       engine.SetGlobal("console", console);
-      jish = new JishInterpreter(engine, console);
-    }
-
-    [TearDown] public virtual void TearDown()
-    {
-      engine.Dispose();
-    }
+      kernel.Bind<JSConsole>().ToConstant(console);      
+      jish = kernel.Get<IJishInterpreter>();
+      jish.InitialiseDependencies(kernel);
+    }    
   }
 }

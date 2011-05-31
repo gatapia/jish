@@ -5,6 +5,13 @@ namespace js.net.jish.Command
 {
   public class ProcessCommand : ParseInputCommand
   {
+    private readonly JSConsole console;
+
+    public ProcessCommand(JSConsole console)
+    {
+      this.console = console;
+    }
+
     public override string GetName()
     {
       return "process";
@@ -63,8 +70,8 @@ namespace js.net.jish.Command
         process.Start();
         string err = process.StandardError.ReadToEnd();
         string output = process.StandardOutput.ReadToEnd();
-        if (!String.IsNullOrWhiteSpace(err)) JishEngine.JavaScriptConsole.log(err);
-        if (!String.IsNullOrWhiteSpace(output)) JishEngine.JavaScriptConsole.log(output);
+        if (!String.IsNullOrWhiteSpace(err)) console.log(err);
+        if (!String.IsNullOrWhiteSpace(output)) console.log(output);
         process.WaitForExit();
 
         if (process.ExitCode != 0)

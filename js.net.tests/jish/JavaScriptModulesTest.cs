@@ -20,10 +20,9 @@ function testFunction(arg1) {
       base.SetUp();
     }
 
-    public override void TearDown()
+    public void TearDown()
     {
       if (File.Exists(TEST_FILE)) File.Delete(TEST_FILE);
-      base.TearDown();
     }
 
     [Test] public void TestModuleLoaded()

@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace js.net.jish
 {
-  public class Jish
+  public class InputLoop
   {
     private readonly IJishInterpreter interpretter;
 
-    public Jish(IJishInterpreter interpretter)
+    public InputLoop(IJishInterpreter interpretter)
     {
       this.interpretter = interpretter;
     }
 
-    public void StartJish()
+    public void StartInputLoop()
     {   
       while (true)
       {

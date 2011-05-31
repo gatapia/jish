@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -9,6 +8,15 @@ namespace js.net.jish.Command
 {
   public class CreateCommand : ParseInputCommand
   {
+    private readonly TypeLoader typeLoader;
+    private readonly JSConsole console;
+
+    public CreateCommand(TypeLoader typeLoader, JSConsole console)
+    {
+      this.typeLoader = typeLoader;
+      this.console = console;
+    }
+
     public override string GetName()
     {
       return "create";
@@ -25,27 +33,29 @@ namespace js.net.jish.Command
       string[] split = Regex.Split(typeArgsAndGlobalName, ",(?=(?:[^']*'[^']*')*[^']*$)").Select(s => s.Trim().Replace("\"", "").Replace("'", "")).ToArray();
       string[] args = split.Skip(1).Take(split.Length - 2).ToArray();
       string typeStr = split[0];
-      Type t = new TypeLoader().LoadType(typeStr, JishEngine.GetLoadedAssemblies());
+      Type t = typeLoader.LoadType(typeStr);
       if (t == null)
       {
-        JishEngine.JavaScriptConsole.log("Could not find a matching type: " + typeStr);
+        console.log("Could not find a matching type: " + typeStr);
         return;
       }
       object[] realArgs = ConvertToActualArgs(args, t);
       if (realArgs == null)
       {
-        JishEngine.JavaScriptConsole.log("Could not find a matching constructor.");
+        console.log("Could not find a matching constructor.");
         return;
       }
       object instance;
-      if (t.GetConstructors(BindingFlags.Public).Length == 0)
+      if (t.GetConstructors().Length == 0)
       {
-
+        instance = new StaticTypeWrapper(t).CreateWrapper();
       } else
       {
         instance = Activator.CreateInstance(t, realArgs);
       }
-      JishEngine.SetGlobal(split.Last(), instance);
+      string globalName = split.Last();
+      JishEngine.SetGlobal(globalName, instance);
+      console.log("Created instance of " + typeStr + ". Saved in global '" + globalName + "'");
     }
 
     private object[] ConvertToActualArgs(string[] args, Type type)

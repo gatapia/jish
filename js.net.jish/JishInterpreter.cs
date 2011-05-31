@@ -9,39 +9,42 @@ using js.net.Engine;
 using js.net.jish.Command;
 using js.net.jish.InlineCommand;
 using js.net.Util;
+using Ninject;
 using Noesis.Javascript;
 
 namespace js.net.jish
 {
   public class JishInterpreter : IJishInterpreter
   {
-    private readonly IList<ICommand> commands = new List<ICommand>();
-    protected IDictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
+    private readonly IList<ICommand> commands = new List<ICommand>();    
 
     private readonly JSConsole javaScriptConsole;
     private readonly IEngine engine;
+    private readonly LoadedAssembliesBucket loadedAssemblies;
+    private readonly EmbeddedResourcesUtils embeddedResourceLoader;
+
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole)
+    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader)
     {
       Trace.Assert(engine != null);
       Trace.Assert(javaScriptConsole != null);
 
       this.engine = engine;
-      this.javaScriptConsole = javaScriptConsole;
-      
-      Initialise();      
+      this.embeddedResourceLoader = embeddedResourceLoader;
+      this.loadedAssemblies = loadedAssemblies;
+      this.javaScriptConsole = javaScriptConsole;           
     }
 
-    private void Initialise()
+    public void InitialiseDependencies(IKernel kernel)
     {
       Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
-      Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
-      Array.ForEach(assemblies, LoadAllInlineCommandsFromAssembly);      
-      Array.ForEach(assemblies, a => loadedAssemblies.Add(a.GetName().Name, a));
-      // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?
-      EmbeddedResourcesUtils embedded = new EmbeddedResourcesUtils();      
-      engine.Run(embedded.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
+      Array.ForEach(assemblies, a => LoadAllCommandsFromAssembly(kernel, a));      
+      Array.ForEach(assemblies, a => LoadAllInlineCommandsFromAssembly(kernel, a));      
+      Array.ForEach(assemblies, loadedAssemblies.AddAssembly);
+
+      // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?       
+      engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
       LoadJavaScriptModules();
     }
     
@@ -56,21 +59,21 @@ namespace js.net.jish
       return defaultAssemlies.Concat(moduleAssemblies);
     }
 
-    private void LoadAllCommandsFromAssembly(Assembly assembly)
+    private void LoadAllCommandsFromAssembly(IKernel kernel, Assembly assembly)
     {
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(ICommand)))
       {
-        ICommand command = (ICommand) Activator.CreateInstance(t);
+        ICommand command = (ICommand) kernel.Get(t);
         command.JishEngine = this;
         commands.Add(command);
       }      
     }
     
-    private void LoadAllInlineCommandsFromAssembly(Assembly assembly)
+    private void LoadAllInlineCommandsFromAssembly(IKernel kernel, Assembly assembly)
     {
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
       {
-        IInlineCommand icommand = (IInlineCommand) Activator.CreateInstance(t);
+        IInlineCommand icommand = (IInlineCommand) kernel.Get(t);
         string ns = icommand.GetNameSpace();
         if (String.IsNullOrWhiteSpace(ns)) { throw new ApplicationException("Could not load inline command from type[" + t.FullName + "].  No namespace specified.");}
         if (ns.IndexOf('.') > 0)
@@ -151,13 +154,13 @@ namespace js.net.jish
       returnValue = null;
       try
       {
-        returnValue = engine.Run("(" + bufferedCommand + ")", "jish");
+        returnValue = engine.Run("(" + bufferedCommand + ")", "JishInterpreter.AttemptToRunCommand_1");
         bufferedCommand = String.Empty;
       }  catch (JavascriptException)
       {
         try
         {
-          returnValue = engine.Run(bufferedCommand, "jish");
+          returnValue = engine.Run(bufferedCommand, "JishInterpreter.AttemptToRunCommand_2");
           bufferedCommand = String.Empty;
         } catch (JavascriptException ex2)
         {
@@ -212,11 +215,6 @@ namespace js.net.jish
       return commands;
     }
 
-    public IDictionary<string, Assembly> GetLoadedAssemblies()
-    {
-      return loadedAssemblies;
-    }
-
     public JSConsole JavaScriptConsole
     {
       get { return javaScriptConsole; }
@@ -227,7 +225,7 @@ namespace js.net.jish
       engine.SetGlobal(name, valud);
     }
 
-    public void InitialiseConsole()
+    public void InitialiseInputConsole()
     {
       Console.TreatControlCAsInput = false;
       Console.CancelKeyPress += (s, e) => Environment.Exit(0);

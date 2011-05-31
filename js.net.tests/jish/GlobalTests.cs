@@ -16,9 +16,8 @@ namespace js.net.tests.jish
       File.WriteAllText(TEST_FILE, command);
     }
 
-    [TearDown] public override void TearDown()
+    [TearDown] public void TearDown()
     {
-      base.TearDown();
       if (File.Exists(TEST_FILE)) File.Delete(TEST_FILE);
     }
 
