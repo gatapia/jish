@@ -7,6 +7,11 @@
   - ILMerge all managed assemblies (and exe)
 
 - jish
+  - Separate jish and js.net, jish is probably now the project with most potential
+  - Jish help should load the 'build.js' as an example file
+  - .process should become jish.process
+  - jish.commands should integrate to help
+  - help system should display arg names
   - Installer? Including making it the default js interpreter?
   - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
