@@ -15,7 +15,7 @@ namespace js.net.jish
 
     public string ValidateArguments(object[] actualArguments)
     {
-      IEnumerable<CommandParm> expected = command.GetParameters();
+      IEnumerable<CommandParam> expected = command.GetParameters();
       if (expected == null || expected.Count() == 0)
       {
         if (actualArguments != null && actualArguments.Length > 0)
@@ -35,7 +35,7 @@ namespace js.net.jish
                        String.Join(", ", expected) + "].  Only got " + actualArguments.Length + " [" +
                        String.Join(", ", actualArguments) + "]";
 
-      CommandParm last = expected.Last();
+      CommandParam last = expected.Last();
       if (!last.IsParams) { return message; }
       int diff = expected.Count() - actualArguments.Length;
       return (diff == 1 || diff < 0) ? String.Empty : message;

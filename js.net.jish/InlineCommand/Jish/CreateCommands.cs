@@ -54,12 +54,12 @@ namespace js.net.jish.InlineCommand.Jish
       return "Creates and instance of any type (including static classes).  If the type's assembly is not loaded you must precede this call with a call to jish.assembly('assemblyFileName').";
     }
 
-    public IEnumerable<CommandParm> GetParameters()
+    public IEnumerable<CommandParam> GetParameters()
     {
       return new[]
       {
-        new CommandParm {Name = "typeName"},
-        new CommandParm {Name = "args", IsParams = true }
+        new CommandParam {Name = "typeName"},
+        new CommandParam {Name = "args", IsParams = true }
       };
     }
   }

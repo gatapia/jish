@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace js.net.tests.jish
+namespace js.net.tests.jish.Command
 {
   [TestFixture] public class CommandModulesTest : AbstractJishTest
   {
-    private const string sourceCommandDll = @"..\..\..\js.net.test.module\bin\Debug\js.net.test.module.dll";
+    private const string sourceCommandDll = @"..\..\..\js.net.test.module\bin\js.net.test.module.dll";
     private const string targetCommandDll = @"modules\js.net.test.module.dll";
 
     public override void SetUp()

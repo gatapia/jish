@@ -19,22 +19,24 @@ namespace js.net.jish
   public class JishInterpreter : IJishInterpreter
   {
     private readonly IDictionary<string, Type> commands = new Dictionary<string, Type>();
-    private readonly IList<ICommand> loadedCommands = new List<ICommand>();    
+    // private readonly IList<ICommand> loadedCommands = new List<ICommand>();    
 
     private readonly JSConsole console;
     private readonly IEngine engine;
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly EmbeddedResourcesUtils embeddedResourceLoader;
     private readonly IKernel kernel;
+    private readonly HelpMgr helpManager;
 
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, IKernel kernel)
+    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, IKernel kernel, HelpMgr helpManager)
     {
       Trace.Assert(engine != null);
       Trace.Assert(console != null);
 
       this.engine = engine;
+      this.helpManager = helpManager;
       this.kernel = kernel;
       this.embeddedResourceLoader = embeddedResourceLoader;
       this.loadedAssemblies = loadedAssemblies;
@@ -70,7 +72,7 @@ namespace js.net.jish
       {
         ICommand command = CreateCommand(kernel, t);
         commands.Add(command.GetName(), t);
-        loadedCommands.Add(command);
+        helpManager.AddHelpForSpecialCommand(command);
       }
     }
 
@@ -89,6 +91,7 @@ namespace js.net.jish
         if (String.IsNullOrWhiteSpace(ns)) { throw new ApplicationException("Could not load inline command from type[" + t.FullName + "].  No namespace specified.");}
         if (ns.IndexOf('.') > 0) { throw new ApplicationException("Nested namespaces (namespaces with '.' in them) are not supported."); }
         if (!icommands.ContainsKey(ns)) icommands.Add(ns, new List<IInlineCommand>());
+        helpManager.AddHelpForInlineCommand(icommand);
         icommands[ns].Add(icommand);
       }
 
@@ -114,7 +117,6 @@ global['{0}']['{1}'] = function() {{
 
         foreach (string method in command.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
         {
-          console.log("Adding method: " + method + " to namespace: " + ns);
           js.Append(String.Format(jsBinder, ns, method, tmpClassName));
         }
       }
@@ -123,7 +125,16 @@ global['{0}']['{1}'] = function() {{
 
     private IEnumerable<Type> GetAllTypesThatImplement(Assembly assembly, Type iface)
     {
-      return assembly.GetTypes().Where(t => !t.IsAbstract && iface.IsAssignableFrom(t));
+      try
+      {
+        Type[] types = assembly.GetTypes();
+        return types.Where(t => !t.IsAbstract && iface.IsAssignableFrom(t));
+      } catch (ReflectionTypeLoadException ex) {
+        foreach(Exception inner in ex.LoaderExceptions) {
+            Console.WriteLine(inner);
+        }
+        throw;
+      }
     }
 
 
@@ -261,11 +272,6 @@ global['{0}']['{1}'] = function() {{
 
     public bool ThrowErrors { get; set; }
 
-    public IEnumerable<ICommand> GetAllActiveCommands()
-    {
-      return loadedCommands;
-    }
-
     private void PrintExceptionMessage(Exception e)
     {
       string msg = e.Message;
@@ -278,6 +284,11 @@ global['{0}']['{1}'] = function() {{
     private void InterceptSpecialCommands(string input)
     {
       string commandName = new Regex(@"\.([A-z0-9])+").Match(input).Captures[0].Value.Substring(1).Trim();
+      if (commandName.Equals("help"))
+      {
+        console.log(helpManager.GetHelpString());
+        return;
+      }
       if (!commands.ContainsKey(commandName))
       {
         console.log("Could not find command: " + input);

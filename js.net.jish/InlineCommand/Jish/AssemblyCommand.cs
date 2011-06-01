@@ -37,9 +37,9 @@ namespace js.net.jish.InlineCommand.Jish
       return "Loads an assembly into the Jish 'context'. You can not jish.create(<typeNames>) types from this assembly.";
     }
 
-    public IEnumerable<CommandParm> GetParameters()
+    public IEnumerable<CommandParam> GetParameters()
     {
-      return new[] { new CommandParm {Name = "assemblyFileName"} };
+      return new[] { new CommandParam {Name = "assemblyFileName"} };
     }
   }
 }

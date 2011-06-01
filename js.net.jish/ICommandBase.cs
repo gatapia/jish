@@ -7,6 +7,6 @@ namespace js.net.jish
   {
     string GetName();
     string GetHelpDescription();
-    IEnumerable<CommandParm> GetParameters();
+    IEnumerable<CommandParam> GetParameters();
   }
 }

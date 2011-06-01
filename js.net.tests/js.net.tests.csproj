@@ -64,9 +64,10 @@
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="FrameworkAdapters\JSDomAdapterTest.cs" />
     <Compile Include="jish\AbstractJishTest.cs" />
-    <Compile Include="jish\CommandModulesTest.cs" />
-    <Compile Include="jish\InlineCommandModulesTest.cs" />
-    <Compile Include="jish\CreateCommandTests.cs" />
+    <Compile Include="jish\Command\CommandModulesTest.cs" />
+    <Compile Include="jish\Command\HelpCommandTests.cs" />
+    <Compile Include="jish\Command\InlineCommandModulesTest.cs" />
+    <Compile Include="jish\Command\CreateCommandTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
     <Compile Include="jish\JavaScriptModulesTest.cs" />
     <Compile Include="jish\JishNuGetDeploymentPackageTest.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="jish\MultiLineTests.cs" />
     <Compile Include="jish\RunJishFileTests.cs" />
     <Compile Include="jish\TestingConsole.cs" />
-    <Compile Include="jish\CreateAndLoadCommandTests.cs" />
+    <Compile Include="jish\Command\CreateAndLoadCommandTests.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
     <Compile Include="TestAdapters\JSCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />

@@ -23,10 +23,10 @@ namespace js.net.jish.Command
       return "Executes the command in a separate Process.";
     }
 
-    public override IEnumerable<CommandParm> GetParameters()
+    public override IEnumerable<CommandParam> GetParameters()
     {
-      CommandParm a1 = new CommandParm { Name = "command" };
-      CommandParm a2 = new CommandParm { Name = "arguments", Null = true};
+      CommandParam a1 = new CommandParam { Name = "command" };
+      CommandParam a2 = new CommandParam { Name = "arguments", Null = true};
       return new[] { a1, a2 };
     }
 

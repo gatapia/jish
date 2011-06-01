@@ -26,9 +26,9 @@ namespace js.net.test.module
       return "help";
     }
 
-    public IEnumerable<CommandParm> GetParameters()
+    public IEnumerable<CommandParam> GetParameters()
     {
-      return new CommandParm[] { };
+      return new CommandParam[] { };
     }
   }
 }

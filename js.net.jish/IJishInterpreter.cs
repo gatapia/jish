@@ -13,7 +13,6 @@ namespace js.net.jish
     void SetGlobal(string name, object valud);    
     void InitialiseDependencies();
     void InitialiseInputConsole();
-    bool ThrowErrors { get; set; }
-    IEnumerable<ICommand> GetAllActiveCommands();
+    bool ThrowErrors { get; set; }    
   }
 }

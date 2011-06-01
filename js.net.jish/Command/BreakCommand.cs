@@ -21,9 +21,9 @@ namespace js.net.jish.Command
       return "Cancels the execution of a multi-line command.";
     }
 
-    public override IEnumerable<CommandParm> GetParameters()
+    public override IEnumerable<CommandParam> GetParameters()
     {
-      return new CommandParm[] {};
+      return new CommandParam[] {};
     }
 
     public override void Execute(params string[] args)

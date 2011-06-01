@@ -6,7 +6,7 @@ namespace js.net.jish.Command
   {
     public abstract string GetName();
     public abstract string GetHelpDescription();
-    public abstract IEnumerable<CommandParm> GetParameters();
+    public abstract IEnumerable<CommandParam> GetParameters();
     public abstract void Execute(params string[] args);    
   }
 }

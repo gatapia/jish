@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace js.net.tests.jish
+namespace js.net.tests.jish.Command
 {
   [TestFixture]
   internal class CreateCommandTests : AbstractJishTest

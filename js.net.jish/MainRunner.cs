@@ -9,7 +9,7 @@ namespace js.net.jish
   {
     [STAThread] public static void Main(string[] args)
     {
-      IKernel kernel = new StandardKernel();
+      IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
       IEngine engine = new JSNetEngine();
       JSConsole console = new JSConsole();
       engine.SetGlobal("console", console);
@@ -20,7 +20,7 @@ namespace js.net.jish
       kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
       
       InitialiseJishInterpreter(kernel);
-      StartInterpreter(kernel, args);
+      StartInterpreter(kernel, args, console);
     }
    
     private static void InitialiseJishInterpreter(IKernel kernel)
@@ -30,11 +30,13 @@ namespace js.net.jish
       jish.InitialiseInputConsole();
     }
 
-    private static void StartInterpreter(IKernel kernel, string[] args)
+    private static void StartInterpreter(IKernel kernel, string[] args, JSConsole console)
     {
       InputLoop inputLoop = kernel.Get<InputLoop>();
       if (args == null || args.Length == 0)
       {
+        console.log("Welcome to Jish. Type '.help' for more options.");
+
         inputLoop.StartInputLoop();
       }
       else

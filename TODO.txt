@@ -11,8 +11,6 @@
   - Jish README.md should load the 'build.js' as an example file
     - build.js should now be a more complete example
   - .process should become jish.process
-  - jish.commands should integrate to help
-  - help system should display arg names
   - Installer? Including making it the default js interpreter?
   - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
