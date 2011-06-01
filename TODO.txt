@@ -7,6 +7,9 @@
   - ILMerge all managed assemblies (and exe)
 
 - jish
+  - Installer? Including making it the default js interpreter?
+  - Limitation that .create goes to top of file is bad, make create a 
+    jish.create() module?
   - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
     * It would be nice to change the signature of generic methods so we 

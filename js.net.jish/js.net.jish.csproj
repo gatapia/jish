@@ -77,7 +77,6 @@
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="IJishInterpreter.cs" />
     <Compile Include="InlineCommand\IInlineCommand.cs" />
-    <Compile Include="JishNinjectModule.cs" />
     <Compile Include="Util\LoadedAssembliesBucket.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

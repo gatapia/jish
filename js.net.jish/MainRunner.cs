@@ -1,4 +1,6 @@
 ﻿using System;
+using js.net.Engine;
+using js.net.jish.Util;
 using Ninject;
 
 namespace js.net.jish
@@ -7,12 +9,29 @@ namespace js.net.jish
   {
     [STAThread] public static void Main(string[] args)
     {
-      IKernel kernel = new StandardKernel(new JishNinjectModule());
-
+      IKernel kernel = new StandardKernel();
+      IEngine engine = new JSNetEngine();
+      JSConsole console = new JSConsole();
+      engine.SetGlobal("console", console);
+      
+      kernel.Bind<IEngine>().ToConstant(engine);
+      kernel.Bind<JSConsole>().ToConstant(console);
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
+      kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
+      
+      InitialiseJishInterpreter(kernel);
+      StartInterpreter(kernel, args);
+    }
+   
+    private static void InitialiseJishInterpreter(IKernel kernel)
+    {
       IJishInterpreter jish = kernel.Get<IJishInterpreter>();
       jish.InitialiseDependencies();
       jish.InitialiseInputConsole();
-      
+    }
+
+    private static void StartInterpreter(IKernel kernel, string[] args)
+    {
       InputLoop inputLoop = kernel.Get<InputLoop>();
       if (args == null || args.Length == 0)
       {
@@ -23,5 +42,6 @@ namespace js.net.jish
         inputLoop.ExecuteArgs(args);
       }
     }
+
   }
 }

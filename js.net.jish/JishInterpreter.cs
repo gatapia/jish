@@ -20,7 +20,7 @@ namespace js.net.jish
     private readonly IDictionary<string, Type> commands = new Dictionary<string, Type>();
     private readonly IList<ICommand> loadedCommands = new List<ICommand>();
 
-    private readonly JSConsole javaScriptConsole;
+    private readonly JSConsole console;
     private readonly IEngine engine;
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly EmbeddedResourcesUtils embeddedResourceLoader;
@@ -28,16 +28,16 @@ namespace js.net.jish
 
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, IKernel kernel)
+    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, IKernel kernel)
     {
       Trace.Assert(engine != null);
-      Trace.Assert(javaScriptConsole != null);
+      Trace.Assert(console != null);
 
       this.engine = engine;
       this.kernel = kernel;
       this.embeddedResourceLoader = embeddedResourceLoader;
       this.loadedAssemblies = loadedAssemblies;
-      this.javaScriptConsole = javaScriptConsole;           
+      this.console = console;           
     }
 
     public void InitialiseDependencies()
@@ -110,14 +110,14 @@ namespace js.net.jish
 
     private void LoadJavaScriptModule(string file)
     {
-      javaScriptConsole.log("Loading JavaScript Module: " + file);
+      console.log("Loading JavaScript Module: " + file);
       RunFile(file);
-      javaScriptConsole.log("Successfully Imported JavaScript Module.");
+      console.log("Successfully Imported JavaScript Module.");
     }
 
     public virtual string ReadCommand()
     {
-      javaScriptConsole.log("> ", false);
+      console.log("> ", false);
       string input = Console.ReadLine().Trim();
       if (String.IsNullOrWhiteSpace(input))
       {
@@ -141,7 +141,7 @@ namespace js.net.jish
         if (!AttemptToRunCommand(out returnValue)) { return; } // Is multi-line
         if (IsLoggableReturnValue(returnValue))
         {
-          javaScriptConsole.log(returnValue);
+          console.log(returnValue);
         }
         if (returnValue != null) engine.SetGlobal("_", returnValue);
       }
@@ -222,11 +222,6 @@ namespace js.net.jish
       bufferedCommand = String.Empty;      
     }
 
-    public JSConsole JavaScriptConsole
-    {
-      get { return javaScriptConsole; }
-    }
-
     public void SetGlobal(string name, object valud)
     {
       engine.SetGlobal(name, valud);
@@ -251,7 +246,7 @@ namespace js.net.jish
       if (msg.IndexOf(": ") > 0) msg = msg.Substring(msg.IndexOf(": ") + 2);
       if (msg.IndexOf('(') > 0) msg = msg.Substring(0, msg.IndexOf('('));
 
-      javaScriptConsole.log(msg);
+      console.log(msg);
     }
 
     private void InterceptSpecialCommands(string input)
@@ -259,7 +254,7 @@ namespace js.net.jish
       string commandName = new Regex(@"\.([A-z0-9])+").Match(input).Captures[0].Value.Substring(1).Trim();
       if (!commands.ContainsKey(commandName))
       {
-        javaScriptConsole.log("Could not find command: " + input);
+        console.log("Could not find command: " + input);
         return;
       }
       CreateCommand(kernel, commands[commandName]).Execute(ParseSpecialCommandInputs(input));

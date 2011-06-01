@@ -24,8 +24,7 @@ if (args.indexOf('push') >= 0) {
 function updateNuGetBuildFiles() {
   // jish
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\jish\\tools\\Noesis.Javascript.dll');
-  copyFile('js.net.jish\\bin\\js.net.dll', 'build\\jish\\tools\\js.net.dll');
-  copyFile('js.net.jish\\bin\\jish.exe', 'build\\jish\\tools\\jish.exe');
+  runProcess('build\\ILMerge.exe', '/internalize /v4 /out:build\\jish\\tools\\jish.exe js.net.jish\\bin\\jish.exe js.net.jish\\bin\\js.net.dll js.net.jish\\bin\\Ninject.dll');
 
   // js.net
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll');
@@ -41,8 +40,8 @@ function updateVersionNumberInNuGetConfigs() {
 };
 
 function packNuGetPacakges() {  
-  runProcess('build\\NuGet.exe', 'Pack build\\js.net\\js.net.nuspec');
-  runProcess('build\\NuGet.exe', 'Pack build\\jish\\jish.nuspec');
+  runProcess('build\\NuGet.exe', 'Pack -OutputDirectory build\\js.net build\\js.net\\js.net.nuspec');
+  runProcess('build\\NuGet.exe', 'Pack -OutputDirectory build\\jish build\\jish\\jish.nuspec');
 };
 
 function pushNuGetPackages() {
