@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -7,7 +8,8 @@ namespace js.net.tests.jish
 {
   [TestFixture] public class JishNuGetDeploymentPackageTest
   {
-    private const string jishBuildDir = @"..\..\..\build\jish\tools\";
+    private const string rootDir = @"..\..\..\";
+    private const string jishBuildDir = @"build\jish\tools\";
     private const string testFile = "test.js";
     private const string testContent = 
 @"
@@ -21,6 +23,7 @@ if (file.Exists('test.js')) {
 
     [SetUp] public void SetUp()
     {
+      Directory.SetCurrentDirectory(rootDir);
       if (File.Exists(testFile))  File.Delete(testFile);
       File.WriteAllText(testFile, testContent);
     }
@@ -32,8 +35,7 @@ if (file.Exists('test.js')) {
 
     [Test] public void TestRunSimpleScriptInOwnProcess()
     {
-      AssertBuildDirectoryExistsAndAppearsCorrect();
-
+      AssertBuildDirectoryExistsAndAppearsCorrect();      
 
       const string command = jishBuildDir + "jish.exe";
       const string arguments = testFile;
@@ -51,9 +53,10 @@ if (file.Exists('test.js')) {
       {
         process.Start();
         string err = process.StandardError.ReadToEnd();
+        Console.WriteLine(err);
         string output = process.StandardOutput.ReadToEnd();
         Assert.IsEmpty(err);
-        Assert.AreEqual("success", output);
+        Assert.AreEqual("Created instance of System.IO.File.\r\nsuccess\r\n", output);
         process.WaitForExit();
         Assert.AreEqual(0, process.ExitCode);
       }
@@ -61,6 +64,7 @@ if (file.Exists('test.js')) {
 
     private void AssertBuildDirectoryExistsAndAppearsCorrect()
     {
+      Console.WriteLine("DIRECTORY: " + new DirectoryInfo(jishBuildDir).FullName);
       Assert.IsTrue(Directory.Exists(jishBuildDir));
       string[] files = Directory.GetFiles(jishBuildDir, "*.exe");
       Assert.IsTrue(files.Single(f => f.EndsWith("jish.exe")) != null);

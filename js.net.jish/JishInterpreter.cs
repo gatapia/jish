@@ -147,9 +147,8 @@ global['{0}']['{1}'] = function() {{
 
     private void LoadJavaScriptModule(string file)
     {
-      console.log("Loading JavaScript Module: " + file);
       RunFile(file);
-      console.log("Successfully Imported JavaScript Module.");
+      console.log("Successfully Imported JavaScript Module: " + file);
     }
 
     public virtual string ReadCommand()
@@ -266,8 +265,11 @@ global['{0}']['{1}'] = function() {{
 
     public void InitialiseInputConsole()
     {
-      Console.TreatControlCAsInput = false;
-      Console.CancelKeyPress += (s, e) => Environment.Exit(0);
+      try
+      {
+        Console.TreatControlCAsInput = false;
+        Console.CancelKeyPress += (s, e) => Environment.Exit(0);
+      } catch {} // Ignore, as this throws when running in a Process (tests)
     }
 
     public bool ThrowErrors { get; set; }
