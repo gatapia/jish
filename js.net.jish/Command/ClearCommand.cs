@@ -6,10 +6,12 @@ namespace js.net.jish.Command
   public class ClearCommand : EmptyCommand
   {
     private readonly IJishInterpreter jish;
+    private readonly JSConsole console;
 
-    public ClearCommand(IJishInterpreter jish)
+    public ClearCommand(IJishInterpreter jish, JSConsole console)
     {
       this.jish = jish;
+      this.console = console;
     }
 
     public override string GetName()
@@ -30,13 +32,14 @@ namespace js.net.jish.Command
     public override void Execute(params string[] args)
     {
       jish.ClearBufferedCommand();      
-      Console.WriteLine("Clearing context...");
+      console.log("Clearing context...");
       jish.ExecuteCommand(
         @"
 for (var i in this) {
   if (i === 'console' || i === 'global') continue;
   delete this[i];
 }
+null;
 "
         );
     }

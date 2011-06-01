@@ -18,7 +18,6 @@
     could do something like (in JavaScript):      
       // Where 'NameSpace.ClassName' is the generic argument
       variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
-  - .clear prints False
 
 - Documentation (Web Site)
   - Overview
