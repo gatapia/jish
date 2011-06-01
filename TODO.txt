@@ -7,8 +7,14 @@
   - ILMerge all managed assemblies (and exe)
 
 - jish
+  - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
-  - Commands should analyse input and parse into required argument types
+    * It would be nice to change the signature of generic methods so we 
+    could do something like (in JavaScript):
+      
+      // Where 'NameSpace.ClassName' is the generic argument
+      variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
+  - Commands should analyse input and parse into required argument types  
 
 - Documentation (Web Site)
   - Overview
