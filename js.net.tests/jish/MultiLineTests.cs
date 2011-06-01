@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace js.net.tests.jish
 {
@@ -27,8 +28,14 @@ namespace js.net.tests.jish
     {
       jish.ExecuteCommand("for (var i = 0; i < 10; i++)");
       jish.ExecuteCommand(".break");
-      jish.ExecuteCommand("console.log(i);");
-      Assert.AreEqual("i is not defined", console.GetLastMessage());
+      try
+      {
+        jish.ExecuteCommand("console.log(i);");
+        Assert.Fail("Should fail with ReferenceError: i is not defined");
+      } catch (Exception e)
+      {
+        Assert.IsTrue(e.Message.StartsWith("ReferenceError: i is not defined"));
+      }
     }
   }
 }

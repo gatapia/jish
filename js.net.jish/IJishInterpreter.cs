@@ -14,5 +14,6 @@ namespace js.net.jish
     void SetGlobal(string name, object valud);    
     void InitialiseDependencies(IKernel kernel);
     void InitialiseInputConsole();
+    bool ThrowErrors { get; set; }
   }
 }

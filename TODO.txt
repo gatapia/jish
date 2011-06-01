@@ -1,9 +1,10 @@
+
 - More unit testing frameworks
 - Fork the JavaScript.Net project as it appears to have died.
 - Find a way of getting more fail information from tests (exceptions).
-- Use linked assemblies instead of internal embedded referrence for deployment
 - Node interface
-- Improve the auto publish js to also update the git downloads
+- Improve the auto publish js to also update the git downloads.  
+  - ILMerge all managed assemblies (and exe)
 
 - jish
   - Generic methods not supported in .create (both static and instance)  

@@ -22,6 +22,7 @@ namespace js.net.tests.jish
       kernel.Bind<JSConsole>().ToConstant(console);      
       jish = kernel.Get<IJishInterpreter>();
       jish.InitialiseDependencies(kernel);
+      jish.ThrowErrors = true;
     }    
   }
 }

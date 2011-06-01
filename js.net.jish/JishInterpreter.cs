@@ -137,6 +137,7 @@ namespace js.net.jish
       catch (Exception e)
       {
         bufferedCommand = String.Empty;
+        if (ThrowErrors) throw;
         PrintExceptionMessage(e);
       }
     }
@@ -229,7 +230,9 @@ namespace js.net.jish
     {
       Console.TreatControlCAsInput = false;
       Console.CancelKeyPress += (s, e) => Environment.Exit(0);
-    }    
+    }
+
+    public bool ThrowErrors { get; set; }
 
     private void PrintExceptionMessage(Exception e)
     {
