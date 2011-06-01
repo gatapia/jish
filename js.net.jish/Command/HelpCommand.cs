@@ -21,7 +21,12 @@ namespace js.net.jish.Command
       return "Displays this screen.";
     }
 
-    public override void Execute(string input)
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    {
+      return AssertExpectedArguments(null);
+    }
+
+    public override void Execute(params string[] args)
     {
       foreach (ICommand command in JishEngine.GetCommands())
       {

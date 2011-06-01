@@ -14,7 +14,7 @@
       
       // Where 'NameSpace.ClassName' is the generic argument
       variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
-  - Commands should analyse input and parse into required argument types  
+  - Commands should be initialised on each call
 
 - Documentation (Web Site)
   - Overview

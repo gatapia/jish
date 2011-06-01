@@ -77,6 +77,8 @@ certain charasteristics which may not be immediately obvious.
 * ICommand(s) integrate into Jish's `.help` system
 * ICommand(s) are invoked by calling the command prefixed by a `.`. 
   I.e. `.commandname`
+* When adding your own custom ICommands you must implement an Execute method.
+  This is not enforced by the interface as you can define your own signature
 
 ### IInlineCommand 
 The IInlineCommand(s) extend the JavsScript environment by adding a type to the 

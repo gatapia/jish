@@ -21,7 +21,7 @@ namespace js.net.test.module
       return "test command help";
     }
 
-    public override void Execute(string input)
+    public override void Execute(params string[] args)
     {
       console.log("test command executed");
     }

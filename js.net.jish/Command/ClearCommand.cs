@@ -14,7 +14,7 @@ namespace js.net.jish.Command
       return "Break, and also clear the local context.";
     }
 
-    public override void Execute(string input)
+    public override void Execute(params string[] args)
     {
       JishEngine.ClearBufferedCommand();      
       Console.WriteLine("Clearing context...");

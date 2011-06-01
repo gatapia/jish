@@ -12,7 +12,7 @@
       return "Cancels the execution of a multi-line command.";
     }
 
-    public override void Execute(string input)
+    public override void Execute(params string[] args)
     {
       JishEngine.ClearBufferedCommand();
     }

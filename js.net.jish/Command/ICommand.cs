@@ -6,6 +6,8 @@
 
     string GetName();
     string GetHelpDescription();
-    void Execute(string input);
+    
+    string ValidateArgumentsBeforeExecute(params string[] args);
+    void Execute(params string[] args);
   }
 }

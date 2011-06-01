@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace js.net.jish.Command
 {
-  public class ProcessCommand : ParseInputCommand
+  public class ProcessCommand : EmptyCommand
   {
     private readonly JSConsole console;
 
@@ -22,45 +22,21 @@ namespace js.net.jish.Command
       return "Executes the command in a separate Process.";
     }
 
-    public override void Execute(string input)
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
     {
-      string commandAndArgs = GetCommandAndArgsFromInput(input);
-
-      string args, command;
-      ParseCommandAndArguments(commandAndArgs, out command, out args);
-      RunCommandWithArgs(commandAndArgs, command, args);
+      return AssertExpectedArguments(new [] {"command", "arguments"});
     }
 
-    private string GetCommandAndArgsFromInput(string input)
+    public override void Execute(params string[] args)
     {
-      string commandAndArgs = ParseFileOrTypeName(input);
-      if (commandAndArgs.StartsWith("'") || commandAndArgs.StartsWith("\""))
-        commandAndArgs = commandAndArgs.Substring(1);
-      if (commandAndArgs.EndsWith("'") || commandAndArgs.StartsWith("\""))
-        commandAndArgs = commandAndArgs.Substring(0, commandAndArgs.Length - 1);
-      return commandAndArgs;
-    }
-
-    private void ParseCommandAndArguments(string commandAndArgs, out string command, out string args)
-    {
-      int spaceIdx = commandAndArgs.IndexOf(' ');
-
-      command = commandAndArgs;
-      args = String.Empty;
-      if (spaceIdx <= 0) return;
-
-      command = commandAndArgs.Substring(0, commandAndArgs.IndexOf(' '));
-      args = commandAndArgs.Substring(commandAndArgs.IndexOf(' ') + 1);
-    }
-
-    private void RunCommandWithArgs(string commandAndArgs, string command, string args)
-    {      
+      string command = args[0];
+      string arguments = args[1];
       using (var process = new Process
                       {
                         StartInfo =
                           {
                             FileName = command,
-                            Arguments = args,
+                            Arguments = arguments,
                             UseShellExecute = false,
                             RedirectStandardOutput = true,
                             RedirectStandardError = true
@@ -76,7 +52,7 @@ namespace js.net.jish.Command
 
         if (process.ExitCode != 0)
         {
-          throw new ApplicationException("Process " + commandAndArgs + " exited with code: " + process.ExitCode);
+          throw new ApplicationException("Process [" + command + "] args [" + arguments+ "] exited with code: " + process.ExitCode);
         }
       }
     }

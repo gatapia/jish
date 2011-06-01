@@ -3,7 +3,7 @@ using js.net.jish.Util;
 
 namespace js.net.jish.Command
 {
-  public class AssemblyCommand : ParseInputCommand
+  public class AssemblyCommand : EmptyCommand
   {
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly JSConsole console;
@@ -24,9 +24,9 @@ namespace js.net.jish.Command
       return "Loads a .Net assembly in preparation for .create calls.";
     }
 
-    public override void Execute(string input)
+    public override void Execute(params string[] args)
     {
-      string assemblyFileName = ParseFileOrTypeName(input);      
+      string assemblyFileName = args[0];      
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
       loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");

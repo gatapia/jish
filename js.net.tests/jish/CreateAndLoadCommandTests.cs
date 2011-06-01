@@ -24,7 +24,7 @@ namespace js.net.tests.jish
     
     [Test] public void TestAssemblyLoad()
     {
-      jish.ExecuteCommand(".create('PicNet2.CryptoUtils, PicNet2')");
+      jish.ExecuteCommand(".create('PicNet2.CryptoUtils, PicNet2', 'cu')");
       Assert.AreEqual("Could not find a matching type: PicNet2.CryptoUtils, PicNet2", console.GetLastMessage());
       jish.ExecuteCommand(@".assembly(..\..\..\lib\PicNet2.dll)");
       Assert.AreEqual("Assembly 'PicNet2' loaded.", console.GetLastMessage());
@@ -76,6 +76,13 @@ namespace js.net.tests.jish
       Assert.AreEqual("Member 2 [123]", console.GetLastMessage());
     }
 
+    [Test] public void TestCreateWithConstructorArgs()
+    {
+      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'nsc', 'arg1', 'arg2')");
+      jish.ExecuteCommand("console.log(nsc.GetConstructorArgs());");
+      Assert.AreEqual("arg1arg2", console.GetLastMessage());
+    }
+
     [Test, Ignore("Generic Methods not supported")] public void TestNonStaticOverloadsWithGenericArgs()
     {
       jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'ns')");
@@ -120,6 +127,21 @@ namespace js.net.tests.jish
 
   public class InstanceMock
   {
+    private readonly string a1;
+    private readonly string a2;
+
+    public InstanceMock() {}
+    public InstanceMock(string a1, string a2)
+    {
+      this.a1 = a1;
+      this.a2 = a2;
+    }
+
+    public string GetConstructorArgs()
+    {
+      return a1 + a2;
+    }
+
     public string OverridenNSMember(int arg1, int arg2)
     {
       return "Non Satatic Member 1 [" + arg1 + arg2 + "]";

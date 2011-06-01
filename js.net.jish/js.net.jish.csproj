@@ -72,7 +72,6 @@
     <Compile Include="Command\ProcessCommand.cs" />
     <Compile Include="Command\CreateCommand.cs" />
     <Compile Include="Command\AssemblyCommand.cs" />
-    <Compile Include="Command\ParseInputCommand.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />
     <Compile Include="Command\ICommand.cs" />

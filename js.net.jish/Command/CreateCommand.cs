@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using js.net.jish.Util;
 
 namespace js.net.jish.Command
 {
-  public class CreateCommand : ParseInputCommand
+  public class CreateCommand : EmptyCommand
   {
     private readonly TypeLoader typeLoader;
     private readonly JSConsole console;
@@ -28,33 +27,33 @@ namespace js.net.jish.Command
       return "Creates an instance of an object and stores it in the specified global name.";
     }
 
-    public override void Execute(string input)
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
     {
-      string typeArgsAndGlobalName = ParseFileOrTypeName(input);
-      string[] split = Regex.Split(typeArgsAndGlobalName, ",(?=(?:[^']*'[^']*')*[^']*$)").Select(s => s.Trim().Replace("\"", "").Replace("'", "")).ToArray();
-      string[] args = split.Skip(1).Take(split.Length - 2).ToArray();
-      string typeStr = split[0];
+      return AssertExpectedArguments(new [] {"typeName", "globalVariableName", "constructor args (if any)"}, true);
+    }
+
+    public override void Execute(params string[] args)
+    {            
+      string typeStr = args[0];
+      string globalName = args[1];
+      string[] constructorArgsAsString = args.Skip(2).ToArray();
+
       Type t = typeLoader.LoadType(typeStr);
       if (t == null)
       {
         console.log("Could not find a matching type: " + typeStr);
         return;
       }
-      object[] realArgs = ConvertToActualArgs(args, t);
+      object[] realArgs = ConvertToActualArgs(constructorArgsAsString, t);
       if (realArgs == null)
       {
         console.log("Could not find a matching constructor.");
         return;
       }
-      object instance;
-      if (t.GetConstructors().Length == 0)
-      {
-        instance = new StaticTypeWrapper(t).CreateWrapper();
-      } else
-      {
-        instance = Activator.CreateInstance(t, realArgs);
-      }
-      string globalName = split.Last();
+      object instance = t.GetConstructors().Length == 0 
+        ? new StaticTypeWrapper(t).CreateWrapper() 
+        : Activator.CreateInstance(t, realArgs);
+      
       JishEngine.SetGlobal(globalName, instance);
       console.log("Created instance of " + typeStr + ". Saved in global '" + globalName + "'");
     }

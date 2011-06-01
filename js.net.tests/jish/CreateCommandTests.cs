@@ -8,7 +8,7 @@ namespace js.net.tests.jish
     [Test] public void TestCreateFileInfoSuccess()
     {
       const string file = @"..\..\..\lib\PicNet2.dll";
-      jish.ExecuteCommand(".create(System.IO.FileInfo, '" + file + "', 'dllFile')");
+      jish.ExecuteCommand(".create(System.IO.FileInfo, 'dllFile', '" + file + "')");
       jish.ExecuteCommand("console.log(dllFile.FullName);");
       Assert.AreEqual(new FileInfo(file).FullName, console.GetLastMessage());
     }
@@ -24,7 +24,7 @@ namespace js.net.tests.jish
     [Test] public void TestCreateWithMultipleconstructorArgs()
     {
       jish.ExecuteCommand(@".assembly(js.net.tests.dll)");      
-      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str', '1', 'test')");
+      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'test', 'str', '1')");
       jish.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("String[str] and Int[1] Arg", console.GetLastMessage());
     }
@@ -32,7 +32,7 @@ namespace js.net.tests.jish
     [Test] public void TestCreateWithMultiplePossibleConstructors()
     {
       jish.ExecuteCommand(@".assembly(js.net.tests.dll)");      
-      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'str1', 'str2', 'test')");
+      jish.ExecuteCommand(".create('js.net.tests.jish.TestCreateTarget, js.net.tests', 'test', 'str1', 'str2')");
       jish.ExecuteCommand("console.log(test.GetConstructorType());");
       Assert.AreEqual("String[str1] and String[str2] Arg", console.GetLastMessage());
     }

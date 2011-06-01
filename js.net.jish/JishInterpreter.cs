@@ -251,10 +251,18 @@ namespace js.net.jish
       foreach (ICommand command in commands)
       {
         if (!command.GetName().Equals(commandName)) continue;
-        command.Execute(input);
+        command.Execute(ParseSpecialCommandInputs(input));
         return;
       }
       javaScriptConsole.log("Could not find command: " + input);                  
-    }      
+    }
+
+    private string[] ParseSpecialCommandInputs(string input)
+    {
+      if (input.IndexOf('(') < 0) return null;
+      input = input.Substring(input.IndexOf('(') + 1); 
+      input = input.Substring(0, input.LastIndexOf(')')); 
+      return Regex.Split(input, ",(?=(?:[^']*'[^']*')*[^']*$)").Select(s => s.Trim().Replace("\"", "").Replace("'", "")).ToArray();
+    }
   }
 }
