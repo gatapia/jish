@@ -24,7 +24,7 @@ namespace js.net.jish.Command
 
     public override string ValidateArgumentsBeforeExecute(params string[] args)
     {
-      return AssertExpectedArguments(new [] {"command", "arguments"});
+      return AssertExpectedArguments(new [] {"command", "arguments"}, args);
     }
 
     public override void Execute(params string[] args)

@@ -14,6 +14,11 @@ namespace js.net.jish.Command
       return "Break, and also clear the local context.";
     }
 
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    {
+      return AssertExpectedArguments(null, args);
+    }
+
     public override void Execute(params string[] args)
     {
       JishEngine.ClearBufferedCommand();      

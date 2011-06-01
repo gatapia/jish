@@ -15,6 +15,7 @@
       // Where 'NameSpace.ClassName' is the generic argument
       variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
   - Commands should be initialised on each call
+  - Add unit testing for command arg validation
 
 - Documentation (Web Site)
   - Overview

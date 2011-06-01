@@ -23,14 +23,14 @@ namespace js.net.jish.Command
 
     public override string ValidateArgumentsBeforeExecute(params string[] args)
     {
-      return AssertExpectedArguments(null);
+      return AssertExpectedArguments(null, args);
     }
 
     public override void Execute(params string[] args)
     {
       foreach (ICommand command in JishEngine.GetCommands())
       {
-        console.log("." + command.GetName() + " - " + command.GetHelpDescription());
+        console.log("." + command.GetName() + "(args) - " + command.GetHelpDescription());
       }
     }
   }

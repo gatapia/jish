@@ -12,7 +12,7 @@ namespace js.net.jish.Command
 
     public abstract void Execute(params string[] args);
 
-    protected string AssertExpectedArguments(string[] expectedArgumentNames, params string[] actualArguments, bool lastArgOptional = false, bool lastArgParams = false;)
+    protected string AssertExpectedArguments(string[] expectedArgumentNames, string[] actualArguments, bool lastArgOptional = false, bool lastArgParams = false)
     {
       if (expectedArgumentNames == null || expectedArgumentNames.Length == 0)
       {
@@ -21,11 +21,25 @@ namespace js.net.jish.Command
           return "Command [." + GetName() + "] should not be invoked with any arguments.";
         }
         return String.Empty;
-      } else if (actualArguments == null || actualArguments.Length == 0 || actualArguments.Length != actualArguments.Length)
+      }            
+      if (actualArguments == null || actualArguments.Length == 0)
       {
-        return "Expected " + expectedArgumentNames.Length + " arguments [" + String.Join(", ", expectedArgumentNames) + "].  Only got " + actualArguments.Length + " [" + String.Join(", ", actualArguments) + "]";
+        return "Expected " + expectedArgumentNames.Length + " Names [" +
+                       String.Join(", ", expectedArgumentNames) + "].  Got no arguments.";
       }
-      return String.Empty;
+      if (actualArguments.Length == expectedArgumentNames.Length) return String.Empty;
+
+      string message = "Expected " + expectedArgumentNames.Length + " Names [" +
+                       String.Join(", ", expectedArgumentNames) + "].  Only got " + actualArguments.Length + " [" +
+                       String.Join(", ", actualArguments) + "]";
+
+      if (!lastArgOptional && !lastArgParams) return message;
+
+      if (actualArguments.Length > expectedArgumentNames.Length)
+      {
+        return lastArgParams ? String.Empty : message;
+      }
+      return lastArgOptional && expectedArgumentNames.Length - actualArguments.Length == 1 ? String.Empty : message;
     }
   }
 }

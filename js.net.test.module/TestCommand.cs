@@ -1,4 +1,5 @@
-﻿using js.net.jish.Command;
+﻿using System;
+using js.net.jish.Command;
 
 namespace js.net.test.module
 {
@@ -19,6 +20,11 @@ namespace js.net.test.module
     public override string GetHelpDescription()
     {
       return "test command help";
+    }
+
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    {
+      return AssertExpectedArguments(null, args);
     }
 
     public override void Execute(params string[] args)

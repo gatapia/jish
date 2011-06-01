@@ -29,7 +29,7 @@ namespace js.net.tests.jish
     [Test] public void TestTestModuleHasHelp()
     {
       jish.ExecuteCommand(".help");
-      Assert.IsTrue(console.GetLastMessage().IndexOf(".testcommand - test command help") >= 0, console.GetLastMessage());
+      Assert.IsTrue(console.GetLastMessage().IndexOf(".testcommand(args) - test command help") >= 0, console.GetLastMessage());
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using js.net.jish.Util;
 
 namespace js.net.jish.Command
@@ -22,6 +23,11 @@ namespace js.net.jish.Command
     public override string GetHelpDescription()
     {
       return "Loads a .Net assembly in preparation for .create calls.";
+    }
+
+    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    {
+      return AssertExpectedArguments(new[] {"assemblyFileName"}, args);
     }
 
     public override void Execute(params string[] args)
