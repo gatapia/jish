@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace js.net.jish.Command
@@ -22,9 +23,11 @@ namespace js.net.jish.Command
       return "Executes the command in a separate Process.";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(new [] {"command", "arguments"}, args);
+      CommandParm a1 = new CommandParm { Name = "command" };
+      CommandParm a2 = new CommandParm { Name = "arguments", Null = true};
+      return new[] { a1, a2 };
     }
 
     public override void Execute(params string[] args)

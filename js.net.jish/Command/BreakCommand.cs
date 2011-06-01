@@ -1,9 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace js.net.jish.Command
 {
   public class BreakCommand : EmptyCommand
   {
+    private readonly IJishInterpreter jish;
+
+    public BreakCommand(IJishInterpreter jish)
+    {
+      this.jish = jish;
+    }
+
     public override string GetName()
     {
       return "break";
@@ -14,14 +21,14 @@ namespace js.net.jish.Command
       return "Cancels the execution of a multi-line command.";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(null, args);
+      return new CommandParm[] {};
     }
 
     public override void Execute(params string[] args)
     {
-      JishEngine.ClearBufferedCommand();
+      jish.ClearBufferedCommand();
     }
   }
 }

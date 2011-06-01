@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace js.net.jish.Command
 {
@@ -14,9 +15,9 @@ namespace js.net.jish.Command
       return "Exit Jish.";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(null, args);
+      return new CommandParm[] {};
     }
 
     public override void Execute(params string[] args)

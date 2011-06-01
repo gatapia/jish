@@ -1,13 +1,15 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace js.net.jish.Command
 {
   public class HelpCommand : EmptyCommand
   {
+    private readonly IJishInterpreter jish;
     private readonly JSConsole console;
 
-    public HelpCommand(JSConsole console)
+    public HelpCommand(IJishInterpreter jish, JSConsole console)
     {
+      this.jish = jish;
       this.console = console;
     }
 
@@ -21,14 +23,14 @@ namespace js.net.jish.Command
       return "Displays this screen.";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(null, args);
+      return new CommandParm[] {};
     }
 
     public override void Execute(params string[] args)
     {
-      foreach (ICommand command in JishEngine.GetAllActiveCommands())
+      foreach (ICommand command in jish.GetAllActiveCommands())
       {
         console.log("." + command.GetName() + "(args) - " + command.GetHelpDescription());
       }

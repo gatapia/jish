@@ -1,4 +1,6 @@
-﻿initialise();
+﻿var global = this;
 
-function initialise() {
+__initialise();
+
+function __initialise() {
 };

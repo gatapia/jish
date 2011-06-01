@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using js.net.jish;
 using js.net.jish.Command;
 
 namespace js.net.test.module
@@ -22,9 +23,9 @@ namespace js.net.test.module
       return "test command help";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(null, args);
+      return new CommandParm[] { };
     }
 
     public override void Execute(params string[] args)

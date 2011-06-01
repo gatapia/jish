@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using js.net.jish.Util;
 
-namespace js.net.jish.InlineCommand
+namespace js.net.jish.Util
 {
   public class TypeCreator
   {

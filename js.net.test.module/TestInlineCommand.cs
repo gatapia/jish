@@ -1,4 +1,6 @@
-﻿using js.net.jish.InlineCommand;
+﻿using System.Collections.Generic;
+using js.net.jish;
+using js.net.jish.InlineCommand;
 
 namespace js.net.test.module
 {
@@ -9,9 +11,24 @@ namespace js.net.test.module
       return "inline_command";
     }
 
-    public int Add(int arg1, int arg2)
+    public int add(int arg1, int arg2)
     {
       return arg1 + arg2;
+    }
+
+    public string GetName()
+    {
+      return "add";
+    }
+
+    public string GetHelpDescription()
+    {
+      return "help";
+    }
+
+    public IEnumerable<CommandParm> GetParameters()
+    {
+      return new CommandParm[] { };
     }
   }
 }

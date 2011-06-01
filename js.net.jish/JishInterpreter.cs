@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.jish.Command;
@@ -18,7 +19,7 @@ namespace js.net.jish
   public class JishInterpreter : IJishInterpreter
   {
     private readonly IDictionary<string, Type> commands = new Dictionary<string, Type>();
-    private readonly IList<ICommand> loadedCommands = new List<ICommand>();
+    private readonly IList<ICommand> loadedCommands = new List<ICommand>();    
 
     private readonly JSConsole console;
     private readonly IEngine engine;
@@ -42,13 +43,13 @@ namespace js.net.jish
 
     public void InitialiseDependencies()
     {
+      engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
+
       Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
       Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
       Array.ForEach(assemblies, LoadAllInlineCommandsFromAssembly);      
       Array.ForEach(assemblies, loadedAssemblies.AddAssembly);
-
-      // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?       
-      engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
+      
       LoadJavaScriptModules();
     }
     
@@ -75,24 +76,49 @@ namespace js.net.jish
 
     private ICommand CreateCommand(IKernel kernel, Type t)
     {
-      ICommand command = (ICommand) kernel.Get(t);
-      command.JishEngine = this;
-      return command;
+      return (ICommand) kernel.Get(t);
     }
 
     private void LoadAllInlineCommandsFromAssembly(Assembly assembly)
     {
+      IDictionary<string, IList<IInlineCommand>> icommands = new Dictionary<string, IList<IInlineCommand>>();
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
       {
-        IInlineCommand icommand = (IInlineCommand) kernel.Get(t);
-        string ns = icommand.GetNameSpace();
+        IInlineCommand icommand = (IInlineCommand) kernel.Get(t);        
+        string ns = icommand.GetNameSpace();        
         if (String.IsNullOrWhiteSpace(ns)) { throw new ApplicationException("Could not load inline command from type[" + t.FullName + "].  No namespace specified.");}
-        if (ns.IndexOf('.') > 0)
-        {
-          throw new ApplicationException("Nested namespaces (namespaces with '.' in them) are not supported.");
-        }
-        engine.SetGlobal(ns, icommand);
+        if (ns.IndexOf('.') > 0) { throw new ApplicationException("Nested namespaces (namespaces with '.' in them) are not supported."); }
+        if (!icommands.ContainsKey(ns)) icommands.Add(ns, new List<IInlineCommand>());
+        icommands[ns].Add(icommand);
       }
+
+      foreach (KeyValuePair<string, IList<IInlineCommand>> nsCommands in icommands)
+      {
+        InjectCommands(nsCommands.Key, nsCommands.Value);
+      }
+    }
+
+    private void InjectCommands(string ns, IList<IInlineCommand> nsCommands)
+    {
+      const string jsBinder = 
+@"
+global['{0}']['{1}'] = function() {{
+  return global['{2}']['{1}'].apply(global, arguments)
+}};
+";
+      StringBuilder js = new StringBuilder(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
+      foreach (IInlineCommand command in nsCommands)
+      {
+        string tmpClassName = "__" + Guid.NewGuid();
+        engine.SetGlobal(tmpClassName, command);
+
+        foreach (string method in command.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
+        {
+          console.log("Adding method: " + method + " to namespace: " + ns);
+          js.Append(String.Format(jsBinder, ns, method, tmpClassName));
+        }
+      }
+      engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
     }
 
     private IEnumerable<Type> GetAllTypesThatImplement(Assembly assembly, Type iface)

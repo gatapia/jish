@@ -8,7 +8,8 @@
 
 - jish
   - Separate jish and js.net, jish is probably now the project with most potential
-  - Jish help should load the 'build.js' as an example file
+  - Jish README.md should load the 'build.js' as an example file
+    - build.js should now be a more complete example
   - .process should become jish.process
   - jish.commands should integrate to help
   - help system should display arg names

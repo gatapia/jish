@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace js.net.jish.Command
 {
   public class ClearCommand : EmptyCommand
   {
+    private readonly IJishInterpreter jish;
+
+    public ClearCommand(IJishInterpreter jish)
+    {
+      this.jish = jish;
+    }
+
     public override string GetName()
     {
       return "clear";
@@ -14,16 +22,16 @@ namespace js.net.jish.Command
       return "Break, and also clear the local context.";
     }
 
-    public override string ValidateArgumentsBeforeExecute(params string[] args)
+    public override IEnumerable<CommandParm> GetParameters()
     {
-      return AssertExpectedArguments(null, args);
+      return new CommandParm[] {};
     }
 
     public override void Execute(params string[] args)
     {
-      JishEngine.ClearBufferedCommand();      
+      jish.ClearBufferedCommand();      
       Console.WriteLine("Clearing context...");
-      JishEngine.ExecuteCommand(
+      jish.ExecuteCommand(
         @"
 for (var i in this) {
   if (i === 'console' || i === 'global') continue;

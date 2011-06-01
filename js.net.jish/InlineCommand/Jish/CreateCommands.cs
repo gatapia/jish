@@ -1,32 +1,21 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
 using js.net.jish.Util;
 
-namespace js.net.jish.InlineCommand
+namespace js.net.jish.InlineCommand.Jish
 {
-  public class CoreJishCommands : IInlineCommand
+  public class CreateCommand : IInlineCommand
   {
-    private readonly LoadedAssembliesBucket loadedAssemblies;
-    private readonly JSConsole console;
     private readonly TypeCreator typeCreator;
 
-    public CoreJishCommands(LoadedAssembliesBucket loadedAssemblies, JSConsole console, TypeCreator typeCreator)
+    public CreateCommand(TypeCreator typeCreator)
     {
-      this.loadedAssemblies = loadedAssemblies;
       this.typeCreator = typeCreator;
-      this.console = console;
     }
     
     public string GetNameSpace()
     {
       return "jish";
-    }
-
-    public void assembly(string assemblyFileName)
-    {
-      Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      loadedAssemblies.AddAssembly(assembly);
-      console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
     }
 
     // This uglyness is my inplementation of param object[] NULL_ARG is used 
@@ -53,6 +42,25 @@ namespace js.net.jish.InlineCommand
     {
       object[] args = new[] {a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16}.Where(a => a != NULL_ARG).ToArray();
       return typeCreator.CreateType(typeName, args);
+    }
+
+    public string GetName()
+    {
+      return "create";
+    }
+
+    public string GetHelpDescription()
+    {
+      return "Creates and instance of any type (including static classes).  If the type's assembly is not loaded you must precede this call with a call to jish.assembly('assemblyFileName').";
+    }
+
+    public IEnumerable<CommandParm> GetParameters()
+    {
+      return new[]
+      {
+        new CommandParm {Name = "typeName"},
+        new CommandParm {Name = "args", IsParams = true }
+      };
     }
   }
 }
