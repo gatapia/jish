@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace js.net.jish.Command
+namespace js.net.jish.Util
 {
   public class StaticTypeWrapper
   {

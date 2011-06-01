@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace js.net.jish
+namespace js.net.jish.Util
 {
   public class TypeLoader
   {

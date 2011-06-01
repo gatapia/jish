@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace js.net.jish
+namespace js.net.jish.Util
 {
   internal class AssemblyNameComparer : IEqualityComparer<Assembly>
   {

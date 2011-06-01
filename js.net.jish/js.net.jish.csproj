@@ -62,9 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyNameComparer.cs" />
-    <Compile Include="Command\StaticTypeWrapper.cs" />
-    <Compile Include="DelegateBuilder.cs" />
+    <Compile Include="Util\AssemblyNameComparer.cs" />
+    <Compile Include="Util\StaticTypeWrapper.cs" />
+    <Compile Include="Util\DelegateBuilder.cs" />
     <Compile Include="JishInterpreter.cs" />
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
@@ -79,11 +79,11 @@
     <Compile Include="IJishInterpreter.cs" />
     <Compile Include="InlineCommand\IInlineCommand.cs" />
     <Compile Include="JishNinjectModule.cs" />
-    <Compile Include="LoadedAssembliesBucket.cs" />
+    <Compile Include="Util\LoadedAssembliesBucket.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InputLoop.cs" />
-    <Compile Include="TypeLoader.cs" />
+    <Compile Include="Util\TypeLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\js.net\js.net.csproj">

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using js.net.Engine;
 using js.net.jish.Command;
 using js.net.jish.InlineCommand;
+using js.net.jish.Util;
 using js.net.Util;
 using Ninject;
 using Noesis.Javascript;
