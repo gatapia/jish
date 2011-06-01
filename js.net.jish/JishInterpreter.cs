@@ -17,31 +17,34 @@ namespace js.net.jish
 {
   public class JishInterpreter : IJishInterpreter
   {
-    private readonly IList<ICommand> commands = new List<ICommand>();    
+    private readonly IDictionary<string, Type> commands = new Dictionary<string, Type>();
+    private readonly IList<ICommand> loadedCommands = new List<ICommand>();
 
     private readonly JSConsole javaScriptConsole;
     private readonly IEngine engine;
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly EmbeddedResourcesUtils embeddedResourceLoader;
+    private readonly IKernel kernel;
 
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader)
+    public JishInterpreter(IEngine engine, JSConsole javaScriptConsole, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, IKernel kernel)
     {
       Trace.Assert(engine != null);
       Trace.Assert(javaScriptConsole != null);
 
       this.engine = engine;
+      this.kernel = kernel;
       this.embeddedResourceLoader = embeddedResourceLoader;
       this.loadedAssemblies = loadedAssemblies;
       this.javaScriptConsole = javaScriptConsole;           
     }
 
-    public void InitialiseDependencies(IKernel kernel)
+    public void InitialiseDependencies()
     {
       Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
-      Array.ForEach(assemblies, a => LoadAllCommandsFromAssembly(kernel, a));      
-      Array.ForEach(assemblies, a => LoadAllInlineCommandsFromAssembly(kernel, a));      
+      Array.ForEach(assemblies, LoadAllCommandsFromAssembly);      
+      Array.ForEach(assemblies, LoadAllInlineCommandsFromAssembly);      
       Array.ForEach(assemblies, loadedAssemblies.AddAssembly);
 
       // TODO: There is nothing in jish.js is it really needed? Is there any real immediate need for it?       
@@ -60,17 +63,24 @@ namespace js.net.jish
       return defaultAssemlies.Concat(moduleAssemblies);
     }
 
-    private void LoadAllCommandsFromAssembly(IKernel kernel, Assembly assembly)
+    private void LoadAllCommandsFromAssembly(Assembly assembly)
     {
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(ICommand)))
       {
-        ICommand command = (ICommand) kernel.Get(t);
-        command.JishEngine = this;
-        commands.Add(command);
-      }      
+        ICommand command = CreateCommand(kernel, t);
+        commands.Add(command.GetName(), t);
+        loadedCommands.Add(command);
+      }
     }
-    
-    private void LoadAllInlineCommandsFromAssembly(IKernel kernel, Assembly assembly)
+
+    private ICommand CreateCommand(IKernel kernel, Type t)
+    {
+      ICommand command = (ICommand) kernel.Get(t);
+      command.JishEngine = this;
+      return command;
+    }
+
+    private void LoadAllInlineCommandsFromAssembly(Assembly assembly)
     {
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
       {
@@ -212,11 +222,6 @@ namespace js.net.jish
       bufferedCommand = String.Empty;      
     }
 
-    public IEnumerable<ICommand> GetCommands()
-    {
-      return commands;
-    }
-
     public JSConsole JavaScriptConsole
     {
       get { return javaScriptConsole; }
@@ -235,6 +240,11 @@ namespace js.net.jish
 
     public bool ThrowErrors { get; set; }
 
+    public IEnumerable<ICommand> GetAllActiveCommands()
+    {
+      return loadedCommands;
+    }
+
     private void PrintExceptionMessage(Exception e)
     {
       string msg = e.Message;
@@ -246,15 +256,13 @@ namespace js.net.jish
 
     private void InterceptSpecialCommands(string input)
     {
-
       string commandName = new Regex(@"\.([A-z0-9])+").Match(input).Captures[0].Value.Substring(1).Trim();
-      foreach (ICommand command in commands)
+      if (!commands.ContainsKey(commandName))
       {
-        if (!command.GetName().Equals(commandName)) continue;
-        command.Execute(ParseSpecialCommandInputs(input));
+        javaScriptConsole.log("Could not find command: " + input);
         return;
       }
-      javaScriptConsole.log("Could not find command: " + input);                  
+      CreateCommand(kernel, commands[commandName]).Execute(ParseSpecialCommandInputs(input));
     }
 
     private string[] ParseSpecialCommandInputs(string input)

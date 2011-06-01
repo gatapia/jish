@@ -22,7 +22,7 @@ namespace js.net.tests.jish
       engine.SetGlobal("console", console);
       kernel.Bind<JSConsole>().ToConstant(console);      
       jish = kernel.Get<IJishInterpreter>();
-      jish.InitialiseDependencies(kernel);
+      jish.InitialiseDependencies();
       jish.ThrowErrors = true;
     }    
   }

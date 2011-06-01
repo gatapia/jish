@@ -28,7 +28,7 @@ namespace js.net.jish.Command
 
     public override void Execute(params string[] args)
     {
-      foreach (ICommand command in JishEngine.GetCommands())
+      foreach (ICommand command in JishEngine.GetAllActiveCommands())
       {
         console.log("." + command.GetName() + "(args) - " + command.GetHelpDescription());
       }

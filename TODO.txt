@@ -10,12 +10,9 @@
   - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
     * It would be nice to change the signature of generic methods so we 
-    could do something like (in JavaScript):
-      
+    could do something like (in JavaScript):      
       // Where 'NameSpace.ClassName' is the generic argument
       variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
-  - Commands should be initialised on each call
-  - Add unit testing for command arg validation
 
 - Documentation (Web Site)
   - Overview

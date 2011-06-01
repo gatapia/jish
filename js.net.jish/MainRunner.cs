@@ -10,7 +10,7 @@ namespace js.net.jish
       IKernel kernel = new StandardKernel(new JishNinjectModule());
 
       IJishInterpreter jish = kernel.Get<IJishInterpreter>();
-      jish.InitialiseDependencies(kernel);
+      jish.InitialiseDependencies();
       jish.InitialiseInputConsole();
       
       InputLoop inputLoop = kernel.Get<InputLoop>();
