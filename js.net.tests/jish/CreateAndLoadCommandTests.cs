@@ -6,36 +6,36 @@ namespace js.net.tests.jish
   {    
     [Test] public void TestUsingRecognisedRegardlessOfParenthesisOrQuotes() 
     {             
-      jish.ExecuteCommand(".create('System.IO.File', 'file')");
-      Assert.AreEqual("Created instance of System.IO.File. Saved in global 'file'", console.GetLastMessage());
+      jish.ExecuteCommand("var file = jish.create('System.IO.File');");
+      Assert.AreEqual("Created instance of System.IO.File.", console.GetLastMessage());
       console.Reset();
 
-      jish.ExecuteCommand(".create (\"System.IO.File\", \"file\")");
-      Assert.AreEqual("Created instance of System.IO.File. Saved in global 'file'", console.GetLastMessage());
+      jish.ExecuteCommand("var file = jish.create (\"System.IO.File\");");
+      Assert.AreEqual("Created instance of System.IO.File.", console.GetLastMessage());
       console.Reset();
     }
 
     [Test] public void TestUsingShortName()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock', 'im')");      
-      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock. Saved in global 'im'", console.GetLastMessage());
+      jish.ExecuteCommand("var im = jish.create('js.net.tests.jish.InstanceMock');");      
+      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock.", console.GetLastMessage());
     }
 
     
     [Test] public void TestAssemblyLoad()
     {
-      jish.ExecuteCommand(".create('PicNet2.CryptoUtils, PicNet2', 'cu')");
+      jish.ExecuteCommand("var cu = jish.create('PicNet2.CryptoUtils, PicNet2');");
       Assert.AreEqual("Could not find a matching type: PicNet2.CryptoUtils, PicNet2", console.GetLastMessage());
-      jish.ExecuteCommand(@".assembly(..\..\..\lib\PicNet2.dll)");
+      jish.ExecuteCommand(@"jish.assembly('..\\..\\..\\lib\\PicNet2.dll')");
       Assert.AreEqual("Assembly 'PicNet2' loaded.", console.GetLastMessage());
-      jish.ExecuteCommand(".create('PicNet2.CryptoUtils, PicNet2', 'cu')");
-      Assert.AreEqual("Created instance of PicNet2.CryptoUtils, PicNet2. Saved in global 'cu'", console.GetLastMessage());
+      jish.ExecuteCommand("var cu = jish.create('PicNet2.CryptoUtils, PicNet2');");
+      Assert.AreEqual("Created instance of PicNet2.CryptoUtils, PicNet2.", console.GetLastMessage());
     }
 
     [Test] public void TestOverloadedStaticMethods()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'im')");
-      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock, js.net.tests. Saved in global 'im'", console.GetLastMessage());
+      jish.ExecuteCommand("var im = jish.create('js.net.tests.jish.InstanceMock, js.net.tests');");
+      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock, js.net.tests.", console.GetLastMessage());
       jish.ExecuteCommand("console.log(im.OverridenStaticMember(1, 2));");
       Assert.AreEqual("Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(im.OverridenStaticMember(1, 2, 3));");
@@ -44,14 +44,14 @@ namespace js.net.tests.jish
 
     [Test] public void TestCallingWithParamsArgs()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'im')");
-      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock, js.net.tests. Saved in global 'im'", console.GetLastMessage());
+      jish.ExecuteCommand("var im = jish.create('js.net.tests.jish.InstanceMock, js.net.tests');");
+      Assert.AreEqual("Created instance of js.net.tests.jish.InstanceMock, js.net.tests.", console.GetLastMessage());
       jish.ExecuteCommand("console.log(im.ObjectArgs(['test', true]));");
     }
 
     [Test] public void TestOverloadedNonStaticMethods()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'ns')");
+      jish.ExecuteCommand("var ns = jish.create('js.net.tests.jish.InstanceMock, js.net.tests')");
       jish.ExecuteCommand("console.log(ns.OverridenNSMember(1, 2));");
       Assert.AreEqual("Non Satatic Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(ns.OverridenNSMember(1, 2, 3));");
@@ -60,7 +60,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestOverloadedStaticMethodsWithInstance()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'ns')");
+      jish.ExecuteCommand("var ns = jish.create('js.net.tests.jish.InstanceMock, js.net.tests')");
       jish.ExecuteCommand("console.log(ns.OverridenStaticMember(1, 2));");
       Assert.AreEqual("Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(ns.OverridenStaticMember(1, 2, 3));");
@@ -69,7 +69,7 @@ namespace js.net.tests.jish
 
     [Test] public void TestStaticClassOverloadedStaticMethodsWithInstance()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.StaticMock, js.net.tests', 'ns')");
+      jish.ExecuteCommand("var ns = jish.create('js.net.tests.jish.StaticMock, js.net.tests');");
       jish.ExecuteCommand("console.log(ns.OverridenStaticMember(1, 2));");
       Assert.AreEqual("Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(ns.OverridenStaticMember(1, 2, 3));");
@@ -78,14 +78,14 @@ namespace js.net.tests.jish
 
     [Test] public void TestCreateWithConstructorArgs()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'nsc', 'arg1', 'arg2')");
+      jish.ExecuteCommand("var nsc = jish.create('js.net.tests.jish.InstanceMock, js.net.tests', 'arg1', 'arg2')");
       jish.ExecuteCommand("console.log(nsc.GetConstructorArgs());");
       Assert.AreEqual("arg1arg2", console.GetLastMessage());
     }
 
     [Test, Ignore("Generic Methods not supported")] public void TestNonStaticOverloadsWithGenericArgs()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.InstanceMock, js.net.tests', 'ns')");
+      jish.ExecuteCommand("var ns = jish.create('js.net.tests.jish.InstanceMock, js.net.tests');");
       jish.ExecuteCommand("console.log(ns.OverridenNSMemberWithGenericArgs(1, 2));");
       Assert.AreEqual("Non Satatic Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(ns.OverridenNSMemberWithGenericArgs(1, 2, 3));");
@@ -94,7 +94,7 @@ namespace js.net.tests.jish
 
     [Test, Ignore("Generic Methods not supported")] public void TestStaticOverloadsWithGenericArgs()
     {
-      jish.ExecuteCommand(".create('js.net.tests.jish.StaticMock, js.net.tests', 'ns')");
+      jish.ExecuteCommand("var ns = jish.create('js.net.tests.jish.StaticMock, js.net.tests');");
       jish.ExecuteCommand("console.log(ns.OverridenStaticMemberWithGenerics(1, 2));");
       Assert.AreEqual("Member 1 [12]", console.GetLastMessage());
       jish.ExecuteCommand("console.log(ns.OverridenStaticMemberWithGenerics(1, 2, 3));");
@@ -131,6 +131,7 @@ namespace js.net.tests.jish
     private readonly string a2;
 
     public InstanceMock() {}
+
     public InstanceMock(string a1, string a2)
     {
       this.a1 = a1;

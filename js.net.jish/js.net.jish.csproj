@@ -70,8 +70,8 @@
     <Compile Include="Command\ClearCommand.cs" />
     <Compile Include="Command\EmptyCommand.cs" />
     <Compile Include="Command\ProcessCommand.cs" />
-    <Compile Include="Command\CreateCommand.cs" />
-    <Compile Include="Command\AssemblyCommand.cs" />
+    <Compile Include="InlineCommand\TypeCreator.cs" />
+    <Compile Include="InlineCommand\CoreJishCommands.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />
     <Compile Include="Command\ICommand.cs" />

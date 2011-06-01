@@ -1,11 +1,7 @@
 // Use jish.exe to execute this file
 
-// Load required .Net statics and objects
-.create('System.IO.File', 'file');
-// We are creating and reusing an instance of process because using .process
-// means that it will be executed at the start of the file which is not 
-// acceptable here
-.create('System.Diagnostics.Process, System', 'process');
+var file = jish.create('System.IO.File');
+var process = jish.create('System.Diagnostics.Process, System');
 
 // Run!
 updateNuGetBuildFiles();
