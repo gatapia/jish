@@ -7,7 +7,7 @@ way:
 - A wrapper around V8:  Include js.net.dll in your project and you can run 
  JavaScript straight from your .Net programs
 - A command line interface and JavaScript file interpreter for running 
- JavaScript straight from your console.
+ JavaScript straight from your console (Jish).
 - A set of unit testing bindings for different JavaScript frameoworks that
  allows you tu run your JavaScript tests straight from Visual Studio or your
  favourite CI tools.
@@ -25,18 +25,66 @@ Example:
     }
 
 ## Jish ##
-The JavaScript Interactive SHell is js.net's answer to Node.js's REPL.  It is 
-basically a command line interface to write JavaScript and interpret javascript 
-files.  To run Jish simple execute jish.exe
+Jish.exe is a command line shell interpreter to run JavaScript scripts that 
+allows .Net framework integration.  Jish can also be used to run JavaScript 
+scripts files.
 
-Example:
+## Running Jish
+Running 'jish.exe' will yield the interactive shell.
 
     jish.exe
     > 1 + 1
     2
-    > console.log('Hello World');
-    Hello World
-    >.exit
+    > .exit
+
+## Built-in Jish commands
+All inbuilt Jish commands start with a '.' character.  Jish commands cannot be 
+mixed on the same line with other JavaScript commands.  If Jish commands are run 
+as part of an input file they are executed prior to execution of any other 
+command.  Commands included in Jish are:
+
+* .help - Shows a help description of all other built in Jish commands
+* .process - Executes the command in a separate Process.
+* .create - Creates an instance of an object (including static classes) and 
+  stores it in the specified global name.
+* .clear - Break, and also clear the local context.
+* .break - Cancels the execution of a multi-line command.
+* .exit - Exit Jish.
+* .assembly - Loads a .Net assembly in preparation for .static calls.
+
+## Extending Jish
+There are 3 main extension points to Jish.  
+
+### JavaScript Modules
+The first way you can extend Jish is by creating a JavaScript extension files 
+that will be available to all your Jish scripts. 
+
+Simply create a 'modules' directory next to your 'jish.exe' file.  This 
+directory will be parsed for all `.js` files and they will be loaded 
+into your Jish environment.
+
+### ICommand (Special Commands)
+The special commands implement the ICommand interface.  ICommand(s) have 
+certain charasteristics which may not be immediately obvious.
+
+* ICommand(s) have access to IJishInterpreter which allows all ICommand(s) to 
+  run additional JavaScript files, load and set globals and integrate into the 
+  built in `.help` command.
+* ICommand(s) get run before any other JavaScript command, regardless where they 
+  appear on the JavaScript file.
+* ICommand(s) only accept simple primitive inputs.
+* ICommand(s) cannot return any values into the JavaScript environment
+* ICommand(s) integrate into Jish's `.help` system
+* ICommand(s) are invoked by calling the command prefixed by a `.`. 
+  I.e. `.commandname`
+
+### IInlineCommand 
+The IInlineCommand(s) extend the JavsScript environment by adding a type to the 
+  global namespace.
+
+* IInlineCommand(s) must have a non-embedded namespace (cannot contain '.'s)
+* IInlineCommand(s) cannot execute other scripts, or set/get globals
+* IInlineCommand(s) can return any primative type to the JavaScript environment.
     
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 
