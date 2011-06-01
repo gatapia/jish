@@ -29,7 +29,7 @@ namespace js.net.jish.Command
 
     public override string ValidateArgumentsBeforeExecute(params string[] args)
     {
-      return AssertExpectedArguments(new [] {"typeName", "globalVariableName", "constructor args (if any)"}, true);
+      return AssertExpectedArguments(new [] {"typeName", "globalVariableName", "constructor args (if any)"}, true, true);
     }
 
     public override void Execute(params string[] args)
