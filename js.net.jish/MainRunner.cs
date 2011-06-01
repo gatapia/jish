@@ -6,7 +6,7 @@ using Ninject;
 namespace js.net.jish
 {  
   public class MainRunner
-  {
+  {    
     [STAThread] public static void Main(string[] args)
     {
       IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });

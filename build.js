@@ -20,7 +20,7 @@ if (args.indexOf('push') >= 0) {
 function updateNuGetBuildFiles() {
   // jish
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\jish\\tools\\Noesis.Javascript.dll');
-  runProcess('build\\ILMerge.exe', '/internalize /v4  /target:winexe /out:build\\jish\\tools\\jish.exe js.net.jish\\bin\\jish.exe js.net.jish\\bin\\js.net.dll js.net.jish\\bin\\Ninject.dll');
+  runProcess('build\\ILMerge.exe', '/targetplatform:v4 /target:exe /out:build\\jish\\tools\\jish.exe js.net.jish\\bin\\jish.exe js.net.jish\\bin\\js.net.dll js.net.jish\\bin\\Ninject.dll');
 
   // js.net
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll');
