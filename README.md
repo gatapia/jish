@@ -23,9 +23,9 @@ That way you can send me fixes ;)
 
 Otherwise just download one of the following:
 
-[Jish - JavaScript Interactive SHell](https://github.com/gatapia/js.net/raw/master/build/jish.exe.zip)
-[js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/js.net/raw/master/build/js.net.dll.zip)
-[Both](https://github.com/gatapia/js.net/raw/master/build/both.zip)
+* [Jish - JavaScript Interactive SHell](https://github.com/gatapia/js.net/raw/master/build/jish.exe.zip)
+* [js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/js.net/raw/master/build/js.net.dll.zip)
+* [Both](https://github.com/gatapia/js.net/raw/master/build/both.zip)
 
 ## Using js.net in your code ##
 To use js.net simply add a reference to the js.net.dll in your project and
