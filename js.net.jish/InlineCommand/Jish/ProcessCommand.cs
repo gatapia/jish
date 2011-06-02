@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace js.net.jish.Command
+namespace js.net.jish.InlineCommand.Jish
 {
-  public class ProcessCommand : EmptyCommand
+  public class ProcessCommand : IInlineCommand
   {
     private readonly JSConsole console;
 
@@ -13,27 +13,31 @@ namespace js.net.jish.Command
       this.console = console;
     }
 
-    public override string GetName()
+    public string GetName()
     {
       return "process";
     }
 
-    public override string GetHelpDescription()
+    public string GetHelpDescription()
     {
       return "Executes the command in a separate Process.";
     }
 
-    public override IEnumerable<CommandParam> GetParameters()
+    public IEnumerable<CommandParam> GetParameters()
     {
       CommandParam a1 = new CommandParam { Name = "command" };
       CommandParam a2 = new CommandParam { Name = "arguments", Null = true};
       return new[] { a1, a2 };
     }
 
-    public override void Execute(params string[] args)
+    public string GetNameSpace()
     {
-      string command = args[0];
-      string arguments = args[1];
+      return "jish";
+    }
+
+    public int process(string command) { return process(command, null);  }
+    public int process(string command, string arguments) 
+    {
       using (var process = new Process
                       {
                         StartInfo =
@@ -49,14 +53,13 @@ namespace js.net.jish.Command
         process.Start();
         string err = process.StandardError.ReadToEnd();
         string output = process.StandardOutput.ReadToEnd();
-        if (!String.IsNullOrWhiteSpace(err)) console.log(err);
+        
+        if (!String.IsNullOrWhiteSpace(err)) console.error(err);
         if (!String.IsNullOrWhiteSpace(output)) console.log(output);
+        
         process.WaitForExit();
-
-        if (process.ExitCode != 0)
-        {
-          throw new ApplicationException("Process [" + command + "] args [" + arguments+ "] exited with code: " + process.ExitCode);
-        }
+        
+        return process.ExitCode;
       }
     }
   }

@@ -74,7 +74,7 @@
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
     <Compile Include="Command\EmptyCommand.cs" />
-    <Compile Include="Command\ProcessCommand.cs" />
+    <Compile Include="InlineCommand\Jish\ProcessCommand.cs" />
     <Compile Include="Util\TypeCreator.cs" />
     <Compile Include="InlineCommand\Jish\AssemblyCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />

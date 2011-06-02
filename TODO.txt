@@ -10,7 +10,7 @@
   - Separate jish and js.net, jish is probably now the project with most potential
   - Jish README.md should load the 'build.js' as an example file
     - build.js should now be a more complete example
-  - .process should become jish.process
+    - Also include the help output
   - Installer? Including making it the default js interpreter?
   - Generic classes not supported
   - Generic methods not supported in .create (both static and instance)  
