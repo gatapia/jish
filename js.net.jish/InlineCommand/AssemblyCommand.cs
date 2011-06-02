@@ -2,7 +2,7 @@
 using System.Reflection;
 using js.net.jish.Util;
 
-namespace js.net.jish.InlineCommand.Jish
+namespace js.net.jish.InlineCommand
 {
   public class AssemblyCommand : IInlineCommand
   {

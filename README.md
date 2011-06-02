@@ -108,11 +108,95 @@ The first way you can extend Jish is by creating a JavaScript extension files
 that will be available to all your Jish scripts. 
 
 Simply create a 'modules' directory next to your 'jish.exe' file.  This 
-directory will be parsed for all `.js` files and they will be loaded 
-into your Jish environment.
+directory will parse all `.js` files and they will be loaded into your Jish 
+environment.  This directory is also where you can drop any additional dll's
+that you want loaded into the context.  They will be parsed for implementations
+if IInlineCommands and ICommands also.
+
+### js.net.jish.InlineCommand.IInlineCommand 
+The IInlineCommand(s) extend the JavsScript environment by adding a type to the 
+  global namespace.  Inline commands are the main way of providing .Net framwork
+  capabilities to your JavaScript scripts.
+
+* IInlineCommand(s) must have a non-embedded namespace (cannot contain '.'s)
+* IInlineCommand(s) cannot execute other scripts, or set/get globals
+* IInlineCommand(s) can return any type to the JavaScript environment.
+* IInlineCommand(s) intgrate into the built in `.help` command.
+
+An example IInlineCommand follows, this is the jish.process command and is
+used to spawn a process from your JavaScript environment.  Note: this is the
+actual implementation code and is available every time you use jish 
+by `jish.process('commandName', 'arguments_string')`:
+
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    
+    namespace js.net.jish.InlineCommand
+    {
+      public class ProcessCommand : IInlineCommand
+      {
+        private readonly JSConsole console;
+    
+        public ProcessCommand(JSConsole console)
+        {
+          this.console = console;
+        }
+    
+        public string GetName()
+        {
+          return "process";
+        }
+    
+        public string GetHelpDescription()
+        {
+          return "Executes the command in a separate Process.";
+        }
+    
+        public IEnumerable<CommandParam> GetParameters()
+        {
+          CommandParam a1 = new CommandParam { Name = "command" };
+          CommandParam a2 = new CommandParam { Name = "arguments", Null = true};
+          return new[] { a1, a2 };
+        }
+    
+        public string GetNameSpace()
+        {
+          return "jish";
+        }
+    
+        public int process(string command) { return process(command, null);  }
+        public int process(string command, string arguments) 
+        {
+          using (var process = new Process
+                          {
+                            StartInfo =
+                              {
+                                FileName = command,
+                                Arguments = arguments,
+                                UseShellExecute = false,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true
+                              }
+                          })
+          {
+            process.Start();
+            string err = process.StandardError.ReadToEnd();
+            string output = process.StandardOutput.ReadToEnd();
+            
+            if (!String.IsNullOrWhiteSpace(err)) console.error(err);
+            if (!String.IsNullOrWhiteSpace(output)) console.log(output);
+            
+            process.WaitForExit();
+            
+            return process.ExitCode;
+          }
+        }
+      }
+    }
 
 ### js.net.jish.Command.ICommand (Console Commands)
-The special commands implement the ICommand interface.  ICommand(s) have 
+The console commands implement the ICommand interface.  ICommand(s) have 
 certain charasteristics which may not be immediately obvious.
 
 * ICommand(s) have access to IJishInterpreter which allows all ICommand(s) to 
@@ -125,17 +209,7 @@ certain charasteristics which may not be immediately obvious.
 * ICommand(s) integrate into Jish's `.help` system
 * ICommand(s) are invoked by calling the command prefixed by a `.`. 
   I.e. `.commandname`
-* When adding your own custom ICommands you must implement an Execute method.
-  This is not enforced by the interface as you can define your own signature
 
-### js.net.jish.InlineCommand.IInlineCommand 
-The IInlineCommand(s) extend the JavsScript environment by adding a type to the 
-  global namespace.
-
-* IInlineCommand(s) must have a non-embedded namespace (cannot contain '.'s)
-* IInlineCommand(s) cannot execute other scripts, or set/get globals
-* IInlineCommand(s) can return any type to the JavaScript environment.
-* IInlineCommand(s) intgrate into the built in `.help` command.
     
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 

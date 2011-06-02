@@ -66,7 +66,7 @@
     <Compile Include="CommandParam.cs" />
     <Compile Include="HelpMgr.cs" />
     <Compile Include="ICommandBase.cs" />
-    <Compile Include="InlineCommand\Jish\CreateCommands.cs" />
+    <Compile Include="InlineCommand\CreateCommands.cs" />
     <Compile Include="Util\AssemblyNameComparer.cs" />
     <Compile Include="Util\StaticTypeWrapper.cs" />
     <Compile Include="Util\DelegateBuilder.cs" />
@@ -74,9 +74,9 @@
     <Compile Include="Command\BreakCommand.cs" />
     <Compile Include="Command\ClearCommand.cs" />
     <Compile Include="Command\EmptyCommand.cs" />
-    <Compile Include="InlineCommand\Jish\ProcessCommand.cs" />
+    <Compile Include="InlineCommand\ProcessCommand.cs" />
     <Compile Include="Util\TypeCreator.cs" />
-    <Compile Include="InlineCommand\Jish\AssemblyCommand.cs" />
+    <Compile Include="InlineCommand\AssemblyCommand.cs" />
     <Compile Include="Command\ExitCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="IJishInterpreter.cs" />

@@ -2,7 +2,7 @@
 using System.Linq;
 using js.net.jish.Util;
 
-namespace js.net.jish.InlineCommand.Jish
+namespace js.net.jish.InlineCommand
 {
   public class CreateCommand : IInlineCommand
   {

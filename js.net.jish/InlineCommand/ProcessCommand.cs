@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace js.net.jish.InlineCommand.Jish
+namespace js.net.jish.InlineCommand
 {
   public class ProcessCommand : IInlineCommand
   {
