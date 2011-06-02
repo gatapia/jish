@@ -6,7 +6,11 @@
 - Improve the auto publish js to also update the git downloads.  
   - ILMerge all managed assemblies (and exe)
 
-- jish  
+- jish    
+  - jish.assembly command is pretty much useless as it needs to inject 
+  javascript back into the engine and this is not allowed.  Currently a hack
+  is in place to return a dodget IDictionary<string, IInlineCommand> which 
+  needs to be replaced with an IL generated wrapper.
   - Separate jish and js.net, jish is probably now the project with most potential
   - Installer? Including making it the default js interpreter?
   - Generic classes not supported

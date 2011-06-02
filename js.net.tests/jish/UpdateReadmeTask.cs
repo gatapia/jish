@@ -8,23 +8,8 @@ namespace js.net.tests.jish
     const string readMeFile =  @"..\..\..\README.md";
     const string buildJsFile =  @"..\..\..\build.js";
     const string buildJsSearchTag = "[in github](https://github.com/gatapia/js.net/blob/master/build.js).";
-    const string helpScreenSearchTagStart = "Commands included in Jish are:";
+    const string helpScreenSearchTagStart = "Jish are:";
     const string helpScreenSearchTagEnd = "## Extending Jish";
-
-    private const string sourceCommandDll = @"..\..\..\js.net.test.module\bin\js.net.test.module.dll";
-    private const string targetCommandDll = @"modules\js.net.test.module.dll";
-
-    public override void SetUp()
-    {
-      if (!Directory.Exists("modules")) { Directory.CreateDirectory("modules"); }
-      File.Copy(sourceCommandDll, targetCommandDll, true);
-      base.SetUp();
-    }
-
-    public void TearDown()
-    {
-      if (File.Exists(targetCommandDll)) File.Delete(targetCommandDll);
-    }
 
     [Test] public void AddBuildJSToTailOfReadme()
     {
@@ -53,19 +38,6 @@ namespace js.net.tests.jish
       help = "\n\n    " + help.Replace("\n", "\n    ") + "\n\n";
 
       File.WriteAllText(readMeFile, pre + help + post);
-    }
-
-    [Test] public void ZipGitHubDownloads()
-    {
-      Directory.SetCurrentDirectory(@"..\..\..");
-
-      jish.ExecuteCommand(@"
-build.zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
-build.zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);
-console.log('Both zip files updated to build\jish.exe.zip and build\js.net.dll.zip.  Please update github downloads');
-");
-      Assert.IsTrue(File.Exists(@"build\js.net.dll.zip"));
-      Assert.IsTrue(File.Exists(@"build\js.net.dll.zip"));
     }
 
     private void ValidateReadmeIsStillValidFormat()

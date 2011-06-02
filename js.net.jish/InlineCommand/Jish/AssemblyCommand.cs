@@ -20,11 +20,17 @@ namespace js.net.jish.InlineCommand.Jish
       return "jish";
     }
 
-    public void assembly(string assemblyFileName)
+    /// <summary>
+    /// Returns a dictionary of all commands added (by namespace).
+    /// </summary>
+    /// <param name="assemblyFileName"></param>
+    /// <returns></returns>
+    public IDictionary<string, object> assembly(string assemblyFileName)
     {
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      loadedAssemblies.AddAssembly(assembly);
+      IDictionary<string, object> loadedCommands = loadedAssemblies.AddAssembly(assembly, true);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
+      return loadedCommands;
     }
 
     public string GetName()

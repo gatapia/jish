@@ -21,9 +21,11 @@ The best way to get started is to download the source:
 
 That way you can send me fixes ;)
 
-Otherwise just go to the [downloads section in github](https://github.com/gatapia/js.net)
-and download either the js.net.dll.zip or the jish.exe.zip file.  They are
-self contained zip packages that should be very straight forward to hook up.
+Otherwise just download one of the following:
+
+[Jish - JavaScript Interactive SHell](https://github.com/gatapia/js.net/raw/master/build/jish.exe.zip)
+[js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/js.net/raw/master/build/js.net.dll.zip)
+[Both](https://github.com/gatapia/js.net/raw/master/build/both.zip)
 
 ## Using js.net in your code ##
 To use js.net simply add a reference to the js.net.dll in your project and
@@ -49,10 +51,17 @@ Running 'jish.exe' will yield the interactive shell.
     > .exit
 
 ## Built-in Jish commands
-All inbuilt Jish commands start with a '.' character.  Jish commands cannot be 
-mixed on the same line with other JavaScript commands.  If Jish commands are run 
-as part of an input file they are executed prior to execution of any other 
-command.  Commands included in Jish are:
+There are two type of built in commands available to Jish Inline Commands and
+Console Commands.  The main difference is that Console command are there
+to help you using the shell console, commands like .help, .exit, etc.  
+
+Inline commands can be run inboth console and interpreted mode (running 
+script files). And are your window into the .Net framework.
+
+All Console Jish commands start with a '.' character and are only 
+available if running in console mode.  Jish commands cannot be 
+mixed on the same line with other JavaScript commands.  Commands included in 
+Jish are:
 
     Jish Help
     =========
@@ -102,7 +111,7 @@ Simply create a 'modules' directory next to your 'jish.exe' file.  This
 directory will be parsed for all `.js` files and they will be loaded 
 into your Jish environment.
 
-### ICommand (Special Commands)
+### js.net.jish.Command.ICommand (Console Commands)
 The special commands implement the ICommand interface.  ICommand(s) have 
 certain charasteristics which may not be immediately obvious.
 
@@ -119,13 +128,14 @@ certain charasteristics which may not be immediately obvious.
 * When adding your own custom ICommands you must implement an Execute method.
   This is not enforced by the interface as you can define your own signature
 
-### IInlineCommand 
+### js.net.jish.InlineCommand.IInlineCommand 
 The IInlineCommand(s) extend the JavsScript environment by adding a type to the 
   global namespace.
 
 * IInlineCommand(s) must have a non-embedded namespace (cannot contain '.'s)
 * IInlineCommand(s) cannot execute other scripts, or set/get globals
-* IInlineCommand(s) can return any primative type to the JavaScript environment.
+* IInlineCommand(s) can return any type to the JavaScript environment.
+* IInlineCommand(s) intgrate into the built in `.help` command.
     
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 
@@ -257,11 +267,25 @@ this is Jish's very own build file.  You can find the latest version of this
 file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
 
     
-        // Use jish.exe to execute this file
+        
+    // Use jish.exe to execute this file. Takes two optional command line 
+    // instructions: 
+    //    updatever:  Increments the build numbers on the NuGet files
+    //    push:       Publishes NuGet packages
+    
+    // Load additional assemblies into the context.  This dll includes the 
+    // build.zip command used in createZipBundles() below;
+    var zip = jish.assembly('js.net.test.module/bin/js.net.test.module.dll')['build.zip'].zip;
+    
+    // Create a handle on the File static class.  Yes, jish.create even creates
+    // static handles.
     var file = jish.create('System.IO.File');
+    
+    run(); // Go!!!!
     
     function run() {
       updateNuGetBuildFiles();
+      createZipBundles();
     
       if (args.indexOf('updatever') >= 0) {
         updateVersionNumberInNuGetConfigs();
@@ -277,8 +301,6 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
       }  
     };
     
-    run(); // Go!!!!
-    
     function updateNuGetBuildFiles() {
       // jish
       copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
@@ -291,6 +313,13 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
       copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
         'build\\js.net\\lib\\Noesis.Javascript.dll');
       copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+    };
+    
+    function createZipBundles() {
+      zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
+      zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);  
+      zip('build\\both.zip', ['build\\js.net.dll.zip', 'build\\jish.exe.zip']);  
+      console.log('Successfully created the zip bundles');
     };
     
     function copyFile(from, to) {  

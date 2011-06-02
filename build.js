@@ -1,8 +1,22 @@
-// Use jish.exe to execute this file
+
+// Use jish.exe to execute this file. Takes two optional command line 
+// instructions: 
+//    updatever:  Increments the build numbers on the NuGet files
+//    push:       Publishes NuGet packages
+
+// Load additional assemblies into the context.  This dll includes the 
+// build.zip command used in createZipBundles() below;
+var zip = jish.assembly('js.net.test.module/bin/js.net.test.module.dll')['build.zip'].zip;
+
+// Create a handle on the File static class.  Yes, jish.create even creates
+// static handles.
 var file = jish.create('System.IO.File');
+
+run(); // Go!!!!
 
 function run() {
   updateNuGetBuildFiles();
+  createZipBundles();
 
   if (args.indexOf('updatever') >= 0) {
     updateVersionNumberInNuGetConfigs();
@@ -18,8 +32,6 @@ function run() {
   }  
 };
 
-run(); // Go!!!!
-
 function updateNuGetBuildFiles() {
   // jish
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
@@ -32,6 +44,13 @@ function updateNuGetBuildFiles() {
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
     'build\\js.net\\lib\\Noesis.Javascript.dll');
   copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+};
+
+function createZipBundles() {
+  zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
+  zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);  
+  zip('build\\both.zip', ['build\\js.net.dll.zip', 'build\\jish.exe.zip']);  
+  console.log('Successfully created the zip bundles');
 };
 
 function copyFile(from, to) {  
