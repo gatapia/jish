@@ -51,7 +51,7 @@ namespace js.net.jish.InlineCommand.Jish
 
     public string GetHelpDescription()
     {
-      return "Creates and instance of any type (including static classes).  If the type's assembly is not loaded you must precede this call with a call to jish.assembly('assemblyFileName').";
+      return "Creates and instance of any type (including static classes).  If the\n\t\ttype's assembly is not loaded you must precede this call with a\n\t\tcall to jish.assembly('assemblyFileName').";
     }
 
     public IEnumerable<CommandParam> GetParameters()

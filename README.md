@@ -43,14 +43,58 @@ mixed on the same line with other JavaScript commands.  If Jish commands are run
 as part of an input file they are executed prior to execution of any other 
 command.  Commands included in Jish are:
 
-* .help - Shows a help description of all other built in Jish commands
-* .process - Executes the command in a separate Process.
-* .create - Creates an instance of an object (including static classes) and 
-  stores it in the specified global name.
-* .clear - Break, and also clear the local context.
-* .break - Cancels the execution of a multi-line command.
-* .exit - Exit Jish.
-* .assembly - Loads a .Net assembly in preparation for .static calls.
+    Jish Help
+    =========
+    
+    Special Commands:
+    
+    .break:
+    -------
+    	Cancels the execution of a multi-line command.
+    	Arguments: ()
+    
+    .clear:
+    -------
+    	Break, and also clear the local context.
+    	Arguments: ()
+    
+    .exit:
+    ------
+    	Exit Jish.
+    	Arguments: ()
+    
+    .testcommand:
+    -------------
+    	test command help
+    	Arguments: ()
+    
+    
+    Inline Commands:
+    
+    inline_command.add:
+    -------------------
+    	help
+    	Arguments: ()
+    
+    jish.assembly:
+    --------------
+    	Loads an assembly into the Jish 'context'. You can not
+    		jish.create(<typeNames>) types from this assembly.
+    	Arguments: (assemblyFileName)
+    
+    jish.create:
+    ------------
+    	Creates and instance of any type (including static classes).  If the
+    		type's assembly is not loaded you must precede this call with a
+    		call to jish.assembly('assemblyFileName').
+    	Arguments: (typeName, param object[] args)
+    
+    jish.process:
+    -------------
+    	Executes the command in a separate Process.
+    	Arguments: (command, arguments?)
+    
+    
 
 ## Extending Jish
 There are 3 main extension points to Jish.  
@@ -159,12 +203,15 @@ Example:
       [Test] public void TestRunCoverageWithProperAdapter()
       {
         // Code must be instrumented first (use the native instrumenter).
-        Process p = Process.Start("jscoverage.exe", "src\ instrumented\").WaitForExit();
+        Process p = 
+          Process.Start("jscoverage.exe", "src\ instrumented\").WaitForExit();
 
-        using (ICoverageAdapter adapter = JSNet.JSCoverage(JSNet.ClosureLibrary(basejsfile)))
+        using (ICoverageAdapter adapter = 
+          JSNet.JSCoverage(JSNet.ClosureLibrary(basejsfile)))
         {        
           adapter.LoadSourceFile(@"instrumented\instrumentedSourceFile.js"); 
-          ICoverageResults results = adapter.RunCoverage(@"src\tests\sourceFileTests.js");         
+          ICoverageResults results = 
+            adapter.RunCoverage(@"src\tests\sourceFileTests.js");
 
           // Assert tests passes as per normal
           Assert.AreEqual(0, results.Failed.Count(), results.ToString());
@@ -182,7 +229,7 @@ Example:
           Assert.AreEqual("jscoverage_source.js", sourceCoverage.FileName);
           Assert.AreEqual(5, sourceCoverage.Statements);
           Assert.AreEqual(5, sourceCoverage.Executed);
-          Assert.AreEqual(100.0m, sourceCoverage.CoveragePercentage);                  
+          Assert.AreEqual(100.0m, sourceCoverage.CoveragePercentage);
         } 
       }
     }
@@ -213,3 +260,97 @@ BSD, see license.txt for full license
 This is an example JavaScript file that can be run using jish.exe.  In fact
 this is Jish's very own build file.  You can find the latest version of this 
 file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
+
+    
+        // Use jish.exe to execute this file
+    var file = jish.create('System.IO.File');
+    
+    // Run!
+    updateNuGetBuildFiles();
+    if (args.indexOf('updatever') >= 0) {
+      updateVersionNumberInNuGetConfigs();
+    } else {
+      console.log('Not updating version numbers. To update versions please ' +
+        'execute with "updatever" argument');
+    }
+    packNuGetPacakges();
+    if (args.indexOf('push') >= 0) {
+      pushNuGetPackages();
+    } else {
+      console.log('Not "pushing". To push please execute with "push" argmuent');
+    }
+    
+    function updateNuGetBuildFiles() {
+      // jish
+      copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
+        'build\\jish\\tools\\Noesis.Javascript.dll');
+      jish.process('build\\ILMerge.exe', '/targetplatform:v4 /target:exe ' + 
+        '/out:build\\jish\\tools\\jish.exe js.net.jish\\bin\\jish.exe ' +
+        'js.net.jish\\bin\\js.net.dll js.net.jish\\bin\\Ninject.dll');
+    
+      // js.net
+      copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
+        'build\\js.net\\lib\\Noesis.Javascript.dll');
+      copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+    };
+    
+    function copyFile(from, to) {  
+      file.Copy(from, to, true);
+    };
+    
+    function updateVersionNumberInNuGetConfigs() {
+      updateVersionOnConfig('build\\js.net\\js.net.nuspec');
+      updateVersionOnConfig('build\\jish\\jish.nuspec');
+    };
+    
+    function packNuGetPacakges() {  
+      jish.process('build\\NuGet.exe', 
+        'Pack -OutputDirectory build\\js.net build\\js.net\\js.net.nuspec');
+      jish.process('build\\NuGet.exe', 
+        'Pack -OutputDirectory build\\jish build\\jish\\jish.nuspec');
+    };
+    
+    function pushNuGetPackages() {  
+      var name = 'build\\js.net\\js.net.' + 
+        getVersionNumberFromConfig('build\\js.net\\js.net.nuspec') + '.nupkg';
+      
+      console.log('Publishing ' + name);
+      jish.process('build\\NuGet.exe', 'Push ' + name);
+    
+      name = 'build\\jish\\jish.' + 
+        getVersionNumberFromConfig('build\\jish\\jish.nuspec') + '.nupkg';
+      
+      console.log('Publishing ' + name);
+      jish.process('build\\NuGet.exe', 'Push ' + name);
+    };
+    
+    function getVersionNumberFromConfig(configFile) {
+      var contents = file.ReadAllText(configFile);
+      var version = contents.substring(contents.indexOf('<version>') + 9);
+      version = version.substring(0, version.indexOf('<'));
+      return version;
+    };
+    
+    function updateVersionOnConfig(configFile) {
+      var version = getVersionNumberFromConfig(configFile);
+      version = updateVersionNumber(version);
+      setVersionNumberOnConfig(configFile, version);
+    };
+    
+    function updateVersionNumber(oldVersion) {
+      var pre = oldVersion.substring(0, oldVersion.lastIndexOf('.') + 1);
+      var buildNum = 
+        parseInt(oldVersion.substring(oldVersion.lastIndexOf('.') + 1), 10);
+      buildNum++;
+      return pre + buildNum.toString();
+    };
+    
+    function setVersionNumberOnConfig(file, newv) {
+      var contents = file.ReadAllText(file);
+      var newContents = contents.substring(0, contents.indexOf('<version>') + 9);
+      newContents += newv;
+      newContents += contents.substring(contents.indexOf('</version>'));
+      file.WriteAllText(file, newContents);
+    
+      console.log('Updated the version on [' + file + '] to [' + newv + ']');
+    };

@@ -34,7 +34,7 @@ namespace js.net.jish.InlineCommand.Jish
 
     public string GetHelpDescription()
     {
-      return "Loads an assembly into the Jish 'context'. You can not jish.create(<typeNames>) types from this assembly.";
+      return "Loads an assembly into the Jish 'context'. You can not\n\t\tjish.create(<typeNames>) types from this assembly.";
     }
 
     public IEnumerable<CommandParam> GetParameters()
