@@ -208,3 +208,8 @@ Feel free to email:
 
 ## License
 BSD, see license.txt for full license
+
+## An example jish JavaScript file
+This is an example JavaScript file that can be run using jish.exe.  In fact
+this is Jish's very own build file.  You can find the latest version of this 
+file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
