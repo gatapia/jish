@@ -40,7 +40,6 @@ namespace js.net.jish
       string commandName = GetCommandName(command);
       StringBuilder sb = new StringBuilder(commandName);
       sb.Append(":\n");
-      sb.Append(new String('-', sb.Length - 1)).Append('\n');
       sb.Append('\t').Append(command.GetHelpDescription()).Append('\n');
       sb.Append("\tArguments: ").Append(GetArgumentDescriptionFor(command)).Append('\n');
       return sb.ToString();
@@ -77,9 +76,9 @@ namespace js.net.jish
     {
       StringBuilder sb = new StringBuilder("Jish Help\n");
       sb.Append(new String('=', sb.Length - 1)).Append("\n\n");
-      sb.Append("Special Commands:\n\n");
+      sb.Append("Console Commands\n\n");
       AddCommandsToBuilder(specialCommandHelps, sb);
-      sb.Append("\nInline Commands:\n\n");
+      sb.Append("\nInline Commands\n\n");
       AddCommandsToBuilder(inlineCommandHelps, sb);
       return sb.ToString();
     }

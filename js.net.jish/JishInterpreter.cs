@@ -72,7 +72,10 @@ namespace js.net.jish
       {
         ICommand command = CreateCommand(kernel, t);
         commands.Add(command.GetName(), t);
-        helpManager.AddHelpForSpecialCommand(command);
+        if (command.GetType().Assembly.FullName.IndexOf("js.net.test.module") < 0)
+        {
+          helpManager.AddHelpForSpecialCommand(command);
+        }
       }
     }
 
@@ -91,7 +94,10 @@ namespace js.net.jish
         if (String.IsNullOrWhiteSpace(ns)) { throw new ApplicationException("Could not load inline command from type[" + t.FullName + "].  No namespace specified.");}
         if (ns.IndexOf('.') > 0) { throw new ApplicationException("Nested namespaces (namespaces with '.' in them) are not supported."); }
         if (!icommands.ContainsKey(ns)) icommands.Add(ns, new List<IInlineCommand>());
-        helpManager.AddHelpForInlineCommand(icommand);
+        if (icommand.GetType().Assembly.FullName.IndexOf("js.net.test.module") < 0)
+        {
+          helpManager.AddHelpForInlineCommand(icommand);
+        }      
         icommands[ns].Add(icommand);
       }
 

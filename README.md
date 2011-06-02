@@ -57,51 +57,35 @@ command.  Commands included in Jish are:
     Jish Help
     =========
     
-    Special Commands:
+    Console Commands
     
     .break:
-    -------
     	Cancels the execution of a multi-line command.
     	Arguments: ()
     
     .clear:
-    -------
     	Break, and also clear the local context.
     	Arguments: ()
     
     .exit:
-    ------
     	Exit Jish.
     	Arguments: ()
     
-    .testcommand:
-    -------------
-    	test command help
-    	Arguments: ()
     
-    
-    Inline Commands:
-    
-    inline_command.add:
-    -------------------
-    	help
-    	Arguments: ()
+    Inline Commands
     
     jish.assembly:
-    --------------
     	Loads an assembly into the Jish 'context'. You can not
     		jish.create(<typeNames>) types from this assembly.
     	Arguments: (assemblyFileName)
     
     jish.create:
-    ------------
     	Creates and instance of any type (including static classes).  If the
     		type's assembly is not loaded you must precede this call with a
     		call to jish.assembly('assemblyFileName').
     	Arguments: (typeName, param object[] args)
     
     jish.process:
-    -------------
     	Executes the command in a separate Process.
     	Arguments: (command, arguments?)
     
@@ -276,20 +260,24 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
         // Use jish.exe to execute this file
     var file = jish.create('System.IO.File');
     
-    // Run!
-    updateNuGetBuildFiles();
-    if (args.indexOf('updatever') >= 0) {
-      updateVersionNumberInNuGetConfigs();
-    } else {
-      console.log('Not updating version numbers. To update versions please ' +
-        'execute with "updatever" argument');
-    }
-    packNuGetPacakges();
-    if (args.indexOf('push') >= 0) {
-      pushNuGetPackages();
-    } else {
-      console.log('Not "pushing". To push please execute with "push" argmuent');
-    }
+    function run() {
+      updateNuGetBuildFiles();
+    
+      if (args.indexOf('updatever') >= 0) {
+        updateVersionNumberInNuGetConfigs();
+      } else {
+        console.log('Not updating version numbers. To update versions please ' +
+          'execute with "updatever" argument');
+      }
+      packNuGetPacakges();
+      if (args.indexOf('push') >= 0) {
+        pushNuGetPackages();
+      } else {
+        console.log('Not "pushing". To push please execute with "push" argmuent');
+      }  
+    };
+    
+    run(); // Go!!!!
     
     function updateNuGetBuildFiles() {
       // jish

@@ -7,13 +7,13 @@ namespace js.net.tests.jish.Command
     [Test] public void InlineCommandHelpIntegration()
     {
        jish.ExecuteCommand(".help");
-      Assert.IsTrue(console.GetLastMessage().IndexOf("jish.assembly:\n--------------") >= 0, console.GetLastMessage());
+      Assert.IsTrue(console.GetLastMessage().IndexOf("jish.assembly:") >= 0, console.GetLastMessage());
     }    
 
     [Test] public void InlinSpecialHelpIntegration()
     {
        jish.ExecuteCommand(".help");
-      Assert.IsTrue(console.GetLastMessage().IndexOf(".exit:\n------") >= 0, console.GetLastMessage());
+      Assert.IsTrue(console.GetLastMessage().IndexOf(".exit:") >= 0, console.GetLastMessage());
     }
   }
 }

@@ -25,11 +25,5 @@ namespace js.net.tests.jish.Command
       jish.ExecuteCommand(".testcommand");
       Assert.AreEqual("test command executed", console.GetLastMessage());
     }
-
-    [Test] public void TestTestModuleHasHelp()
-    {
-      jish.ExecuteCommand(".help");
-      Assert.IsTrue(console.GetLastMessage().IndexOf(".testcommand:\n-------------\n\ttest command help") >= 0, console.GetLastMessage());
-    }
   }
 }
