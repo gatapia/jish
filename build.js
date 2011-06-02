@@ -1,20 +1,24 @@
 // Use jish.exe to execute this file
 var file = jish.create('System.IO.File');
 
-// Run!
-updateNuGetBuildFiles();
-if (args.indexOf('updatever') >= 0) {
-  updateVersionNumberInNuGetConfigs();
-} else {
-  console.log('Not updating version numbers. To update versions please ' +
-    'execute with "updatever" argument');
-}
-packNuGetPacakges();
-if (args.indexOf('push') >= 0) {
-  pushNuGetPackages();
-} else {
-  console.log('Not "pushing". To push please execute with "push" argmuent');
-}
+function run() {
+  updateNuGetBuildFiles();
+
+  if (args.indexOf('updatever') >= 0) {
+    updateVersionNumberInNuGetConfigs();
+  } else {
+    console.log('Not updating version numbers. To update versions please ' +
+      'execute with "updatever" argument');
+  }
+  packNuGetPacakges();
+  if (args.indexOf('push') >= 0) {
+    pushNuGetPackages();
+  } else {
+    console.log('Not "pushing". To push please execute with "push" argmuent');
+  }  
+};
+
+run(); // Go!!!!
 
 function updateNuGetBuildFiles() {
   // jish

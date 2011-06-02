@@ -61,7 +61,7 @@ namespace js.net.jish
       Assembly[] defaultAssemlies = AppDomain.CurrentDomain.GetAssemblies();
       if (!Directory.Exists("modules")) return defaultAssemlies;
       string[] assemblyFiles = Directory.GetFiles("modules", "*.dll", SearchOption.AllDirectories);
-      if (assemblyFiles.Length == 0) return defaultAssemlies;
+      if (assemblyFiles.Length == 0) return defaultAssemlies;      
       IEnumerable<Assembly> moduleAssemblies = assemblyFiles.Select(Assembly.LoadFrom);
       return defaultAssemlies.Concat(moduleAssemblies);
     }

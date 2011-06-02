@@ -14,6 +14,17 @@ way:
 
 For full details see the [wiki](https://github.com/gatapia/js.net/wiki/)
 
+## Getting Started
+The best way to get started is to download the source:
+
+    git clone git://github.com/gatapia/js.net.git
+
+That way you can send me fixes ;)
+
+Otherwise just go to the [downloads section in github](https://github.com/gatapia/js.net)
+and download either the js.net.dll.zip or the jish.exe.zip file.  They are
+self contained zip packages that should be very straight forward to hook up.
+
 ## Using js.net in your code ##
 To use js.net simply add a reference to the js.net.dll in your project and
 initialise the Engine.
