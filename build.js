@@ -30,7 +30,8 @@ function copyFile(from, to) {
 };
 
 function updateVersionNumberInNuGetConfigs() {
-  // TODO.  Needs also to update version in pushNuGetPackages
+  updateVersionOnConfig('build\\js.net\\js.net.nuspec');
+  updateVersionOnConfig('build\\jish\\jish.nuspec');
 };
 
 function packNuGetPacakges() {  
@@ -38,7 +39,42 @@ function packNuGetPacakges() {
   jish.process('build\\NuGet.exe', 'Pack -OutputDirectory build\\jish build\\jish\\jish.nuspec');
 };
 
-function pushNuGetPackages() {
-  runProcess('build\\NuGet.exe', 'Push build\\js.net\\js.net.0.0.1.nupkg');
-  runProcess('build\\NuGet.exe', 'Push build\\jish\\jish.0.0.1.nupkg');
+function pushNuGetPackages() {  
+  var name = 'build\\js.net\\js.net.' + getVersionNumberFromConfig('build\\js.net\\js.net.nuspec') + '.nupkg';
+  console.log('Publishing ' + name);
+  jish.process('build\\NuGet.exe', 'Push ' + name);
+
+  name = 'build\\jish\\jish.' + getVersionNumberFromConfig('build\\jish\\jish.nuspec') + '.nupkg';
+  console.log('Publishing ' + name);
+  jish.process('build\\NuGet.exe', 'Push ' + name);
+};
+
+function getVersionNumberFromConfig(configFile) {
+  var contents = file.ReadAllText(configFile);
+  var version = contents.substring(contents.indexOf('<version>') + 9);
+  version = version.substring(0, version.indexOf('<'));
+  return version;
+};
+
+function updateVersionOnConfig(configFile) {
+  var version = getVersionNumberFromConfig(configFile);
+  version = updateVersionNumber(version);
+  setVersionNumberOnConfig(configFile, version);
+};
+
+function updateVersionNumber(oldVersion) {
+  var pre = oldVersion.substring(0, oldVersion.lastIndexOf('.') + 1);
+  var buildNum = parseInt(oldVersion.substring(oldVersion.lastIndexOf('.') + 1), 10);
+  buildNum++;
+  return pre + buildNum.toString();
+};
+
+function setVersionNumberOnConfig(configFile, newVersion) {
+  var contents = file.ReadAllText(configFile);
+  var newContents = contents.substring(0, contents.indexOf('<version>') + 9);
+  newContents += newVersion;
+  newContents += contents.substring(contents.indexOf('</version>'));
+  file.WriteAllText(configFile, newContents);
+
+  console.log('Updated the version on [' + configFile + '] to [' + newVersion + ']');
 };

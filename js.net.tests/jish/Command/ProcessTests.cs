@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace js.net.tests.jish.Command
@@ -6,7 +7,7 @@ namespace js.net.tests.jish.Command
   [TestFixture] public class ProcessTests : AbstractJishTest
   {
     [Test] public void TestProcessNotFound()
-    {
+    {      
       try
       {
         jish.ExecuteCommand("jish.process('unknowncommand.exe')");
