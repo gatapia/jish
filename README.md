@@ -26,6 +26,9 @@ Otherwise just download one of the following:
 * [Jish - JavaScript Interactive SHell](https://github.com/gatapia/js.net/raw/master/build/jish.exe.zip)
 * [js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/js.net/raw/master/build/js.net.dll.zip)
 * [Both](https://github.com/gatapia/js.net/raw/master/build/both.zip)
+* [Installer](https://github.com/gatapia/js.net/raw/master/build/jish.msi)
+
+Note: The installer just 'unzips' the 'Both' package into a specified folder.
 
 ## Using js.net in your code ##
 To use js.net simply add a reference to the js.net.dll in your project and
@@ -215,6 +218,7 @@ certain charasteristics which may not be immediately obvious.
 One of js.net's primary and most stable feature is JavaScript unit testing 
 support (including tests that rely on the DOM).  Current supported frameworks 
 are:
+
 - [Closure](http://closure-library.googlecode.com/svn/docs/closure_goog_testing_jsunit.js.html)
 - [qUnit](http://docs.jquery.com/Qunit)
 - [jsUnit](http://www.jsunit.net/)

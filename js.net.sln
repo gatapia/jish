@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9D82F465
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.test.module", "js.net.test.module\js.net.test.module.csproj", "{C96C008B-53F6-486C-972C-259EFA810C19}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "js.net.setup", "js.net.setup\js.net.setup.vdproj", "{57E62709-58B5-4065-9250-597AAB74CF8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,12 @@ Global
 		{C96C008B-53F6-486C-972C-259EFA810C19}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C96C008B-53F6-486C-972C-259EFA810C19}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C96C008B-53F6-486C-972C-259EFA810C19}.Release|x86.ActiveCfg = Release|Any CPU
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Debug|Any CPU.ActiveCfg = Debug
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Debug|x86.ActiveCfg = Debug
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|Any CPU.ActiveCfg = Release
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|Mixed Platforms.ActiveCfg = Release
+		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

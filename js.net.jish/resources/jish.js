@@ -1,9 +1,9 @@
 ﻿var global = this;
 
-global.__initialise();
-
-function global.__initialise() {
+global.__initialise = function() {
 };
+
+global.__initialise();
 
 global.jish = {};
 

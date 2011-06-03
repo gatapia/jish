@@ -26,7 +26,7 @@ namespace js.net.tests.jish.Command
 
     [Test] public void TestProcessWithOneArg()
     {
-      jish.ExecuteCommand("jish.process('net.exe', 'TIME')");
+      jish.ExecuteCommand("jish.process('net.exe', 'ACCOUNTS')");
       Assert.AreEqual("0", console.GetLastMessage());
     }
 
