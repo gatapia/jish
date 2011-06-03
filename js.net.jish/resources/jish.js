@@ -1,8 +1,8 @@
 ﻿var global = this;
 
-__initialise();
+global.__initialise();
 
-function __initialise() {
+function global.__initialise() {
 };
 
 global.jish = {};
@@ -15,9 +15,11 @@ jish.assembly = function(assemblyName) {
 };
 
 global.__importCommands = function(commands) {
-  for (var nsAndFnName in commands) {
+  for (var nsAndFnName in commands) {    
     var split = nsAndFnName.split('.');
-    if (!global[split[0]]) global[split[0]] = {};
+    if (!global[split[0]]) {
+      global[split[0]] = {};
+    }
     global[split[0]][split[1]] = commands[nsAndFnName][split[1]];
   }
 };

@@ -47,26 +47,30 @@ namespace js.net.jish
     private void LoadCommandsFromAssembly(Assembly assembly)
     {
       IDictionary<string, object> commands = loadedAssemblies.AddAssembly(assembly);
-      InjectCommands(commands);
+      if (commands.Any()) InjectCommands(commands);
     }
 
-    private void InjectCommands(string ns, IList<IInlineCommand> nsCommands)
+    private void InjectCommands(IDictionary<string, object> commands)    
     {
+      Trace.Assert(commands.Any());
+
       const string jsBinder = 
 @"
 global['{0}']['{1}'] = function() {{
   return global['{2}']['{1}'].apply(global, arguments)
 }};
 ";
-      StringBuilder js = new StringBuilder(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
-      foreach (IInlineCommand command in nsCommands)
-      {
+      StringBuilder js = new StringBuilder();
+      foreach (IInlineCommand command in commands.Values)
+      {        
+        js.Append(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", command.GetNameSpace()));
+
         string tmpClassName = "__" + Guid.NewGuid();
         engine.SetGlobal(tmpClassName, command);
 
         foreach (string method in command.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
         {
-          js.Append(String.Format(jsBinder, ns, method, tmpClassName));
+          js.Append(String.Format(jsBinder, command.GetNameSpace(), method, tmpClassName));
         }
       }
       engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
