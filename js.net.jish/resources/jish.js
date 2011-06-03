@@ -10,7 +10,11 @@ global.jish = {};
 // Loads the specified assembly and places all loaded IInlineCommands in the 
 // global context.
 jish.assembly = function(assemblyName) {
-  var commands = jish.loadAssemblyImpl(assemblyName);
+  var commands = jish.loadAssemblyImpl(assemblyName);  
+  global.__importCommands(commands);
+};
+
+global.__importCommands = function(commands) {
   for (var nsAndFnName in commands) {
     var split = nsAndFnName.split('.');
     if (!global[split[0]]) global[split[0]] = {};

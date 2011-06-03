@@ -31,7 +31,7 @@ namespace js.net.jish.InlineCommand
     public IDictionary<string, object> loadAssemblyImpl(string assemblyFileName)
     {
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      IDictionary<string, object> loadedCommands = loadedAssemblies.AddAssembly(assembly, true);
+      IDictionary<string, object> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
       return loadedCommands;
     }

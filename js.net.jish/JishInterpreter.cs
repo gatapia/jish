@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using js.net.Engine;
+using js.net.jish.InlineCommand;
 using js.net.jish.Util;
 using js.net.Util;
 using Noesis.Javascript;
@@ -36,12 +38,39 @@ namespace js.net.jish
     {
       engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
 
-      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();          
-      Array.ForEach(assemblies, a => loadedAssemblies.AddAssembly(a));
+      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
+      Array.ForEach(assemblies, LoadCommandsFromAssembly);      
       
       LoadJavaScriptModules();
     }
-    
+
+    private void LoadCommandsFromAssembly(Assembly assembly)
+    {
+      IDictionary<string, object> commands = loadedAssemblies.AddAssembly(assembly);
+      InjectCommands(commands);
+    }
+
+    private void InjectCommands(string ns, IList<IInlineCommand> nsCommands)
+    {
+      const string jsBinder = 
+@"
+global['{0}']['{1}'] = function() {{
+  return global['{2}']['{1}'].apply(global, arguments)
+}};
+";
+      StringBuilder js = new StringBuilder(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
+      foreach (IInlineCommand command in nsCommands)
+      {
+        string tmpClassName = "__" + Guid.NewGuid();
+        engine.SetGlobal(tmpClassName, command);
+
+        foreach (string method in command.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
+        {
+          js.Append(String.Format(jsBinder, ns, method, tmpClassName));
+        }
+      }
+      engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
+    }
 
     private IEnumerable<Assembly> LoadAllAssemblies()
     {

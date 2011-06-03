@@ -349,7 +349,7 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
     
     // Load additional assemblies into the context.  This dll includes the 
     // build.zip command used in createZipBundles() below;
-    var zip = jish.assembly('js.net.test.module/bin/js.net.test.module.dll')['build.zip'].zip;
+    jish.assembly('js.net.test.module/bin/js.net.test.module.dll');
     
     // Create a handle on the File static class.  Yes, jish.create even creates
     // static handles.
@@ -390,9 +390,9 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
     };
     
     function createZipBundles() {
-      zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
-      zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);  
-      zip('build\\both.zip', ['build\\js.net.dll.zip', 'build\\jish.exe.zip']);  
+      build.zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
+      build.zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);  
+      build.zip('build\\both.zip', ['build\\js.net.dll.zip', 'build\\jish.exe.zip']);  
       console.log('Successfully created the zip bundles');
     };
     

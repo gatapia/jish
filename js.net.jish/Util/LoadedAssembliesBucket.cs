@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using js.net.Engine;
 using js.net.jish.Command;
 using js.net.jish.InlineCommand;
 using Ninject;
@@ -18,27 +16,25 @@ namespace js.net.jish.Util
     private readonly IDictionary<string, Assembly> assemblies = new Dictionary<string, Assembly>();
     private readonly IDictionary<string, IDictionary<string, object>> assemblyFullyQualifiedCommands = new Dictionary<string, IDictionary<string, object>>();
 
-    private readonly IKernel kernel;
-    private readonly IEngine engine;
+    private readonly IKernel kernel;    
     private readonly HelpMgr helpManager;
     private readonly JSConsole console;
 
-    public LoadedAssembliesBucket(IEngine engine, HelpMgr helpManager, IKernel kernel, JSConsole console)
-    {
-      this.engine = engine;
+    public LoadedAssembliesBucket(HelpMgr helpManager, IKernel kernel, JSConsole console)
+    {      
       this.console = console;
       this.kernel = kernel;
       this.helpManager = helpManager;
     }
 
-    public IDictionary<string, object> AddAssembly(Assembly a, bool inJavaScriptContext = false)
+    public IDictionary<string, object> AddAssembly(Assembly a)
     {
       string name = a.GetName().Name;
       if (assemblies.ContainsKey(name)) { return assemblyFullyQualifiedCommands[name]; }
       assemblies.Add(name, a);
       
       LoadAllCommandsFromAssembly(a);
-      IDictionary<string, object> assemblyCommands = LoadAllInlineCommandsFromAssembly(a, inJavaScriptContext);
+      IDictionary<string, object> assemblyCommands = LoadAllInlineCommandsFromAssembly(a);
       assemblyFullyQualifiedCommands.Add(name, assemblyCommands);
       return assemblyCommands;
     }
@@ -102,7 +98,7 @@ namespace js.net.jish.Util
       }
     }
 
-    private IDictionary<string, object> LoadAllInlineCommandsFromAssembly(Assembly assembly, bool inJavaScriptContext)
+    private IDictionary<string, object> LoadAllInlineCommandsFromAssembly(Assembly assembly)
     {
       IDictionary<string, IList<IInlineCommand>> icommands = new Dictionary<string, IList<IInlineCommand>>();
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
@@ -118,15 +114,7 @@ namespace js.net.jish.Util
         }      
         icommands[ns].Add(icommand);
       }
-
-      if (!inJavaScriptContext)
-      {
-        foreach (KeyValuePair<string, IList<IInlineCommand>> nsCommands in icommands)
-        {
-          InjectCommands(nsCommands.Key, nsCommands.Value);
-        }
-      } 
-
+      
       // TODO: This is a hack, we should be returning a IL generated wrapper.
       // This would also clean up a lot of the dodgect JavaScript below.
       IDictionary<string, object> fullyQualifiedCommands = new Dictionary<string, object>();
@@ -135,29 +123,7 @@ namespace js.net.jish.Util
         fullyQualifiedCommands.Add(command.GetNameSpace() + "." + command.GetName(), command);
       }
       return fullyQualifiedCommands;
-    }
-
-    private void InjectCommands(string ns, IList<IInlineCommand> nsCommands)
-    {
-      const string jsBinder = 
-@"
-global['{0}']['{1}'] = function() {{
-  return global['{2}']['{1}'].apply(global, arguments)
-}};
-";
-      StringBuilder js = new StringBuilder(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
-      foreach (IInlineCommand command in nsCommands)
-      {
-        string tmpClassName = "__" + Guid.NewGuid();
-        engine.SetGlobal(tmpClassName, command);
-
-        foreach (string method in command.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
-        {
-          js.Append(String.Format(jsBinder, ns, method, tmpClassName));
-        }
-      }
-      engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
-    }
+    }    
 
     private IEnumerable<Type> GetAllTypesThatImplement(Assembly assembly, Type iface)
     {
