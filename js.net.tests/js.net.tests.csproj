@@ -82,6 +82,7 @@
     <Compile Include="jish\RunJishFileTests.cs" />
     <Compile Include="jish\TestingConsole.cs" />
     <Compile Include="jish\Command\CreateAndLoadCommandTests.cs" />
+    <Compile Include="jish\TypeILWrapperTests.cs" />
     <Compile Include="jish\UpdateReadmeTask.cs" />
     <Compile Include="TestAdapters\ClosureTests.cs" />
     <Compile Include="TestAdapters\JSCoverageTests.cs" />

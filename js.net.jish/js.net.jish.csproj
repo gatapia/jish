@@ -68,7 +68,7 @@
     <Compile Include="ICommandBase.cs" />
     <Compile Include="InlineCommand\CreateCommands.cs" />
     <Compile Include="Util\AssemblyNameComparer.cs" />
-    <Compile Include="Util\StaticTypeWrapper.cs" />
+    <Compile Include="Util\TypeILWrapper.cs" />
     <Compile Include="Util\DelegateBuilder.cs" />
     <Compile Include="JishInterpreter.cs" />
     <Compile Include="Command\BreakCommand.cs" />

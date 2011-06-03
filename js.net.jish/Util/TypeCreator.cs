@@ -31,7 +31,7 @@ namespace js.net.jish.Util
         return null;
       }
       object instance = t.GetConstructors().Length == 0 
-        ? new StaticTypeWrapper(t).CreateWrapper() 
+        ? new TypeILWrapper().CreateWrapper(t) 
         : Activator.CreateInstance(t, realArgs);
             
       console.log("Created instance of " + typeName + ".");

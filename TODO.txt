@@ -3,17 +3,11 @@
 - Fork the JavaScript.Net project as it appears to have died.
 - Find a way of getting more fail information from tests (exceptions).
 - Node interface
-- Improve the auto publish js to also update the git downloads.  
-  - ILMerge all managed assemblies (and exe)
 
 - jish    
   - Separate jish and js.net, jish is probably now the project with most potential
   - Generic classes not supported
-  - Generic methods not supported in .create (both static and instance)  
-    * It would be nice to change the signature of generic methods so we 
-    could do something like (in JavaScript):      
-      // Where 'NameSpace.ClassName' is the generic argument
-      variable.GenMethod('NameSpace.ClassName', arg0, arg1);  
+  - Generic methods not supported in .create (both static and instance)      
 
 - Documentation (Web Site)
   - Overview

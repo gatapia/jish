@@ -5,16 +5,9 @@ using System.Reflection.Emit;
 
 namespace js.net.jish.Util
 {
-  public class StaticTypeWrapper
+  public class TypeILWrapper
   {
-    private readonly Type staticType;
-
-    public StaticTypeWrapper(Type staticType)
-    {
-      this.staticType = staticType;
-    }
-
-    public object CreateWrapper()
+    public object CreateWrapper(Type staticType)
     {
       string ns = staticType.Assembly.FullName;      
       ModuleBuilder moduleBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), AssemblyBuilderAccess.Run).DefineDynamicModule(ns); 
