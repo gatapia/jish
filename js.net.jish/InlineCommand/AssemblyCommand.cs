@@ -21,11 +21,14 @@ namespace js.net.jish.InlineCommand
     }
 
     /// <summary>
-    /// Returns a dictionary of all commands added (by namespace).
+    /// Note: This is not supposed to be called manually, it should be called 
+    /// through the jish.assembly command which is defined in jish.js.  This
+    /// is also why the help in this file is misleading (says name = assembly).
+    //  This is intentioanl as jish.js assembly delegates to this.
     /// </summary>
     /// <param name="assemblyFileName"></param>
-    /// <returns></returns>
-    public IDictionary<string, object> assembly(string assemblyFileName)
+    /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
+    public IDictionary<string, object> loadAssemblyImpl(string assemblyFileName)
     {
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
       IDictionary<string, object> loadedCommands = loadedAssemblies.AddAssembly(assembly, true);

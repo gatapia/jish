@@ -67,6 +67,7 @@
     <Compile Include="FrameworkAdapters\ClosureAdapterTests.cs" />
     <Compile Include="FrameworkAdapters\JSDomAdapterTest.cs" />
     <Compile Include="jish\AbstractJishTest.cs" />
+    <Compile Include="jish\Command\AssemblyCommandTests.cs" />
     <Compile Include="jish\Command\ClearCommandTests.cs" />
     <Compile Include="jish\Command\CommandModulesTest.cs" />
     <Compile Include="jish\Command\HelpCommandTests.cs" />
