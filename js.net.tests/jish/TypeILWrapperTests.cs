@@ -127,17 +127,17 @@ namespace js.net.tests.jish
     // OneStringThenSingleRefDefValue
     [Test] public void TestOneStringThenRefParamsArgWithNoArgs()
     {      
-      Assert.AreEqual("strnull", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str"}));
+      Assert.AreEqual("strnull", InvokeWrapped("OneStringThenRefParamsArg", new object[] {"str"}));
     }    
 
     [Test] public void TestOneStringThenRefParamsArgWithOneArgs()
     {
-      Assert.AreEqual("strc1", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str", new TestO("c1") })); 
+      Assert.AreEqual("strc1", InvokeWrapped("OneStringThenRefParamsArg", new object[] {"str", new TestO("c1") })); 
     }
 
     [Test] public void TestOneStringThenRefParamsArgWithTwoArgs()
     {
-     Assert.AreEqual("strc1,c2", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str", new TestO("c1"), new TestO("c2")}));  
+     Assert.AreEqual("strc1,c2", InvokeWrapped("OneStringThenRefParamsArg", new object[] {"str", new TestO("c1"), new TestO("c2")}));  
     }
 
     private string InvokeWrapped(string methodName, object[] args)

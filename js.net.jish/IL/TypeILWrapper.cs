@@ -73,12 +73,13 @@ namespace js.net.jish.IL
         var gen = methodBuilder.GetILGenerator();
         if (!real.IsStatic)
         {
-          // Set this to the result of JishProxy.GetInstance
-          EmitThis(gen, thissIdx);
+          // Set 'this' to the result of JishProxy.GetInstance. This allows one 
+          // class to proxy to methods from different source classes.
+          SetAReferenceToAppropriateThis(gen, thissIdx);
         } 
         int len = parameters.Count() + (realParams.Length > 0 && IsParamsArray(realParams.Last())  ? 1 : 0);
         for (int i = 0; i < len; i++)
-        {
+        {          
           if (IsParamsArray(realParams[i]))
           {
             CovertRemainingParametersToArray(parameters, gen, i, realParams[i].ParameterType.GetElementType());
@@ -92,9 +93,9 @@ namespace js.net.jish.IL
           Console.WriteLine("TODO");
           // TODO:
           // gen.Emit(OpCodes.Ldarg, real.GetParameters().Last().DefaultValue);
-        }
+        }        
 
-        gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real);
+        gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real); // Call the real method
         gen.Emit(OpCodes.Ret);
       }
     }
@@ -115,7 +116,7 @@ namespace js.net.jish.IL
       }
     }
 
-    private void EmitThis(ILGenerator gen, int thissIdx)
+    private void SetAReferenceToAppropriateThis(ILGenerator gen, int thissIdx)
     {
       gen.Emit(OpCodes.Ldarg_0); // Load this argument onto stack
       gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param
