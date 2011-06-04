@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using js.net.jish.IL;
 using NUnit.Framework;
 
@@ -54,6 +57,24 @@ namespace js.net.tests.jish
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic", new [] {typeof(int)}).Invoke(wrapped, new object[] {2}));
       Assert.AreEqual("STATIC[6]", wrapped.GetType().GetMethod("GetStringStatic", new [] {typeof(int), typeof(int)}).Invoke(wrapped, new object[] {2, 4}));
     }
+
+    [Test] public void TestParamsMethodCalledWithNoArgs()
+    {
+      NonStaticWithSimpleArgs instance = new NonStaticWithSimpleArgs(1);
+      object wrapped = wrapper.CreateWrapper(typeof (NonStaticWithSimpleArgs), new [] {new ProxyMethod(typeof(NonStaticWithSimpleArgs).GetMethod("ParamsMethod"), instance)});
+      MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new Type[0]);
+      string ret = (string) target.Invoke(wrapped, null);
+      Assert.AreEqual("ParamsMethod: ", ret);
+    }
+
+    [Test] public void TestParamsMethodCalledWithOneArgs()
+    {
+      NonStaticWithSimpleArgs instance = new NonStaticWithSimpleArgs(1);
+      object wrapped = wrapper.CreateWrapper(typeof (NonStaticWithSimpleArgs), new [] {new ProxyMethod(typeof(NonStaticWithSimpleArgs).GetMethod("ParamsMethod"), instance)});
+      MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new[] {typeof (int)});
+      string ret = (string) target.Invoke(wrapped, new object[] {1});
+      Assert.AreEqual("ParamsMethod: 1", ret);
+    }  
   }
 
   public static class StaticWithSimpleArgs
@@ -83,6 +104,11 @@ namespace js.net.tests.jish
     {
       this.param1 = param1;
       this.param2 = param2;
+    }
+
+    public string ParamsMethod(params int[] args)
+    {
+      return "ParamsMethod: " + (args == null ? "NULL" : String.Join(",", args));
     }
 
     public string GetStringNonStatic(int arg1)

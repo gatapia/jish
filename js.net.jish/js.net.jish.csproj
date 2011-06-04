@@ -66,6 +66,8 @@
     <Compile Include="CommandParam.cs" />
     <Compile Include="HelpMgr.cs" />
     <Compile Include="ICommandBase.cs" />
+    <Compile Include="IL\JishProxy.cs" />
+    <Compile Include="IL\ProxyMethod.cs" />
     <Compile Include="InlineCommand\CreateCommands.cs" />
     <Compile Include="Util\AssemblyCommandLoader.cs" />
     <Compile Include="Util\AssemblyNameComparer.cs" />

@@ -74,6 +74,7 @@
     <Compile Include="jish\Command\InlineCommandModulesTest.cs" />
     <Compile Include="jish\Command\CreateCommandTests.cs" />
     <Compile Include="jish\Command\ProcessTests.cs" />
+    <Compile Include="jish\TypeILWrapperMethodArgumentsExpansionTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />
     <Compile Include="jish\JavaScriptModulesTest.cs" />
     <Compile Include="jish\JishNuGetDeploymentPackageTest.cs" />
