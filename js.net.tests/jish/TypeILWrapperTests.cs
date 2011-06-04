@@ -76,6 +76,7 @@ namespace js.net.tests.jish
       Assert.AreEqual("ParamsMethod: 1", ret);
     }  
 
+    // SingleParamsArg
     [Test] public void TestSingleParamsArgWithNoArgs()
     {
       Assert.AreEqual("null", InvokeWrapped("SingleParamsArg", new object[] {}));
@@ -91,6 +92,7 @@ namespace js.net.tests.jish
      Assert.AreEqual("1,2", InvokeWrapped("SingleParamsArg", new object[] {1, 2}));  
     }
 
+    // OneStringThenParamsArg
     [Test] public void TestOneStringThenParamsArgWithNoArgs()
     {      
       Assert.AreEqual("strnull", InvokeWrapped("OneStringThenParamsArg", new object[] {"str"}));
@@ -106,11 +108,58 @@ namespace js.net.tests.jish
      Assert.AreEqual("str1,2", InvokeWrapped("OneStringThenParamsArg", new object[] {"str", 1, 2}));  
     }
 
+    // SingleRefParamsArg
+    [Test] public void TestSingleRefParamsArgWithNoArgs()
+    {
+      Assert.AreEqual("null", InvokeWrapped("SingleRefParamsArg", new object[] {}));
+    }    
+
+    [Test] public void TestSingleRefParamsArgWithOneArgs()
+    {
+     Assert.AreEqual("c1", InvokeWrapped("SingleRefParamsArg", new object[] {new TestO("c1")})); 
+    }
+
+    [Test] public void TestSingleRefParamsArgWithTwoArgs()
+    {
+     Assert.AreEqual("c1,c2", InvokeWrapped("SingleRefParamsArg", new object[] {new TestO("c1"), new TestO("c2")}));  
+    }
+
+    // OneStringThenSingleRefDefValue
+    [Test] public void TestOneStringThenRefParamsArgWithNoArgs()
+    {      
+      Assert.AreEqual("strnull", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str"}));
+    }    
+
+    [Test] public void TestOneStringThenRefParamsArgWithOneArgs()
+    {
+      Assert.AreEqual("strc1", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str", new TestO("c1") })); 
+    }
+
+    [Test] public void TestOneStringThenRefParamsArgWithTwoArgs()
+    {
+     Assert.AreEqual("strc1,c2", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str", new TestO("c1"), new TestO("c2")}));  
+    }
+
     private string InvokeWrapped(string methodName, object[] args)
     {
       object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new ProxyMethod(typeof(ComplexClz).GetMethod(methodName), null)});
       MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
       return (string) mi.Invoke(wrapped, args);
+    }
+  }
+
+  public class TestO
+  {
+    private readonly string content;
+
+    public TestO(string content)
+    {
+      this.content = content;
+    }
+
+    public override string ToString()
+    {
+      return content;
     }
   }
 

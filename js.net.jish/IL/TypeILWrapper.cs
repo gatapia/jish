@@ -40,7 +40,7 @@ namespace js.net.jish.IL
       }
 
       Type wrapperType = wrapperBuilder.CreateType();
-      // assemblyBuilder.Save("testassembly.dll");
+      assemblyBuilder.Save("testassembly.dll");
       return Activator.CreateInstance(wrapperType, new object[] { methods.Select(m => m.MethodContext).ToArray() });
     }
 
@@ -103,11 +103,11 @@ namespace js.net.jish.IL
     {
       gen.Emit(OpCodes.Ldc_I4, parameters.Count() - startingIndex);
       gen.Emit(OpCodes.Newarr, arrayType);  
-      for (int j = startingIndex; j < parameters.Count(); j++)
+      for (int i = startingIndex; i < parameters.Count(); i++)
       {
         gen.Emit(OpCodes.Dup);
-        gen.Emit(OpCodes.Ldc_I4, j);
-        gen.Emit(OpCodes.Ldarg, j + 1);
+        gen.Emit(OpCodes.Ldc_I4, i - startingIndex);
+        gen.Emit(OpCodes.Ldarg, i + 1);
           
         // if (parameters.ElementAt(i).IsValueType) { gen.Emit(OpCodes.Box, parameters.ElementAt(i)); } // Box if required
 
