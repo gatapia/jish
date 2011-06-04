@@ -28,10 +28,10 @@ namespace js.net.jish.InlineCommand
     /// </summary>
     /// <param name="assemblyFileName"></param>
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
-    public IDictionary<string, object> loadAssemblyImpl(string assemblyFileName)
+    public IEnumerable<IInlineCommand> loadAssemblyImpl(string assemblyFileName)
     {
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
-      IDictionary<string, object> loadedCommands = loadedAssemblies.AddAssembly(assembly);
+      IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
       return loadedCommands;
     }

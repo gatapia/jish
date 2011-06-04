@@ -14,7 +14,7 @@ namespace js.net.jish.Util
     private readonly IDictionary<string, Type> commands = new Dictionary<string, Type>();    
 
     private readonly IDictionary<string, Assembly> assemblies = new Dictionary<string, Assembly>();
-    private readonly IDictionary<string, IDictionary<string, object>> assemblyFullyQualifiedCommands = new Dictionary<string, IDictionary<string, object>>();
+    private readonly IDictionary<string, IEnumerable<IInlineCommand>> loadedInlineCommands = new Dictionary<string, IEnumerable<IInlineCommand>>();
 
     private readonly IKernel kernel;    
     private readonly HelpMgr helpManager;
@@ -27,15 +27,15 @@ namespace js.net.jish.Util
       this.helpManager = helpManager;
     }
 
-    public IDictionary<string, object> AddAssembly(Assembly a)
+    public IEnumerable<IInlineCommand> AddAssembly(Assembly a)
     {
       string name = a.GetName().Name;
-      if (assemblies.ContainsKey(name)) { return assemblyFullyQualifiedCommands[name]; }
+      if (assemblies.ContainsKey(name)) { return loadedInlineCommands[name]; }
       assemblies.Add(name, a);
       
       LoadAllCommandsFromAssembly(a);
-      IDictionary<string, object> assemblyCommands = LoadAllInlineCommandsFromAssembly(a);
-      assemblyFullyQualifiedCommands.Add(name, assemblyCommands);
+      IEnumerable<IInlineCommand> assemblyCommands = LoadAllInlineCommandsFromAssembly(a);
+      loadedInlineCommands.Add(name, assemblyCommands);
       return assemblyCommands;
     }
 
@@ -98,7 +98,7 @@ namespace js.net.jish.Util
       }
     }
 
-    private IDictionary<string, object> LoadAllInlineCommandsFromAssembly(Assembly assembly)
+    private IEnumerable<IInlineCommand> LoadAllInlineCommandsFromAssembly(Assembly assembly)
     {
       IDictionary<string, IList<IInlineCommand>> icommands = new Dictionary<string, IList<IInlineCommand>>();
       foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IInlineCommand)))
@@ -114,15 +114,7 @@ namespace js.net.jish.Util
         }      
         icommands[ns].Add(icommand);
       }
-      
-      // TODO: This is a hack, we should be returning a IL generated wrapper.
-      // This would also clean up a lot of the dodgect JavaScript below.
-      IDictionary<string, object> fullyQualifiedCommands = new Dictionary<string, object>();
-      foreach (IInlineCommand command in icommands.Values.SelectMany(c => c))
-      {
-        fullyQualifiedCommands.Add(command.GetNameSpace() + "." + command.GetName(), command);
-      }
-      return fullyQualifiedCommands;
+      return icommands.Values.SelectMany(c => c);      
     }    
 
     private IEnumerable<Type> GetAllTypesThatImplement(Assembly assembly, Type iface)
