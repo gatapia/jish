@@ -52,29 +52,47 @@ namespace js.net.jish
 
     private void InjectCommands(IEnumerable<IInlineCommand> commands)
     {
+            const string jsBinder = 
+@"
+global['{0}']['{1}'] = function() {{
+  return global['{2}']['{1}'].apply(global, arguments)
+}};
+";
+      StringBuilder js = new StringBuilder();
+
       var nsCommands = commands.GroupBy(c => c.GetNameSpace());
       foreach (var commandsInNamespace in nsCommands)
       {
-        if (commandsInNamespace.Count() == 1)
+        string ns = commandsInNamespace.Key;
+        object namespaceCommand = GetNamespaceCommand(commandsInNamespace);
+
+        js.Append(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
+
+        string tmpClassName = "__" + Guid.NewGuid();
+        engine.SetGlobal(tmpClassName, namespaceCommand);
+
+        foreach (string method in namespaceCommand.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
         {
-          Console.WriteLine("SINGLE: engine.SetGlobal [" + commandsInNamespace.Key +"] [1]");
-          engine.SetGlobal(commandsInNamespace.Key, commandsInNamespace.First());
-        } else
-        {
-          var methods = new List<ProxyMethod>();
-          foreach (var command in commandsInNamespace)
-          {
-            var thisMethods = command.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => Char.IsLower(m.Name[0]));
-            foreach (MethodInfo mi in thisMethods)
-            {
-              methods.Add(new ProxyMethod(mi, command));
-            }
-          }
-          var nsWrapper = new TypeILWrapper().CreateWrapper(commandsInNamespace.First().GetType(), methods.ToArray());
-          Console.WriteLine("MULTIPLE: engine.SetGlobal [" + commandsInNamespace.Key +"] [" + String.Join(", ",  methods.Select(m => m.MethodInfo.Name)) + "]");
-          engine.SetGlobal(commandsInNamespace.Key, nsWrapper);
+          js.Append(String.Format(jsBinder, commandsInNamespace.Key, method, tmpClassName));
         }
       }
+      engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
+    }
+
+    private object GetNamespaceCommand(IGrouping<string, IInlineCommand> commandsInNamespace)
+    {      
+      var methods = new List<ProxyMethod>();
+      foreach (var command in commandsInNamespace)
+      {
+        var thisMethods = command.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => Char.IsLower(m.Name[0]));
+        foreach (MethodInfo mi in thisMethods)
+        {
+          methods.Add(new ProxyMethod(mi, command));
+        }
+      }
+      var nsWrapper = new TypeILWrapper().CreateWrapper(commandsInNamespace.First().GetType(), methods.ToArray());
+      Console.WriteLine("MULTIPLE: engine.SetGlobal [" + commandsInNamespace.Key +"] [" + String.Join(", ",  methods.Select(m => m.MethodInfo.Name)) + "]");
+      return nsWrapper;
     }
 
 
