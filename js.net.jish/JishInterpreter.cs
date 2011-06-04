@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using js.net.Engine;
-using js.net.jish.InlineCommand;
 using js.net.jish.Util;
 using js.net.Util;
 using Noesis.Javascript;
@@ -20,15 +18,17 @@ namespace js.net.jish
     private readonly IEngine engine;
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly EmbeddedResourcesUtils embeddedResourceLoader;
+    private readonly AssemblyCommandLoader assemblyCommandsLoader;
 
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader)
+    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, AssemblyCommandLoader assemblyCommandsLoader)
     {
       Trace.Assert(engine != null);
       Trace.Assert(console != null);
 
       this.engine = engine;
+      this.assemblyCommandsLoader = assemblyCommandsLoader;
       this.embeddedResourceLoader = embeddedResourceLoader;
       this.loadedAssemblies = loadedAssemblies;
       this.console = console;           
@@ -39,62 +39,10 @@ namespace js.net.jish
       engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
 
       Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
-      Array.ForEach(assemblies, LoadCommandsFromAssembly);      
+      Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
       
       LoadJavaScriptModules();
-    }
-
-    private void LoadCommandsFromAssembly(Assembly assembly)
-    {
-      IEnumerable<IInlineCommand> commands = loadedAssemblies.AddAssembly(assembly);
-      if (commands.Any()) InjectCommands(commands);
-    }
-
-    private void InjectCommands(IEnumerable<IInlineCommand> commands)
-    {
-            const string jsBinder = 
-@"
-global['{0}']['{1}'] = function() {{
-  return global['{2}']['{1}'].apply(global, arguments)
-}};
-";
-      StringBuilder js = new StringBuilder();
-
-      var nsCommands = commands.GroupBy(c => c.GetNameSpace());
-      foreach (var commandsInNamespace in nsCommands)
-      {
-        string ns = commandsInNamespace.Key;
-        object namespaceCommand = GetNamespaceCommand(commandsInNamespace);
-
-        js.Append(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
-
-        string tmpClassName = "__" + Guid.NewGuid();
-        engine.SetGlobal(tmpClassName, namespaceCommand);
-
-        foreach (string method in namespaceCommand.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
-        {
-          js.Append(String.Format(jsBinder, commandsInNamespace.Key, method, tmpClassName));
-        }
-      }
-      engine.Run(js.ToString(), "JishInterpreter.InjectCommands");
-    }
-
-    private object GetNamespaceCommand(IGrouping<string, IInlineCommand> commandsInNamespace)
-    {      
-      var methods = new List<ProxyMethod>();
-      foreach (var command in commandsInNamespace)
-      {
-        var thisMethods = command.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => Char.IsLower(m.Name[0]));
-        foreach (MethodInfo mi in thisMethods)
-        {
-          methods.Add(new ProxyMethod(mi, command));
-        }
-      }
-      var nsWrapper = new TypeILWrapper().CreateWrapper(commandsInNamespace.First().GetType(), methods.ToArray());
-      Console.WriteLine("MULTIPLE: engine.SetGlobal [" + commandsInNamespace.Key +"] [" + String.Join(", ",  methods.Select(m => m.MethodInfo.Name)) + "]");
-      return nsWrapper;
-    }
-
+    }    
 
     private IEnumerable<Assembly> LoadAllAssemblies()
     {

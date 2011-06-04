@@ -64,7 +64,6 @@ if (file.Exists('test.js')) {
 
     private void AssertBuildDirectoryExistsAndAppearsCorrect()
     {
-      Console.WriteLine("DIRECTORY: " + new DirectoryInfo(jishBuildDir).FullName);
       Assert.IsTrue(Directory.Exists(jishBuildDir));
       string[] files = Directory.GetFiles(jishBuildDir, "*.exe");
       Assert.IsTrue(files.Single(f => f.EndsWith("jish.exe")) != null);

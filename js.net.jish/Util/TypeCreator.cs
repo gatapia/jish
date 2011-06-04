@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using js.net.jish.IL;
 
 namespace js.net.jish.Util
 {

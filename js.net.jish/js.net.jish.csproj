@@ -67,8 +67,9 @@
     <Compile Include="HelpMgr.cs" />
     <Compile Include="ICommandBase.cs" />
     <Compile Include="InlineCommand\CreateCommands.cs" />
+    <Compile Include="Util\AssemblyCommandLoader.cs" />
     <Compile Include="Util\AssemblyNameComparer.cs" />
-    <Compile Include="Util\TypeILWrapper.cs" />
+    <Compile Include="IL\TypeILWrapper.cs" />
     <Compile Include="Util\DelegateBuilder.cs" />
     <Compile Include="JishInterpreter.cs" />
     <Compile Include="Command\BreakCommand.cs" />
@@ -118,6 +119,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\jish.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

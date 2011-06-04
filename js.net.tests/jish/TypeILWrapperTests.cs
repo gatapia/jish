@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using js.net.jish.Util;
+using js.net.jish.IL;
 using NUnit.Framework;
 
 namespace js.net.tests.jish
