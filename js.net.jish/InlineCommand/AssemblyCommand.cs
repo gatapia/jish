@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using js.net.jish.Util;
 
@@ -28,12 +30,27 @@ namespace js.net.jish.InlineCommand
     /// </summary>
     /// <param name="assemblyFileName"></param>
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
-    public IEnumerable<IInlineCommand> loadAssemblyImpl(string assemblyFileName)
+    public IDictionary<string, IInlineCommand> loadAssemblyImpl(string assemblyFileName)
     {
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
       IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
-      return loadedCommands;
+      return ConvertCommandsToFullyQualifiedDictionary(loadedCommands);
+    }
+
+    private IDictionary<string, IInlineCommand> ConvertCommandsToFullyQualifiedDictionary(IEnumerable<IInlineCommand> loadedCommands)
+    {
+      IDictionary<string, IInlineCommand> fullyQualified = new Dictionary<string, IInlineCommand>();
+      foreach (IInlineCommand command in loadedCommands)
+      {
+        string ns = command.GetNameSpace();
+        IEnumerable<string> methods = command.GetType().GetMethods().Select(mi => mi.Name).Where(n => Char.IsLower(n[0]));
+        foreach (var method in methods)
+        {
+          fullyQualified.Add(ns + '.' + method, command);
+        }
+      }
+      return fullyQualified;
     }
 
     public string GetName()

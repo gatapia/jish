@@ -81,7 +81,7 @@ namespace js.net.jish.IL
         {
           if (IsParamsArray(realParams[i]))
           {
-            CovertRemainingParametersToArray(parameters, gen, i);
+            CovertRemainingParametersToArray(parameters, gen, i, realParams[i].ParameterType.GetElementType());
             break; 
           }
           // Else add standard inline arg
@@ -89,6 +89,7 @@ namespace js.net.jish.IL
         }
         if (realParams.Length > parameters.Count()) // Emitted Optional
         {
+          Console.WriteLine("TODO");
           // TODO:
           // gen.Emit(OpCodes.Ldarg, real.GetParameters().Last().DefaultValue);
         }
@@ -98,11 +99,11 @@ namespace js.net.jish.IL
       }
     }
 
-    private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int i)
+    private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int startingIndex, Type arrayType)
     {
-      gen.Emit(OpCodes.Ldc_I4, parameters.Count() - i);
-      gen.Emit(OpCodes.Newarr, typeof (int));  // Hardcoded int
-      for (int j = i; j < parameters.Count(); j++)
+      gen.Emit(OpCodes.Ldc_I4, parameters.Count() - startingIndex);
+      gen.Emit(OpCodes.Newarr, arrayType);  
+      for (int j = startingIndex; j < parameters.Count(); j++)
       {
         gen.Emit(OpCodes.Dup);
         gen.Emit(OpCodes.Ldc_I4, j);
@@ -110,7 +111,7 @@ namespace js.net.jish.IL
           
         // if (parameters.ElementAt(i).IsValueType) { gen.Emit(OpCodes.Box, parameters.ElementAt(i)); } // Box if required
 
-        gen.Emit(OpCodes.Stelem, typeof(int));
+        gen.Emit(OpCodes.Stelem, arrayType);
       }
     }
 

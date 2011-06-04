@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace js.net.jish.IL
+﻿namespace js.net.jish.IL
 {
   public class JishProxy
   {
@@ -13,7 +11,6 @@ namespace js.net.jish.IL
 
     public object GetInstance(int idx)
     {
-      Console.WriteLine("GetInstance: " + thiss[idx]);
       return thiss[idx];
     }    
   }

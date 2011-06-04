@@ -16,7 +16,7 @@ jish.assembly = function(assemblyName) {
 
 global.__importCommands = function(commands) {
   for (var nsAndFnName in commands) {    
-    var split = nsAndFnName.split('.');
+    var split = nsAndFnName.split('.');      
     if (!global[split[0]]) {
       global[split[0]] = {};
     }
