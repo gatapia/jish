@@ -176,20 +176,45 @@ namespace js.net.tests.jish
       }
     }
 
-    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue()
+    [Test] public void SingleGen()
     {
-      typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]);
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("SingleGen");
+      Assert.AreEqual(1, expanded.Count());
+      Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
     }
 
-    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArg()
+    [Test] public void DoubleGen()
     {
-      typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[0]);
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("DoubleGen");
+      Assert.AreEqual(1, expanded.Count());
+      Assert.AreEqual(4, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
     }
 
-    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArrayArg()
+    [Test] public void IntAndSingleGen()
     {
-      typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[] {1, 2, 3});
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("IntAndSingleGen");
+      Assert.AreEqual(1, expanded.Count());
+      Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
     }
+
+    [Test] public void IntAndDoubleGen()
+    {
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("IntAndDoubleGen");
+      Assert.AreEqual(1, expanded.Count());
+      Assert.AreEqual(3, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
+    }
+
+    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue() { typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]); }
+    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArg() { typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[0]); }
+    [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArrayArg() { typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[] {1, 2, 3}); }
 
     private IEnumerable<MethodInfo> GetExpandedMethods(string methodName)
     {
@@ -215,6 +240,11 @@ namespace js.net.tests.jish
     public static void OneDefAndOneParams(int a1 = 1, params int[] args) { }
     public static void TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args) { }
     public static void OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args) { }
+
+    public static void SingleGen<T>(T arg1) { }
+    public static void DoubleGen<T, U>(T arg1, U arg2) { }
+    public static void IntAndSingleGen<T>(int intarg1, T arg1) { }
+    public static void IntAndDoubleGen<T, U>(int intarg1, T arg1, U arg2) { }
 
   }
 }

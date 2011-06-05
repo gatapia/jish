@@ -12,6 +12,14 @@ namespace js.net.tests.jish
     private readonly MethodInfo miStatic = typeof (StaticClz).GetMethod("GetStringStatic", new [] {typeof(int)});
     private readonly MethodInfo miInstance = typeof (InstanceClz).GetMethod("GetStringNonStatic");
 
+    [Test] public void TestStaticTypeWithArrayArgs()
+    {
+      MethodInfo mi = typeof (StaticClz).GetMethod("GetStringArrStatic", new [] {typeof(string), typeof(string[])});
+      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new[] {new MethodToProxify(mi, null)});
+      Assert.AreEqual("STATICWITHARR[str1]", wrapped.GetType().GetMethod("GetStringArrStatic").Invoke(wrapped, new object[] {"str1", new string[0]}));
+      Assert.AreEqual("STATICWITHARR[str11,2]", wrapped.GetType().GetMethod("GetStringArrStatic").Invoke(wrapped, new object[] {"str1", new []{"1","2"}}));
+    }
+
     [Test] public void TestStaticTypeWithSimpleArgs()
     {
       object wrapped = wrapper.CreateWrapper(typeof(StaticClz));
@@ -352,6 +360,11 @@ namespace js.net.tests.jish
     public static string GetStringStatic(int arg1, int arg2)
     {
       return "STATIC[" + (arg1 + arg2) + "]";
+    }
+
+    public static string GetStringArrStatic(string arg1, string[] arg2)
+    {
+      return "STATICWITHARR[" + arg1 + String.Join(",", arg2) + "]";
     }
   }  
 
