@@ -298,20 +298,25 @@ namespace js.net.tests.jish
 
   public static class ComplexClz
   {
+    // Params
     public static string SingleParamsArg(params int[] args) { return ToParamsString(args); }
     public static string OneStringThenParamsArg(string strArg, params int[] args) { return strArg + ToParamsString(args); }
-                  
+    
+    // Ref Params          
     public static string SingleRefParamsArg(params object[] args) { return ToParamsString(args); }
     public static string OneStringThenRefParamsArg(string strArg, params object[] args) { return strArg + ToParamsString(args); }    
 
+    // Defs          
     public static string SingleDefValue(int a1 = 1) { return ToParamsString(a1); }
     public static string OneStringThenSingleDefValue(string strArg, int a1 = 1) { return ToParamsString(strArg, (object) a1); }
     public static string TwoStringsThenTwoDefValue(string strArg1, string strArg2, int a1 = 1, int a2 = 2) { return ToParamsString(strArg1, strArg2, (object) a1, a2); }
-                  
+    
+    // Ref Defs          
     public static string SingleRefDefValue(int a1 = 1) { return ToParamsString(a1); }    
     public static string OneStringThenSingleRefDefValue(string strArg, int a1 = 1) { return ToParamsString(strArg, (object) a1); }
     public static string TwoStringsThenTwoRefDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) { return ToParamsString(strArg1, strArg2, a1, a2); }
 
+    // Defs and Params
     public static string OneDefAndOneParams(int a1 = 1, params int[] args) { return a1 + ToParamsString(args); }
     public static string TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args) { return a1.ToString() + a2 + ToParamsString(args); }
     public static string OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args) { return strArg1 + a1 + a2 + ToParamsString(args); }

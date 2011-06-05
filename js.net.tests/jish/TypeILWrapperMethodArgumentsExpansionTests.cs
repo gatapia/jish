@@ -103,6 +103,36 @@ namespace js.net.tests.jish
       Assert.AreEqual(typeof(int), expanded.ElementAt(2).GetParameters()[3].ParameterType);
     } 
 
+    [Test] public void OneDefAndOneParams()
+    {
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("OneDefAndOneParams");
+      Assert.AreEqual(18, expanded.Count());
+      
+      ParameterInfo[] ps = expanded.ElementAt(0).GetParameters();
+      Assert.AreEqual(0, ps.Length);
+
+      ps = expanded.ElementAt(1).GetParameters();
+      Assert.AreEqual(1, ps.Length);
+      Assert.AreEqual(typeof(int), ps[0].ParameterType);
+
+      for (int i = 2; i < expanded.Count(); i++)
+      {
+        ps = expanded.ElementAt(i).GetParameters();
+        Assert.AreEqual(i, ps.Length);
+        Assert.IsTrue(ps.All(p => p.ParameterType == typeof(int))); 
+      }      
+    }
+
+    [Test] public void TwoDefAndOneParams()
+    {
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("TwoDefAndOneParams");
+    }
+
+    [Test] public void OneStringTwoDefAndOneParams()
+    {
+      IEnumerable<MethodInfo> expanded = GetExpandedMethods("OneStringTwoDefAndOneParams");
+    }
+
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue()
     {
       typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]);
@@ -139,10 +169,9 @@ namespace js.net.tests.jish
     public static void OneStringThenSingleDefValue(string strArg, int a1 = 1) {}
     public static void TwoStringsThenTwoDefValue(string strArg1, string strArg2, int a1 = 1, int a2 = 2) {}
 
-    // TODO!!
-    public static void Weird(int a2 = 0, params string[] a1) 
-    {
-    }
+    public static void OneDefAndOneParams(int a1 = 1, params int[] args) { }
+    public static void TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args) { }
+    public static void OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args) { }
 
   }
 }

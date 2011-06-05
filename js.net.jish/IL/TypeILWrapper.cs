@@ -81,33 +81,34 @@ namespace js.net.jish.IL
           // class to proxy to methods from different source classes.
           SetAReferenceToAppropriateThis(gen, thissIdx);
         } 
-        int len = parameters.Count() + (realParams.Length > 0 && IsParamsArray(realParams.Last())  ? 1 : 0);
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < parameters.Count(); i++)
         {          
           if (IsParamsArray(realParams[i]))
-          {
-            CovertRemainingParametersToArray(parameters, gen, i, realParams[i].ParameterType.GetElementType());
-            break; 
+          {            
+            break;  // Break as this is the last parameter (params must always be last)
           }
           // Else add standard inline arg
           gen.Emit(OpCodes.Ldarg, i + 1);
         }
-        // Omitted Optional, Note this does not support (args.., optional, params) signature
-        if (realParams.Length > 0 && !IsParamsArray(realParams[realParams.Length - 1]))
-        {
-          int numberOfOptionalsOmmitted = realParams.Length - parameters.Count();
-          for (int i = 0; i < numberOfOptionalsOmmitted; i++)
-          {                      
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
-            gen.Emit(OpCodes.Ldc_I4, realParams.Length - numberOfOptionalsOmmitted + i);
-            MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
-            getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams.Last().ParameterType});
-            gen.Emit(OpCodes.Callvirt, getLastOptional); // Call get instance and pop the current this pointer          
-          }
 
+        for (int i = parameters.Count(); i < realParams.Length; i++)
+        {
+          if (IsParamsArray(realParams[i])) break;
+
+          gen.Emit(OpCodes.Ldarg_0);
+          gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
+          gen.Emit(OpCodes.Ldc_I4, i + 1);
+          MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
+          getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams.Last().ParameterType});
+          gen.Emit(OpCodes.Callvirt, getLastOptional);
         }
-        gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real); // Call the real method
+        ParameterInfo last = realParams.Any() ? realParams.Last() : null;
+        if (last != null && IsParamsArray(last))
+        {
+          CovertRemainingParametersToArray(parameters, gen, realParams.Count() - 1, last.ParameterType.GetElementType());
+        }
+        // Call the real method
+        gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real); 
         gen.Emit(OpCodes.Ret);
       }
     }
