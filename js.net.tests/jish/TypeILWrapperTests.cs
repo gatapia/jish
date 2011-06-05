@@ -234,12 +234,12 @@ namespace js.net.tests.jish
     // TwoDefAndOneParams
     [Test] public void TestTwoDefAndOneParamsWithNoArgs()
     {
-      Assert.AreEqual("12null", InvokeWrapped("TwoDefAndOneParams", new object[] {}));  
+      Assert.AreEqual("1nparamnull", InvokeWrapped("TwoDefAndOneParams", new object[] {}));  
     }
 
     [Test] public void TestTwoDefAndOneParamsWithOneDefArg()
     {
-      Assert.AreEqual("42null", InvokeWrapped("TwoDefAndOneParams", new object[] {4}));  
+      Assert.AreEqual("4nparamnull", InvokeWrapped("TwoDefAndOneParams", new object[] {4}));  
     }
 
     [Test] public void TestTwoDefAndOneParamsWithTwoDefArgs()
@@ -255,12 +255,12 @@ namespace js.net.tests.jish
     // OneStringTwoDefAndOneParams
     [Test] public void TestOneStringTwoDefAndOneParamsWithNoArgs()
     {                      
-      Assert.AreEqual("str12null", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str"}));  
+      Assert.AreEqual("str1nparamnull", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str"}));  
     }                      
                            
     [Test] public void TestOneStringTwoDefAndOneParamsWithOneDefArg()
     {                      
-      Assert.AreEqual("str92null", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9}));  
+      Assert.AreEqual("str9nparamnull", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9}));  
     }                      
                            
     [Test] public void TestOneStringTwoDefAndOneParamsWithTwoDefArgs()
@@ -300,11 +300,11 @@ namespace js.net.tests.jish
   {
     // Params
     public static string SingleParamsArg(params int[] args) { return ToParamsString(args); }
-    public static string OneStringThenParamsArg(string strArg, params int[] args) { return strArg + ToParamsString(args); }
+    public static string OneStringThenParamsArg(string strArg, params int[] args) { return ToSingleParamsString(strArg) + ToParamsString(args); }
     
     // Ref Params          
     public static string SingleRefParamsArg(params object[] args) { return ToParamsString(args); }
-    public static string OneStringThenRefParamsArg(string strArg, params object[] args) { return strArg + ToParamsString(args); }    
+    public static string OneStringThenRefParamsArg(string strArg, params object[] args) { return ToSingleParamsString(strArg) + ToParamsString(args); }    
 
     // Defs          
     public static string SingleDefValue(int a1 = 1) { return ToParamsString(a1); }
@@ -317,9 +317,20 @@ namespace js.net.tests.jish
     public static string TwoStringsThenTwoRefDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) { return ToParamsString(strArg1, strArg2, a1, a2); }
 
     // Defs and Params
-    public static string OneDefAndOneParams(int a1 = 1, params int[] args) { return a1 + ToParamsString(args); }
-    public static string TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args) { return a1.ToString() + a2 + ToParamsString(args); }
-    public static string OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args) { return strArg1 + a1 + a2 + ToParamsString(args); }
+    public static string OneDefAndOneParams(int a1 = 1, params int[] args) { return ToSingleParamsString(a1) + ToParamsString(args); }
+    public static string TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args)
+    {
+      return a1 + ToSingleParamsString(a2) + ToParamsString(args);
+    }
+    public static string OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args)
+    {
+      return strArg1 + a1 + ToSingleParamsString(a2) + ToParamsString(args);
+    }
+
+    private static string ToSingleParamsString(object param)
+    {
+      return param == null ? "nparam" : param.ToString();
+    }
 
     private static string ToParamsString<T>(params T[] args)
     {

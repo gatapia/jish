@@ -126,11 +126,54 @@ namespace js.net.tests.jish
     [Test] public void TwoDefAndOneParams()
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("TwoDefAndOneParams");
+      Assert.AreEqual(19, expanded.Count());
+      
+      ParameterInfo[] ps = expanded.ElementAt(0).GetParameters();
+      Assert.AreEqual(0, ps.Length);
+
+      ps = expanded.ElementAt(1).GetParameters();
+      Assert.AreEqual(1, ps.Length);
+      Assert.AreEqual(typeof(int), ps[0].ParameterType);
+
+      ps = expanded.ElementAt(2).GetParameters();
+      Assert.AreEqual(2, ps.Length);
+      Assert.AreEqual(typeof(int), ps[0].ParameterType);
+      Assert.AreEqual(typeof(object), ps[1].ParameterType);
+
+      for (int i = 3; i < expanded.Count(); i++)
+      {
+        ps = expanded.ElementAt(i).GetParameters();
+        Assert.AreEqual(i, ps.Length);
+        Assert.IsTrue(ps.Skip(2).All(p => p.ParameterType == typeof (int)));
+      }
     }
 
     [Test] public void OneStringTwoDefAndOneParams()
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("OneStringTwoDefAndOneParams");
+      Assert.AreEqual(19, expanded.Count());
+      
+      ParameterInfo[] ps = expanded.ElementAt(0).GetParameters();
+      Assert.AreEqual(1, ps.Length);
+      Assert.AreEqual(typeof(string), ps[0].ParameterType);
+
+      ps = expanded.ElementAt(1).GetParameters();
+      Assert.AreEqual(2, ps.Length);
+      Assert.AreEqual(typeof(string), ps[0].ParameterType);
+      Assert.AreEqual(typeof(int), ps[1].ParameterType);
+
+      ps = expanded.ElementAt(2).GetParameters();
+      Assert.AreEqual(3, ps.Length);
+      Assert.AreEqual(typeof(string), ps[0].ParameterType);
+      Assert.AreEqual(typeof(int), ps[1].ParameterType);
+      Assert.AreEqual(typeof(object), ps[2].ParameterType);
+
+      for (int i = 3; i < expanded.Count(); i++)
+      {
+        ps = expanded.ElementAt(i).GetParameters();
+        Assert.AreEqual(i + 1, ps.Length);
+        Assert.IsTrue(ps.Skip(3).All(p => p.ParameterType == typeof (int)));
+      }
     }
 
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue()

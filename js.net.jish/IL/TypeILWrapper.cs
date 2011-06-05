@@ -97,9 +97,9 @@ namespace js.net.jish.IL
 
           gen.Emit(OpCodes.Ldarg_0);
           gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
-          gen.Emit(OpCodes.Ldc_I4, i + 1);
+          gen.Emit(OpCodes.Ldc_I4, i);
           MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
-          getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams.Last().ParameterType});
+          getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams[i].ParameterType});
           gen.Emit(OpCodes.Callvirt, getLastOptional);
         }
         ParameterInfo last = realParams.Any() ? realParams.Last() : null;
@@ -115,7 +115,7 @@ namespace js.net.jish.IL
 
     private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int startingIndex, Type arrayType)
     {
-      gen.Emit(OpCodes.Ldc_I4, parameters.Count() - startingIndex);
+      gen.Emit(OpCodes.Ldc_I4, Math.Max(0, parameters.Count() - startingIndex));
       gen.Emit(OpCodes.Newarr, arrayType);  
       for (int i = startingIndex; i < parameters.Count(); i++)
       {
@@ -138,36 +138,37 @@ namespace js.net.jish.IL
     {
       IList<IEnumerable<Type>> combinations = new List<IEnumerable<Type>>();
       ParameterInfo[] realParams = mi.GetParameters();
-      if (realParams.Length == 0)
+      if (realParams.Length == 0 || (!realParams.Last().IsOptional && !IsParamsArray(realParams.Last())))
       {
         combinations.Add(GetParamCombination(realParams, realParams.Length));
         return combinations;
       }
 
-      bool isParams = IsParamsArray(realParams.Last());
-      if (isParams)
+      int firstNonRequiredIndex = 0;
+      // First pass finds the required method signature
+      for (int i = 0; i < realParams.Length; i++)
       {
-        for (int j = 0; j < 17; j++)
+        ParameterInfo pi = realParams[i];
+        if (pi.IsOptional || IsParamsArray(pi))
         {
-          combinations.Add(GetParamCombination(realParams, realParams.Count() - 1, realParams.Last().ParameterType.GetElementType(), j));
-        }
-      }
-
-      for (int i = realParams.Length; --i >= 0;)
-      {
-        // Already added an entry, so ignore first iteration
-        if (i < realParams.Length - 1) { isParams = false; } 
-
-        ParameterInfo param = realParams[i];
-        if (param.IsOptional)
-        {
-          // combinations.Add(GetParamCombination(realParams, i));
-          if (!isParams) combinations.Add(GetParamCombination(realParams, i + 1));
-          if (i == 0) { combinations.Add(GetParamCombination(realParams, 0)); }
-        } else // No more params or optionals
-        {
-          if (!isParams) combinations.Add(GetParamCombination(realParams, i + 1));
+          firstNonRequiredIndex = i;
           break;
+        }        
+      }
+      // Add all required params as first combination
+      combinations.Add(GetParamCombination(realParams, firstNonRequiredIndex));
+      for (int i = firstNonRequiredIndex; i < realParams.Length; i++)
+      {
+        ParameterInfo pi = realParams[i];
+        if (pi.IsOptional)
+        {
+          combinations.Add(GetParamCombination(realParams, i + 1));
+        } else if (IsParamsArray(pi))
+        {
+          for (int j = 1; j < 17; j++)
+          {
+            combinations.Add(GetParamCombination(realParams, realParams.Count() - 1, realParams.Last().ParameterType.GetElementType(), j));
+          }
         }
       }
       return combinations;
