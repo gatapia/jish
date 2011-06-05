@@ -2,9 +2,9 @@
 
 namespace js.net.jish.IL
 {
-  public class ProxyMethod
+  public class MethodToProxify
   {    
-    public ProxyMethod(MethodInfo mi, object methodContext)
+    public MethodToProxify(MethodInfo mi, object methodContext)
     {
       RealMethod = mi;
       MethodContext = methodContext;

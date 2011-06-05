@@ -168,8 +168,7 @@ by `jish.process('commandName', 'arguments_string')`:
           return "jish";
         }
     
-        public int process(string command) { return process(command, null);  }
-        public int process(string command, string arguments) 
+        public int process(string command, string arguments = null) 
         {
           using (var process = new Process
                           {

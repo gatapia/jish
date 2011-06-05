@@ -121,7 +121,7 @@ namespace js.net.tests.jish
     private IEnumerable<MethodInfo> GetExpandedMethods(string methodName)
     {
       object wrapped = wrapper.CreateWrapper(typeof (TestExpansion), 
-                                             new [] {new ProxyMethod(typeof(TestExpansion).GetMethod(methodName), null)});
+                                             new [] {new MethodToProxify(typeof(TestExpansion).GetMethod(methodName), null)});
       return wrapped.GetType().GetMethods().Where(mi => mi.Name.Equals(methodName)).OrderBy(mi => mi.GetParameters().Length);
     }
   }

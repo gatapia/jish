@@ -35,7 +35,7 @@ namespace js.net.tests.jish
     [Test] public void TestMergeMethodsInSingleType()
     {
       object instance = new InstanceClz(222);
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new ProxyMethod(miStatic, null), new ProxyMethod(miInstance, instance)});
+      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance)});
       Assert.AreEqual("INSTANCE[222][0][1]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic").Invoke(wrapped, new object[] {2}));
     }
@@ -44,7 +44,7 @@ namespace js.net.tests.jish
     {
       object instance = new InstanceClz(222);
       object instance2 = new InstanceClz(2, 3);
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new ProxyMethod(miStatic, null), new ProxyMethod(miInstance, instance), new ProxyMethod(miInstance, instance2) { OverrideMethodName = "NewMethodName"}});
+      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance), new MethodToProxify(miInstance, instance2) { OverrideMethodName = "NewMethodName"}});
       Assert.AreEqual("INSTANCE[222][0][1]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("INSTANCE[2][3][1]", wrapped.GetType().GetMethod("NewMethodName").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic").Invoke(wrapped, new object[] {2}));
@@ -60,7 +60,7 @@ namespace js.net.tests.jish
     [Test] public void TestParamsMethodCalledWithNoArgs()
     {
       InstanceClz instance = new InstanceClz(1);
-      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new ProxyMethod(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
+      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
       MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new Type[0]);
       string ret = (string) target.Invoke(wrapped, null);
       Assert.AreEqual("ParamsMethod: ", ret);
@@ -69,7 +69,7 @@ namespace js.net.tests.jish
     [Test] public void TestParamsMethodCalledWithOneArgs()
     {
       InstanceClz instance = new InstanceClz(1);
-      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new ProxyMethod(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
+      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
       MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new[] {typeof (int)});
       string ret = (string) target.Invoke(wrapped, new object[] {1});
       Assert.AreEqual("ParamsMethod: 1", ret);
@@ -212,12 +212,12 @@ namespace js.net.tests.jish
 
     [Test] public void TestTwoStringsThenTwoRefDefValueWithTwoArgs()
     {
-     Assert.AreEqual("str1,str2,c9,c111", InvokeWrapped("TwoStringsThenTwoDefValue", new object[] {"str1", "str2", new TestO("c9"), new TestO("c111")}));  
+     Assert.AreEqual("str1,str2,c9,c111", InvokeWrapped("TwoStringsThenTwoRefDefValue", new object[] {"str1", "str2", new TestO("c9"), new TestO("c111")}));  
     }
 
     private string InvokeWrapped(string methodName, object[] args)
     {
-      object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new ProxyMethod(typeof(ComplexClz).GetMethod(methodName), null)});
+      object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new MethodToProxify(typeof(ComplexClz).GetMethod(methodName), null)});
       MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
       return (string) mi.Invoke(wrapped, args);
     }
@@ -260,7 +260,7 @@ namespace js.net.tests.jish
       {
         return "null";
       }
-      return String.Join(",", args);
+      return String.Join(",", args.Select(a => a == null ? "null" : a.ToString()));
     }
   }
 

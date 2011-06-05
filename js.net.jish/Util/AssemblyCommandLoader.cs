@@ -57,13 +57,13 @@ global['{0}']['{1}'] = function() {{
 
     private object GetNamespaceCommandProxy(IEnumerable<IInlineCommand> commands)
     {      
-      var methods = new List<ProxyMethod>();
+      var methods = new List<MethodToProxify>();
       foreach (var command in commands)
       {
         var thisMethods = command.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => Char.IsLower(m.Name[0]));
         foreach (MethodInfo mi in thisMethods)
         {
-          methods.Add(new ProxyMethod(mi, command));
+          methods.Add(new MethodToProxify(mi, command));
         }
       }
       var nsWrapper = new TypeILWrapper().CreateWrapper(commands.First().GetType(), methods.ToArray());

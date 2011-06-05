@@ -24,9 +24,9 @@ namespace js.net.jish.IL
       return CreateWrapper(templateType, GetAllMethods(templateType, null));
     }    
 
-    public object CreateWrapper(Type templateType, ProxyMethod[] methods)
+    public object CreateWrapper(Type templateType, MethodToProxify[] methodsToProxify)
     {
-      Trace.Assert(methods != null && methods.Length > 0);      
+      Trace.Assert(methodsToProxify != null && methodsToProxify.Length > 0);      
 
       string ns = templateType.Assembly.FullName;
       AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), AssemblyBuilderAccess.RunAndSave);
@@ -34,40 +34,44 @@ namespace js.net.jish.IL
       TypeBuilder wrapperBuilder = moduleBuilder.DefineType(templateType.FullName, TypeAttributes.Public, typeof(JishProxy), new Type[0]);
       CreateProxyConstructor(wrapperBuilder);
 
-      for (int i = 0; i < methods.Length; i++)
+      for (int i = 0; i < methodsToProxify.Length; i++)
       {     
-        CreateProxyMethod(wrapperBuilder, i, methods.ElementAt(i));
+        CreateProxyMethod(wrapperBuilder, i, methodsToProxify.ElementAt(i));
       }
 
       Type wrapperType = wrapperBuilder.CreateType();
       assemblyBuilder.Save("testassembly.dll");
-      return Activator.CreateInstance(wrapperType, new object[] { methods.Select(m => m.MethodContext).ToArray() });
+      object[] thiss = methodsToProxify.Select(m => m.MethodContext).ToArray();
+      MethodInfo[] realMethods = methodsToProxify.Select(pm => pm.RealMethod).ToArray();
+      return Activator.CreateInstance(wrapperType, new object[] { thiss, realMethods });
     }
 
-    private ProxyMethod[] GetAllMethods(Type templateType, object instance)
+    private MethodToProxify[] GetAllMethods(Type templateType, object instance)
     {
-      return templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType")).Select(mi => new ProxyMethod(mi, instance)).ToArray();
+      return templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType")).Select(mi => new MethodToProxify(mi, instance)).ToArray();
     }
 
     private void CreateProxyConstructor(TypeBuilder wrapperBuilder)
     {
-      var consBuilder = wrapperBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] {typeof(object[])});
+      var consBuilder = wrapperBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] {typeof(object[]), typeof(MethodInfo[])});
+
       var gen = consBuilder.GetILGenerator();
       gen.Emit(OpCodes.Ldarg_0); // This
       gen.Emit(OpCodes.Ldarg_1); // thiss
-      ConstructorInfo superConstructor = typeof(JishProxy).GetConstructor(new [] {typeof(object[])});
+      gen.Emit(OpCodes.Ldarg_2); // realMethods
+      ConstructorInfo superConstructor = typeof(JishProxy).GetConstructor(new [] {typeof(object[]), typeof(MethodInfo[])});
       gen.Emit(OpCodes.Call, superConstructor);
       gen.Emit(OpCodes.Ret);
     }
 
-    private void CreateProxyMethod(TypeBuilder wrapperBuilder, int thissIdx, ProxyMethod method)
+    private void CreateProxyMethod(TypeBuilder wrapperBuilder, int thissIdx, MethodToProxify methodToProxify)
     {
-      MethodInfo real = method.RealMethod;
+      MethodInfo real = methodToProxify.RealMethod;
       ParameterInfo[] realParams = real.GetParameters();
       IList<IEnumerable<Type>> parameterCombinations = GetAllParameterCombinations(real);      
       foreach (IEnumerable<Type> parameters in parameterCombinations)
       {
-        var methodBuilder = wrapperBuilder.DefineMethod(method.OverrideMethodName ?? real.Name,
+        var methodBuilder = wrapperBuilder.DefineMethod(methodToProxify.OverrideMethodName ?? real.Name,
                                                         MethodAttributes.Public | MethodAttributes.Virtual,
                                                         real.ReturnType, parameters.Select(pt => pt).ToArray());
         var gen = methodBuilder.GetILGenerator();
@@ -88,13 +92,21 @@ namespace js.net.jish.IL
           // Else add standard inline arg
           gen.Emit(OpCodes.Ldarg, i + 1);
         }
-        if (realParams.Length > parameters.Count()) // Emitted Optional
+        // Omitted Optional, Note this does not support (args.., optional, params) signature
+        if (realParams.Length > 0 && !IsParamsArray(realParams[realParams.Length - 1]))
         {
-          Console.WriteLine("TODO");
-          // TODO:
-          // gen.Emit(OpCodes.Ldarg, real.GetParameters().Last().DefaultValue);
-        }        
+          int numberOfOptionalsOmmitted = realParams.Length - parameters.Count();
+          for (int i = 0; i < numberOfOptionalsOmmitted; i++)
+          {                      
+            gen.Emit(OpCodes.Ldarg_0);
+            gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
+            gen.Emit(OpCodes.Ldc_I4, realParams.Length - numberOfOptionalsOmmitted + i);
+            MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
+            getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams.Last().ParameterType});
+            gen.Emit(OpCodes.Callvirt, getLastOptional); // Call get instance and pop the current this pointer          
+          }
 
+        }
         gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real); // Call the real method
         gen.Emit(OpCodes.Ret);
       }
@@ -109,9 +121,7 @@ namespace js.net.jish.IL
         gen.Emit(OpCodes.Dup);
         gen.Emit(OpCodes.Ldc_I4, i - startingIndex);
         gen.Emit(OpCodes.Ldarg, i + 1);
-          
-        // if (parameters.ElementAt(i).IsValueType) { gen.Emit(OpCodes.Box, parameters.ElementAt(i)); } // Box if required
-
+                  
         gen.Emit(OpCodes.Stelem, arrayType);
       }
     }
