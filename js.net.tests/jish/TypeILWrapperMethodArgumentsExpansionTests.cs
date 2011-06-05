@@ -197,22 +197,19 @@ namespace js.net.tests.jish
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("IntAndSingleGen");
       Assert.AreEqual(1, expanded.Count());
-      Assert.AreEqual(3, expanded.ElementAt(0).GetParameters().Length);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
-      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
-      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
+      Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
     }
 
     [Test] public void IntAndDoubleGen()
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("IntAndDoubleGen");
       Assert.AreEqual(1, expanded.Count());
-      Assert.AreEqual(5, expanded.ElementAt(0).GetParameters().Length);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(3, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
       Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
-      Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
-      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(3).ParameterType);
-      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(4).ParameterType);
+      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
     }
 
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue() { typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]); }
@@ -223,8 +220,7 @@ namespace js.net.tests.jish
     {
       object wrapped = wrapper.CreateWrapper(typeof (TestExpansion), 
                                              new [] {new MethodToProxify(typeof(TestExpansion).GetMethod(methodName), null)});
-      IEnumerable<MethodInfo> methods = wrapped.GetType().GetMethods().Where(mi => mi.Name.Equals(methodName));
-      return methods.OrderBy(mi => mi.GetParameters().Length);
+      return wrapped.GetType().GetMethods().Where(mi => mi.Name.Equals(methodName)).OrderBy(mi => mi.GetParameters().Length);
     }
   }
 
