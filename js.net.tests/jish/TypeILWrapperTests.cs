@@ -215,6 +215,64 @@ namespace js.net.tests.jish
      Assert.AreEqual("str1,str2,c9,c111", InvokeWrapped("TwoStringsThenTwoRefDefValue", new object[] {"str1", "str2", new TestO("c9"), new TestO("c111")}));  
     }
 
+    // OneDefAndOneParams
+    [Test] public void TestOneDefAndOneParamsWithNoArgs()
+    {
+      Assert.AreEqual("1null", InvokeWrapped("OneDefAndOneParams", new object[] {}));  
+    }
+
+    [Test] public void TestOneDefAndOneParamsWithDefArg()
+    {
+      Assert.AreEqual("2null", InvokeWrapped("OneDefAndOneParams", new object[] {2}));  
+    }
+
+    [Test] public void TestOneDefAndOneParamsWithBothArgs()
+    {
+      Assert.AreEqual("31,2,3", InvokeWrapped("OneDefAndOneParams", new object[] {3, 1, 2, 3}));  
+    }
+
+    // TwoDefAndOneParams
+    [Test] public void TestTwoDefAndOneParamsWithNoArgs()
+    {
+      Assert.AreEqual("12null", InvokeWrapped("TwoDefAndOneParams", new object[] {}));  
+    }
+
+    [Test] public void TestTwoDefAndOneParamsWithOneDefArg()
+    {
+      Assert.AreEqual("42null", InvokeWrapped("TwoDefAndOneParams", new object[] {4}));  
+    }
+
+    [Test] public void TestTwoDefAndOneParamsWithTwoDefArgs()
+    {
+      Assert.AreEqual("46null", InvokeWrapped("TwoDefAndOneParams", new object[] {4,6}));  
+    }
+
+    [Test] public void TestTwoDefAndOneParamsWithAllThreeArgs()
+    {
+      Assert.AreEqual("467,8,9", InvokeWrapped("TwoDefAndOneParams", new object[] {4, 6, 7, 8, 9}));  
+    }
+
+    // OneStringTwoDefAndOneParams
+    [Test] public void TestOneStringTwoDefAndOneParamsWithNoArgs()
+    {                      
+      Assert.AreEqual("str12null", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str"}));  
+    }                      
+                           
+    [Test] public void TestOneStringTwoDefAndOneParamsWithOneDefArg()
+    {                      
+      Assert.AreEqual("str92null", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9}));  
+    }                      
+                           
+    [Test] public void TestOneStringTwoDefAndOneParamsWithTwoDefArgs()
+    {                      
+      Assert.AreEqual("str98null", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9,8}));  
+    }                      
+                           
+    [Test] public void TestOneStringTwoDefAndOneParamsWithAllThreeArgs()
+    {
+      Assert.AreEqual("str981,2,3", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9,8,1,2,3}));  
+    }
+
     private string InvokeWrapped(string methodName, object[] args)
     {
       object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new MethodToProxify(typeof(ComplexClz).GetMethod(methodName), null)});
@@ -253,6 +311,10 @@ namespace js.net.tests.jish
     public static string SingleRefDefValue(int a1 = 1) { return ToParamsString(a1); }    
     public static string OneStringThenSingleRefDefValue(string strArg, int a1 = 1) { return ToParamsString(strArg, (object) a1); }
     public static string TwoStringsThenTwoRefDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) { return ToParamsString(strArg1, strArg2, a1, a2); }
+
+    public static string OneDefAndOneParams(int a1 = 1, params int[] args) { return a1 + ToParamsString(args); }
+    public static string TwoDefAndOneParams(int a1 = 1, object a2 = null, params int[] args) { return a1.ToString() + a2 + ToParamsString(args); }
+    public static string OneStringTwoDefAndOneParams(string strArg1, int a1 = 1, object a2 = null, params int[] args) { return strArg1 + a1 + a2 + ToParamsString(args); }
 
     private static string ToParamsString<T>(params T[] args)
     {
