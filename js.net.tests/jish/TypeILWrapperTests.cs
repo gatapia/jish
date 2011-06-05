@@ -281,9 +281,41 @@ namespace js.net.tests.jish
       Assert.AreEqual("str981,2,3", InvokeWrapped("OneStringTwoDefAndOneParams", new object[] {"str",9,8,1,2,3}));  
     }
 
+    [Test] public void SingleGen()
+    {
+      Assert.AreEqual("GEN[str]", InvokeGenWrapped("SingleGen", new object[] {"str"}));  
+    }
+
+    [Test] public void DoubleGen()
+    {
+      Assert.AreEqual("DoubleGen[str,2]", InvokeGenWrapped("DoubleGen", new object[] {"str", 2}));  
+    }
+
+    [Test] public void StringAndSingleGen()
+    {
+      Assert.AreEqual("STRGEN[str,str]", InvokeGenWrapped("StringAndSingleGen", new object[] {"str", "str"}));  
+    }
+
+    [Test] public void StringAndDoubleGen()
+    {
+      Assert.AreEqual("STRDoubleGen[str,1,2]", InvokeGenWrapped("StringAndDoubleGen", new object[] {"str",1,2}));  
+    }
+
+    [Test, Ignore("TODO: Implement")] public void StringAndDoubleGenWithOptinalAndParams()
+    {
+      Assert.AreEqual("StringAndDoubleGenWithOptinalAndParams[str,1,2]", InvokeGenWrapped("StringAndDoubleGenWithOptinalAndParams", new object[] {"str",1,2}));  
+    }
+
     private string InvokeWrapped(string methodName, object[] args)
     {
       object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new MethodToProxify(typeof(ComplexClz).GetMethod(methodName), null)});
+      MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
+      return (string) mi.Invoke(wrapped, args);
+    }    
+
+    private string InvokeGenWrapped(string methodName, object[] args)
+    {
+      object wrapped = wrapper.CreateWrapper(typeof (GenClz), new [] {new MethodToProxify(typeof(GenClz).GetMethod(methodName), null)});
       MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
       return (string) mi.Invoke(wrapped, args);
     }
@@ -367,6 +399,34 @@ namespace js.net.tests.jish
       return "STATICWITHARR[" + arg1 + String.Join(",", arg2) + "]";
     }
   }  
+
+  public static class GenClz
+  {
+    public static string SingleGen<T1>(T1 arg1)
+    {
+      return "GEN[" + arg1 + "]";
+    }
+
+    public static string DoubleGen<T1, T2>(T1 arg1, T2 arg2)
+    {
+      return "DoubleGen[" + arg1 + "," + arg2 + "]";
+    }
+
+    public static string StringAndSingleGen<T1>(string s1, T1 arg1)
+    {
+      return "STRGEN[" + s1 + "," + arg1 + "]";
+    }
+
+    public static string StringAndDoubleGen<T1, T2>(string s1, T1 arg1, T2 arg2)
+    {
+      return "STRDoubleGen[" + s1 + "," + arg1 + "," + arg2 + "]";
+    }
+
+    public static string StringAndDoubleGenWithOptinalAndParams<T1, T2>(string s1, T1 arg1, T2 arg2, int opt = 1, params object[] args)
+    {
+      return "STRDouStringAndDoubleGenWithOptinalAndParamsbleGen[" + s1 + "," + arg1 + "," + arg2 + "," + opt + "," + args + "]";
+    }
+  } 
 
   public class InstanceClz
   {

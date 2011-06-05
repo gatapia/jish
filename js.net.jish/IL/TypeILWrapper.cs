@@ -74,6 +74,10 @@ namespace js.net.jish.IL
         var methodBuilder = wrapperBuilder.DefineMethod(methodToProxify.OverrideMethodName ?? real.Name,
                                                         MethodAttributes.Public | MethodAttributes.Virtual,
                                                         real.ReturnType, parameters.Select(pt => pt).ToArray());
+        if (real.GetGenericArguments().Length > 0) // Generics all get changed to objects
+        {
+          real = real.MakeGenericMethod(real.GetGenericArguments().Select(a => typeof (Object)).ToArray());
+        }
         var gen = methodBuilder.GetILGenerator();
         if (!real.IsStatic)
         {
@@ -185,7 +189,7 @@ namespace js.net.jish.IL
       for (int i = 0; i < until; i++)
       {
         ParameterInfo pi = realParams[i];
-        combo.Add(pi.ParameterType);
+        combo.Add(pi.ParameterType.IsGenericParameter ? typeof(object) : pi.ParameterType);
       }
       for (int i = 0; i < extraParams; i++)
       {        

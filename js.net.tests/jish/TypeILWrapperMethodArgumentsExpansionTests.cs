@@ -180,17 +180,17 @@ namespace js.net.tests.jish
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("SingleGen");
       Assert.AreEqual(1, expanded.Count());
-      Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(1, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().First().ParameterType);
     }
 
     [Test] public void DoubleGen()
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("DoubleGen");
       Assert.AreEqual(1, expanded.Count());
-      Assert.AreEqual(4, expanded.ElementAt(0).GetParameters().Length);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().First().ParameterType);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
+      Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().First().ParameterType);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
     }
 
     [Test] public void IntAndSingleGen()
@@ -199,7 +199,7 @@ namespace js.net.tests.jish
       Assert.AreEqual(1, expanded.Count());
       Assert.AreEqual(2, expanded.ElementAt(0).GetParameters().Length);
       Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
     }
 
     [Test] public void IntAndDoubleGen()
@@ -208,8 +208,8 @@ namespace js.net.tests.jish
       Assert.AreEqual(1, expanded.Count());
       Assert.AreEqual(3, expanded.ElementAt(0).GetParameters().Length);
       Assert.AreEqual(typeof(int), expanded.ElementAt(0).GetParameters().First().ParameterType);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
-      Assert.AreEqual(typeof(string), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
+      Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
     }
 
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue() { typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]); }
