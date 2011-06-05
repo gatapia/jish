@@ -6,7 +6,6 @@
 
 - jish    
   - Separate jish and js.net, jish is probably now the project with most potential
-  - Generic methods not supported in .create (both static and instance)      
 
 - Documentation (Web Site)
   - Overview

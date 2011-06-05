@@ -6,8 +6,7 @@ namespace js.net.tests.jish.Command
   [TestFixture]
   internal class CreateCommandTests : AbstractJishTest
   {
-    [Test]
-    public void TestCreateFileInfoSuccess()
+    [Test] public void TestCreateFileInfoSuccess()
     {
       const string file = @"..\\..\\..\\lib\\PicNet2.dll";
       jish.ExecuteCommand("var dllFile = jish.create('System.IO.FileInfo', '" + file + "');");
@@ -15,8 +14,7 @@ namespace js.net.tests.jish.Command
       Assert.AreEqual(new FileInfo(file).FullName, console.GetLastMessage());
     }
 
-    [Test]
-    public void TestCreateWithMultiplePossibleConstructors()
+    [Test] public void TestCreateWithMultiplePossibleConstructors()
     {
       jish.ExecuteCommand(@"jish.assembly('js.net.tests.dll')");
       jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.TestCreateTarget, js.net.tests', 'str1', 'str2');");
@@ -24,8 +22,7 @@ namespace js.net.tests.jish.Command
       Assert.AreEqual("String[str1] and String[str2] Arg", console.GetLastMessage());
     }
 
-    [Test]
-    public void TestCreateWithMultipleconstructorArgs()
+    [Test] public void TestCreateWithMultipleconstructorArgs()
     {
       jish.ExecuteCommand(@"jish.assembly('js.net.tests.dll')");
       jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.TestCreateTarget, js.net.tests', 'str', '1');");
@@ -33,8 +30,7 @@ namespace js.net.tests.jish.Command
       Assert.AreEqual("String[str] and Int[1] Arg", console.GetLastMessage());
     }
 
-    [Test]
-    public void TestMultipleInstances()
+    [Test] public void TestMultipleInstances()
     {
       jish.ExecuteCommand(
         @"
@@ -46,13 +42,40 @@ console.log('x1 - ' + x1.GetConstructorType() + ' x2 - ' + x2.GetConstructorType
       Assert.AreEqual("x1 - String[1] and Int[1] Arg x2 - String[2] and Int[2] Arg", console.GetLastMessage());
     }
 
-    [Test]
-    public void TestNoArgsConstructor()
+    [Test] public void TestNoArgsConstructor()
     {
       jish.ExecuteCommand(@"jish.assembly('js.net.tests.dll')");
       jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.TestCreateTarget, js.net.tests');");
       jish.ExecuteCommand("console.log(test.ConstructorType);");
       Assert.AreEqual("No Args", console.GetLastMessage());
+    }
+
+    [Test] public void TestCreateSimpleNoArgs()
+    {
+      jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.Simple, js.net.tests');");
+      jish.ExecuteCommand("console.log(test.GetArg());");
+      Assert.AreEqual("0", console.GetLastMessage());
+    }
+
+    [Test] public void TestCreateSimpleOneArgs()
+    {
+      jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.Simple, js.net.tests', 2);");
+      jish.ExecuteCommand("console.log(test.GetArg());");
+      Assert.AreEqual("2", console.GetLastMessage());
+    }
+
+    [Test] public void TestCreateGenericNoArgs()
+    {
+      jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.Generic, js.net.tests');");
+      jish.ExecuteCommand("console.log('arg: ' + test.GetArg());");
+      Assert.AreEqual("arg: null", console.GetLastMessage());
+    }
+
+    [Test] public void TestCreateGenericOneArgs()
+    {
+      jish.ExecuteCommand("var test = jish.create('js.net.tests.jish.Command.Generic, js.net.tests', 2);");
+      jish.ExecuteCommand("console.log('arg: ' + test.GetArg());");
+      Assert.AreEqual("arg: 2", console.GetLastMessage());
     }
   }
 
@@ -84,5 +107,25 @@ console.log('x1 - ' + x1.GetConstructorType() + ' x2 - ' + x2.GetConstructorType
     {
       return constructorType;
     }
+  }
+
+  public class Simple
+  {
+    private readonly int arg;
+
+    public Simple() { }
+    public Simple(int arg) { this.arg = arg; }
+
+    public int GetArg() { return arg;  }
+  }
+
+  public class Generic<T>
+  {
+    private readonly T arg;
+
+    public Generic() { }
+    public Generic(T arg) { this.arg = arg; }
+
+    public T GetArg() { return arg;  }
   }
 }

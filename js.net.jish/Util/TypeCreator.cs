@@ -31,6 +31,11 @@ namespace js.net.jish.Util
         console.log("Could not find a matching constructor.");
         return null;
       }
+      
+      if (t.ContainsGenericParameters)
+      {
+        t = t.MakeGenericType(t.GetGenericArguments().Select(a => typeof(object)).ToArray());
+      }
       object instance = t.GetConstructors().Length == 0 
         ? new TypeILWrapper().CreateWrapper(t) 
         : Activator.CreateInstance(t, realArgs);
@@ -56,7 +61,8 @@ namespace js.net.jish.Util
       IList<object> realArgs =new List<object>();
       for (int i = 0; i < args.Length; i++)
       {
-        Type exp = ci.GetParameters()[i].ParameterType;
+        Type t = ci.GetParameters()[i].ParameterType;
+        Type exp = t.IsGenericParameter ? typeof(object) : t;
         object thisArg = args[i];
         try
         {

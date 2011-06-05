@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace js.net.jish.Util
@@ -18,18 +20,28 @@ namespace js.net.jish.Util
       {
         string assembly = typeName.Substring(typeName.IndexOf(',') + 1).Trim();
         if (loadedAssemblies.ContainsAssembly(assembly))
-        {          
-          return loadedAssemblies.GetAssembly(assembly).GetType(typeName.Substring(0, typeName.IndexOf(',')));
+        {
+          string shortTypeName = typeName.Substring(0, typeName.IndexOf(','));
+          return GetTypeFromAssemblyGenericSafe(loadedAssemblies.GetAssembly(assembly), shortTypeName);
         }
       } else
       {
         foreach (Assembly assembly in loadedAssemblies.GetAllAssemblies())
         {
-          Type type = assembly.GetType(typeName);
+          Type type = GetTypeFromAssemblyGenericSafe(assembly, typeName);
           if (type != null) return type;
         }
       }
       return null; // Not found
+    }
+
+    private Type GetTypeFromAssemblyGenericSafe(Assembly ass,  string typeName)
+    {
+      Type[] allTypes = ass.GetTypes();
+      // Get exact match or first generic match
+      
+      return allTypes.SingleOrDefault(t => t.FullName.Equals(typeName)) 
+        ?? allTypes.Where(t => t.FullName.StartsWith(typeName + "`")).FirstOrDefault();
     }
   }
 }
