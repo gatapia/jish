@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.IL;
@@ -124,7 +123,7 @@ namespace js.net.tests.jish
      Assert.AreEqual("c1,c2", InvokeWrapped("SingleRefParamsArg", new object[] {new TestO("c1"), new TestO("c2")}));  
     }
 
-    // OneStringThenSingleRefDefValue
+    // OneStringThenRefParamsArg
     [Test] public void TestOneStringThenRefParamsArgWithNoArgs()
     {      
       Assert.AreEqual("strnull", InvokeWrapped("OneStringThenRefParamsArg", new object[] {"str"}));
@@ -138,6 +137,82 @@ namespace js.net.tests.jish
     [Test] public void TestOneStringThenRefParamsArgWithTwoArgs()
     {
      Assert.AreEqual("strc1,c2", InvokeWrapped("OneStringThenRefParamsArg", new object[] {"str", new TestO("c1"), new TestO("c2")}));  
+    }
+
+    // SingleDefValue
+    [Test] public void TestSingleDefValueWithNoArgs()
+    {
+     Assert.AreEqual("1", InvokeWrapped("SingleDefValue", new object[] {}));  
+    }
+
+    [Test] public void TestSingleDefValueWithArg()
+    {
+     Assert.AreEqual("10", InvokeWrapped("SingleDefValue", new object[] {10}));  
+    }
+
+    // OneStringThenSingleDefValue
+    [Test] public void TestOneStringThenSingleDefValueWithNoArg()
+    {
+     Assert.AreEqual("str1,1", InvokeWrapped("OneStringThenSingleDefValue", new object[] {"str1"}));  
+    }
+
+    [Test] public void TestSingleDefValueWithArgs()
+    {
+     Assert.AreEqual("str1,9", InvokeWrapped("OneStringThenSingleDefValue", new object[] {"str1", 9}));  
+    }
+
+    // TwoStringsThenTwoDefValue
+    [Test] public void TestTwoStringsThenTwoDefValueWithNoOptionals()
+    {
+     Assert.AreEqual("str1,str2,1,2", InvokeWrapped("TwoStringsThenTwoDefValue", new object[] {"str1", "str2"}));  
+    }
+
+    [Test] public void TestTwoStringsThenTwoDefValueWithOneArgs()
+    {
+     Assert.AreEqual("str1,str2,9,2", InvokeWrapped("TwoStringsThenTwoDefValue", new object[] {"str1", "str2", 9}));  
+    }
+
+    [Test] public void TestTwoStringsThenTwoDefValueWithTwoArgs()
+    {
+     Assert.AreEqual("str1,str2,9,111", InvokeWrapped("TwoStringsThenTwoDefValue", new object[] {"str1", "str2", 9, 111}));  
+    }
+
+    // SingleRefDefValue
+    [Test] public void TestSingleRefDefValueWithNoArgs()
+    {
+     Assert.AreEqual("1", InvokeWrapped("SingleRefDefValue", new object[] {}));  
+    }
+
+    [Test] public void TestSingleRefDefValueWithArg()
+    {
+     Assert.AreEqual("10", InvokeWrapped("SingleRefDefValue", new object[] {10}));  
+    }
+
+    // OneStringThenSingleRefDefValue
+    [Test] public void TestOneStringThenSingleRefDefValueWithNoArg()
+    {
+     Assert.AreEqual("str1,1", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str1"}));  
+    }
+
+    [Test] public void TestSingleRefDefValueWithArgs()
+    {
+     Assert.AreEqual("str1,9", InvokeWrapped("OneStringThenSingleRefDefValue", new object[] {"str1", 9}));  
+    }
+
+    // TwoStringsThenTwoRefDefValue
+    [Test] public void TestTwoStringsThenTwoRefDefValueWithNoOptionals()
+    {
+     Assert.AreEqual("str1,str2,null,null", InvokeWrapped("TwoStringsThenTwoRefDefValue", new object[] {"str1", "str2"}));  
+    }
+
+    [Test] public void TestTwoStringsThenTwoRefDefValueWithOneArgs()
+    {
+     Assert.AreEqual("str1,str2,c9,null", InvokeWrapped("TwoStringsThenTwoRefDefValue", new object[] {"str1", "str2", new TestO("c9")}));  
+    }
+
+    [Test] public void TestTwoStringsThenTwoRefDefValueWithTwoArgs()
+    {
+     Assert.AreEqual("str1,str2,c9,c111", InvokeWrapped("TwoStringsThenTwoDefValue", new object[] {"str1", "str2", new TestO("c9"), new TestO("c111")}));  
     }
 
     private string InvokeWrapped(string methodName, object[] args)
@@ -169,9 +244,17 @@ namespace js.net.tests.jish
     public static string OneStringThenParamsArg(string strArg, params int[] args) { return strArg + ToParamsString(args); }
                   
     public static string SingleRefParamsArg(params object[] args) { return ToParamsString(args); }
-    public static string OneStringThenRefParamsArg(string strArg, params object[] args) { return strArg + ToParamsString(args); }
+    public static string OneStringThenRefParamsArg(string strArg, params object[] args) { return strArg + ToParamsString(args); }    
 
-    private static string ToParamsString<T>(IEnumerable<T> args)
+    public static string SingleDefValue(int a1 = 1) { return ToParamsString(a1); }
+    public static string OneStringThenSingleDefValue(string strArg, int a1 = 1) { return ToParamsString(strArg, (object) a1); }
+    public static string TwoStringsThenTwoDefValue(string strArg1, string strArg2, int a1 = 1, int a2 = 2) { return ToParamsString(strArg1, strArg2, (object) a1, a2); }
+                  
+    public static string SingleRefDefValue(int a1 = 1) { return ToParamsString(a1); }    
+    public static string OneStringThenSingleRefDefValue(string strArg, int a1 = 1) { return ToParamsString(strArg, (object) a1); }
+    public static string TwoStringsThenTwoRefDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) { return ToParamsString(strArg1, strArg2, a1, a2); }
+
+    private static string ToParamsString<T>(params T[] args)
     {
       if (args == null || !args.Any())
       {
@@ -179,14 +262,6 @@ namespace js.net.tests.jish
       }
       return String.Join(",", args);
     }
-
-    public static void SingleDefValue(int a1 = 1) {}
-    public static void OneStringThenSingleDefValue(string strArg, int a1 = 1) {}
-    public static void TwoStringsThenTwoDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) {}
-
-    public static void SingleRefDefValue(int a1 = 1) {}
-    public static void OneStringThenSingleRefDefValue(string strArg, int a1 = 1) {}
-    public static void TwoStringsThenTwoRefDefValue(string strArg1, string strArg2, object a1 = null, object a2 = null) {}
   }
 
   public static class StaticClz
