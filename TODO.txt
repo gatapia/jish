@@ -1,11 +1,6 @@
-
 - More unit testing frameworks
 - Fork the JavaScript.Net project as it appears to have died.
-- Find a way of getting more fail information from tests (exceptions).
 - Node interface
-
-- jish    
-  - Separate jish and js.net, jish is probably now the project with most potential
 
 - Documentation (Web Site)
   - Overview

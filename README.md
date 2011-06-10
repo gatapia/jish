@@ -1,8 +1,8 @@
-# js.net - JavaScript the .Net way #
+# jish - JavaScript the .Net way #
 
 ## Overview ##
-js.net provides several tools for working with JavaScript in a '.Net' kind of 
-way:
+jish / js.net provides several tools for working with JavaScript in a '.Net' 
+kind of way:
 
 - A wrapper around V8:  Include js.net.dll in your project and you can run 
  JavaScript straight from your .Net programs
@@ -143,6 +143,8 @@ by `jish.process('commandName', 'arguments_string')`:
     
         public ProcessCommand(JSConsole console)
         {
+          Trace.Assert(console != null);
+    
           this.console = console;
         }
     
@@ -170,6 +172,8 @@ by `jish.process('commandName', 'arguments_string')`:
     
         public int process(string command, string arguments = null) 
         {
+          Trace.Assert(!String.IsNullOrWhiteSpace(command));
+    
           using (var process = new Process
                           {
                             StartInfo =
@@ -197,7 +201,7 @@ by `jish.process('commandName', 'arguments_string')`:
       }
     }
 
-### js.net.jish.Command.ICommand (Console Commands)
+### js.net.jish.Command.IConsoleCommand (Console Commands)
 The console commands implement the ICommand interface.  ICommand(s) have 
 certain charasteristics which may not be immediately obvious.
 
@@ -389,7 +393,9 @@ file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
       // js.net
       copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
         'build\\js.net\\lib\\Noesis.Javascript.dll');
-      copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+      jish.process('build\\ILMerge.exe', '/targetplatform:v4 /target:dll ' + 
+        '/out:build\\js.net\\lib\\js.net.dll js.net\\bin\\js.net.dll ' +
+        'js.net\\bin\\Ninject.dll');
     };
     
     function createZipBundles() {

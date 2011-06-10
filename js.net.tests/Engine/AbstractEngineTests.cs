@@ -40,6 +40,14 @@ namespace js.net.tests.Engine
 ", "AbstractEngineTests.ArrayReduce"));
     }
 
+       
+    [Test] public void TestSetGlobal()
+    {
+      engine.SetGlobal("newglobal", this);
+      int add = (int) engine.Run("newglobal.TestAdd(1, 2);", "test");
+      Assert.AreEqual(3, add);
+    }
+
     [Test] public void TestSetModifyAndGetGlobal()
     {
       engine.SetGlobal("x", 10);

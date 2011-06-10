@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace js.net.jish.Command
+namespace js.net.jish.ConsoleCommand
 {
-  public abstract class EmptyCommand : ICommand
+  public abstract class EmptyConsoleCommand : IConsoleCommand
   {
     public abstract string GetName();
     public abstract string GetHelpDescription();

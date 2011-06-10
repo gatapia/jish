@@ -1,16 +1,19 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace js.net.jish.IL
 {
   public class MethodToProxify
   {    
-    public MethodToProxify(MethodInfo mi, object methodContext)
+    public MethodToProxify(MethodInfo realMethod, object realMethodTargetInstance)
     {
-      RealMethod = mi;
-      MethodContext = methodContext;
+      Trace.Assert(realMethod != null);
+
+      RealMethod = realMethod;
+      TargetInstance = realMethodTargetInstance;
     }
 
-    public object MethodContext { get; private set; }
+    public object TargetInstance { get; private set; }
     public MethodInfo RealMethod { get; private set; }
     public string OverrideMethodName { get; set; }
   }

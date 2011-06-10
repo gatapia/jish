@@ -5,19 +5,13 @@ using System.IO;
 namespace js.net
 {
   public class HtmlFileScriptExtractor
-  {
-    private readonly string file;
-    public HtmlFileScriptExtractor(string file)
+  {    
+    public string GetScriptContents(string file)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
       Trace.Assert(File.Exists(file));
       Trace.Assert(file.EndsWith(".html") || file.EndsWith(".htm"));
 
-      this.file = file;
-    }
-
-    public string GetScriptContents()
-    {
       string html = File.ReadAllText(file);
       string js = "";
       while (html.IndexOf("<script") >= 0)

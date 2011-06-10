@@ -26,12 +26,13 @@ namespace js.net.jish.IL
 
     public object CreateWrapper(Type templateType, MethodToProxify[] methodsToProxify)
     {
+      Trace.Assert(templateType != null);
       Trace.Assert(methodsToProxify != null && methodsToProxify.Length > 0);      
 
       string ns = templateType.Assembly.FullName;
-      AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), AssemblyBuilderAccess.RunAndSave);
-      ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(ns, "testassembly.dll");       
-      TypeBuilder wrapperBuilder = moduleBuilder.DefineType(templateType.FullName, TypeAttributes.Public, typeof(JishProxy), new Type[0]);
+      AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), AssemblyBuilderAccess.Run);
+      ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(ns);       
+      TypeBuilder wrapperBuilder = moduleBuilder.DefineType(templateType.FullName + "Proxy", TypeAttributes.Public, typeof(JishProxy), new Type[0]);
       CreateProxyConstructor(wrapperBuilder);
 
       for (int i = 0; i < methodsToProxify.Length; i++)
@@ -39,33 +40,37 @@ namespace js.net.jish.IL
         CreateProxyMethod(wrapperBuilder, i, methodsToProxify.ElementAt(i));
       }
 
-      Type wrapperType = wrapperBuilder.CreateType();
-      assemblyBuilder.Save("testassembly.dll");
-      object[] thiss = methodsToProxify.Select(m => m.MethodContext).ToArray();
-      MethodInfo[] realMethods = methodsToProxify.Select(pm => pm.RealMethod).ToArray();
-      return Activator.CreateInstance(wrapperType, new object[] { thiss, realMethods });
+      Type wrapperType = wrapperBuilder.CreateType();      
+      return Activator.CreateInstance(wrapperType, new object[] { methodsToProxify });
     }
 
     private MethodToProxify[] GetAllMethods(Type templateType, object instance)
     {
+      Trace.Assert(templateType != null);
+
       return templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType")).Select(mi => new MethodToProxify(mi, instance)).ToArray();
     }
 
     private void CreateProxyConstructor(TypeBuilder wrapperBuilder)
     {
-      var consBuilder = wrapperBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] {typeof(object[]), typeof(MethodInfo[])});
+      Trace.Assert(wrapperBuilder != null);
+
+      var consBuilder = wrapperBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] {typeof(MethodToProxify[])});
 
       var gen = consBuilder.GetILGenerator();
       gen.Emit(OpCodes.Ldarg_0); // This
-      gen.Emit(OpCodes.Ldarg_1); // thiss
-      gen.Emit(OpCodes.Ldarg_2); // realMethods
-      ConstructorInfo superConstructor = typeof(JishProxy).GetConstructor(new [] {typeof(object[]), typeof(MethodInfo[])});
+      gen.Emit(OpCodes.Ldarg_1); // methodsToProxify
+      ConstructorInfo superConstructor = typeof(JishProxy).GetConstructor(new [] {typeof(MethodToProxify[])});
       gen.Emit(OpCodes.Call, superConstructor);
       gen.Emit(OpCodes.Ret);
     }
 
     private void CreateProxyMethod(TypeBuilder wrapperBuilder, int thissIdx, MethodToProxify methodToProxify)
     {
+      Trace.Assert(wrapperBuilder != null);
+      Trace.Assert(thissIdx >= 0);
+      Trace.Assert(methodToProxify != null);
+
       MethodInfo real = methodToProxify.RealMethod;
       ParameterInfo[] realParams = real.GetParameters();
       IList<IEnumerable<Type>> parameterCombinations = GetAllParameterCombinations(real);      
@@ -117,22 +122,30 @@ namespace js.net.jish.IL
       }
     }
 
-    private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int startingIndex, Type arrayType)
+    private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int startingIndex, Type arrayElementType)
     {
+      Trace.Assert(parameters != null);
+      Trace.Assert(gen != null);
+      Trace.Assert(startingIndex >= 0);
+      Trace.Assert(arrayElementType != null);
+
       gen.Emit(OpCodes.Ldc_I4, Math.Max(0, parameters.Count() - startingIndex));
-      gen.Emit(OpCodes.Newarr, arrayType);  
+      gen.Emit(OpCodes.Newarr, arrayElementType);  
       for (int i = startingIndex; i < parameters.Count(); i++)
       {
         gen.Emit(OpCodes.Dup);
         gen.Emit(OpCodes.Ldc_I4, i - startingIndex);
         gen.Emit(OpCodes.Ldarg, i + 1);
                   
-        gen.Emit(OpCodes.Stelem, arrayType);
+        gen.Emit(OpCodes.Stelem, arrayElementType);
       }
     }
 
     private void SetAReferenceToAppropriateThis(ILGenerator gen, int thissIdx)
     {
+      Trace.Assert(gen != null);
+      Trace.Assert(thissIdx >= 0);
+
       gen.Emit(OpCodes.Ldarg_0); // Load this argument onto stack
       gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param
       gen.Emit(OpCodes.Callvirt, typeof (JishProxy).GetMethod("GetInstance")); // Call get instance and pop the current this pointer
@@ -140,6 +153,8 @@ namespace js.net.jish.IL
 
     private IList<IEnumerable<Type>> GetAllParameterCombinations(MethodInfo mi)
     {
+      Trace.Assert(mi != null);
+
       IList<IEnumerable<Type>> combinations = new List<IEnumerable<Type>>();
       ParameterInfo[] realParams = mi.GetParameters();
       if (realParams.Length == 0 || (!realParams.Last().IsOptional && !IsParamsArray(realParams.Last())))
@@ -180,11 +195,19 @@ namespace js.net.jish.IL
 
     private bool IsParamsArray(ParameterInfo param)
     {
+      Trace.Assert(param != null);
+
       return Attribute.IsDefined(param, typeof (ParamArrayAttribute));
     }
 
     private IEnumerable<Type> GetParamCombination(ParameterInfo[] realParams, int until, Type extraParamType = null, int extraParams = 0)
     {
+      Trace.Assert(realParams != null);
+      Trace.Assert(until >= 0);
+      Trace.Assert(extraParams >= 0);
+      if (extraParams > 0) Trace.Assert(extraParamType != null);
+      else Trace.Assert(extraParamType == null);
+
       IList<Type> combo = new List<Type>();
       for (int i = 0; i < until; i++)
       {

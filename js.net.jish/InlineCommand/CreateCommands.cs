@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using js.net.jish.Util;
 
 namespace js.net.jish.InlineCommand
@@ -9,6 +11,8 @@ namespace js.net.jish.InlineCommand
 
     public CreateCommand(TypeCreator typeCreator)
     {
+      Trace.Assert(typeCreator != null);
+
       this.typeCreator = typeCreator;
     }
     
@@ -19,6 +23,8 @@ namespace js.net.jish.InlineCommand
     
     public object create(string typeName, params object[] args) 
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(typeName));
+
       return typeCreator.CreateType(typeName, args);
     }
 

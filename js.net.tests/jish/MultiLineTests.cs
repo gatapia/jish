@@ -34,7 +34,7 @@ namespace js.net.tests.jish
         Assert.Fail("Should fail with ReferenceError: i is not defined");
       } catch (Exception e)
       {
-        Assert.IsTrue(e.Message.StartsWith("ReferenceError: i is not defined"));
+        Assert.IsTrue(e.Message.StartsWith("ReferenceError: i is not defined"), e.Message);
       }
     }
   }

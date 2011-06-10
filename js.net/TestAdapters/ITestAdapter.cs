@@ -1,5 +1,5 @@
 ﻿using System;
-using js.net.Engine;
+using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters
 {
@@ -7,6 +7,6 @@ namespace js.net.TestAdapters
   {
     void LoadSourceFile(string sourceFile);
     ITestResults RunTest(string testFile);
-    IEngine GetInternalEngine();
+    IFrameworkAdapter GetFrameworkAdapter();
   }
 }

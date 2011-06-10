@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace js.net.jish.Command
+namespace js.net.jish.ConsoleCommand
 {
-  public class ClearCommand : EmptyCommand
+  public class ClearCommand : EmptyConsoleCommand
   {
     private readonly IJishInterpreter jish;
     private readonly JSConsole console;
 
     public ClearCommand(IJishInterpreter jish, JSConsole console)
     {
+      Trace.Assert(jish != null);
+      Trace.Assert(console != null);
+
       this.jish = jish;
       this.console = console;
     }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using js.net.jish;
-using js.net.jish.Command;
+using js.net.jish.ConsoleCommand;
 
 namespace js.net.test.module
 {
-  public class TestCommand : EmptyCommand
+  public class TestCommand : EmptyConsoleCommand
   {
     private readonly JSConsole console;
 

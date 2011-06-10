@@ -9,9 +9,9 @@ namespace js.net.Util
   {
     public string ReadEmbeddedResourceTextContents(string resourceName, Assembly assembly = null)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(resourceName));
       if (assembly == null) assembly = Assembly.GetExecutingAssembly();
-      Trace.Assert(Array.IndexOf(assembly.GetManifestResourceNames(), resourceName) >= 0, 
-        String.Join(", ", assembly.GetManifestResourceNames()));
+      Trace.Assert(Array.IndexOf(assembly.GetManifestResourceNames(), resourceName) >= 0, String.Join(", ", assembly.GetManifestResourceNames()));
 
       using(Stream s = assembly.GetManifestResourceStream(resourceName))
       {        

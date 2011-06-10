@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using js.net.Engine;
 using js.net.TestAdapters;
-using js.net.TestAdapters.JSUnit;
 using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters
@@ -42,15 +41,14 @@ namespace js.net.tests.TestAdapters
 
     [Test] public void RunEntireJSUnitTestSuite()
     {
-      JSUnitTestAdapterFactory fact = new JSUnitTestAdapterFactory(jsUnitCoreFile, new DefaultEngineFactory());
-      string[] files = GetTestSuiteFiles();
-      TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
+      IEnumerable<string> files = GetTestSuiteFiles();
+      TestSuiteResults results = JSNet.JSUnitTestSuiteRunner(jsUnitCoreFile).TestFiles(files);
             
       Assert.AreEqual(51, results.Passed.Count());
       Assert.AreEqual(22, results.Failed.Count());
     }
 
-    private string[] GetTestSuiteFiles()
+    private IEnumerable<string> GetTestSuiteFiles()
     {
       return Directory.GetFiles(@"C:\dev\libs\jsunit\tests", "*Tests.html");
     }

@@ -11,7 +11,7 @@ namespace js.net.tests.jish
     const string helpScreenSearchTagStart = "Jish are:";
     const string helpScreenSearchTagEnd = "## Extending Jish";
     const string inlineCommandSearchTagStart = "`jish.process('commandName', 'arguments_string')`:";
-    const string inlineCommandSearchTagEnd = "### js.net.jish.Command.ICommand (Console Commands)";
+    const string inlineCommandSearchTagEnd = "### js.net.jish.Command.IConsoleCommand (Console Commands)";
 
     public override void SetUp()
     {

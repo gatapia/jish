@@ -1,6 +1,9 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using js.net.Engine;
+using Noesis.Javascript;
 using NUnit.Framework;
 
 namespace js.net.tests.Engine
@@ -11,12 +14,44 @@ namespace js.net.tests.Engine
     {
       return new JSNetEngine();
     }
+   
+    [Test, Ignore("Known Memory Leak in js.net")] public void MemoryUsageTests()
+    {      
+      MemoryUsageLoadInstance();
+      long mem = Process.GetCurrentProcess().PrivateMemorySize64;
 
-    [Test] public void TestSetGlobal()
+      for (int i = 0; i < 20; i++)
+      {        
+        MemoryUsageLoadInstance();
+      }
+      GC.Collect();
+      decimal diffMBytes = Math.Round((Process.GetCurrentProcess().PrivateMemorySize64 - mem) / 1048576m, 2);
+      Assert.Less(diffMBytes, 1); // Allow 1 MB
+    }
+
+    private void MemoryUsageLoadInstance() {
+      using (JavascriptContext ctx = new JavascriptContext())
+      {
+        ctx.Run(
+@"
+buffer = [];
+for (var i = 0; i < 100000; i++) {
+  buffer[i] = 'new string';
+}
+");
+      }
+    }
+
+    [Test, Ignore("Not supported")] public void TestCallbackIntoCSharp()
     {
-      engine.SetGlobal("newglobal", this);
-      int add = (int) engine.Run("newglobal.TestAdd(1, 2);", "test");
-      Assert.AreEqual(3, add);
+      engine.SetGlobal("callbackHandler", this);
+      engine.Run("var retval; callbackHandler.methodWithCallback(function(val) { retval = val; });", "TestCallbackIntoCSharp");
+      Assert.AreEqual(10, engine.GetGlobal("retval"));
+    }
+
+    public void methodWithCallback(Action<int> action)
+    {
+      action(10);
     }
 
     [Test, Ignore("Not supported")] public void TestSetGlobalEmbedded()

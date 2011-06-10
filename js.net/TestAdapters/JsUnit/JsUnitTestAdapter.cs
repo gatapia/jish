@@ -11,8 +11,9 @@ namespace js.net.TestAdapters.JSUnit
   {
     private readonly string jsUnitCoreFile;
 
-    public JSUnitTestAdapter(JSDomAdapter js, string jsUnitCoreFile) : base(js)
+    public JSUnitTestAdapter(IFrameworkAdapter js, string jsUnitCoreFile) : base(js)
     {
+      Trace.Assert(js != null);
       Trace.Assert(!String.IsNullOrWhiteSpace(jsUnitCoreFile));
       Trace.Assert(File.Exists(jsUnitCoreFile));
 
@@ -22,8 +23,7 @@ namespace js.net.TestAdapters.JSUnit
     protected override void PrepareFrameworkAndRunTest(string testFile) {
       Trace.Assert(!String.IsNullOrWhiteSpace(testFile));
       Trace.Assert(File.Exists(testFile));
-
-      js.Initialise();
+      
       js.LoadJSFile(jsUnitCoreFile, false);
       js.Run(GetTestingJSFromFile(testFile), new FileInfo(testFile).Name); // Load tests into memory
       string testManager = new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.resources.jsunit.testmanager.js");

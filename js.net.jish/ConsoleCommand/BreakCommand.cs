@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace js.net.jish.Command
+namespace js.net.jish.ConsoleCommand
 {
-  public class BreakCommand : EmptyCommand
+  public class BreakCommand : EmptyConsoleCommand
   {
     private readonly IJishInterpreter jish;
 
     public BreakCommand(IJishInterpreter jish)
     {
+      Trace.Assert(jish != null);
+
       this.jish = jish;
     }
 

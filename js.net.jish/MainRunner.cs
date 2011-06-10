@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using js.net.Engine;
 using js.net.jish.Util;
 using Ninject;
@@ -8,7 +9,7 @@ namespace js.net.jish
   public class MainRunner
   {    
     [STAThread] public static void Main(string[] args)
-    {
+    {      
       IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
       IEngine engine = new JSNetEngine();
       JSConsole console = new JSConsole();
@@ -16,23 +17,17 @@ namespace js.net.jish
       
       kernel.Bind<IEngine>().ToConstant(engine);
       kernel.Bind<JSConsole>().ToConstant(console);
-      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope().OnActivation(jish => ((JishInterpreter)jish).Initialise());
       kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
       
-      InitialiseJishInterpreter(kernel);
-      StartInterpreter(kernel, args, console);
-    }
-   
-    private static void InitialiseJishInterpreter(IKernel kernel)
-    {
-      IJishInterpreter jish = kernel.Get<IJishInterpreter>();
-      jish.InitialiseDependencies();
-      jish.InitialiseInputConsole();
-    }
+      StartInterpreter(kernel.Get<InputLoop>(), args, console);
+    }   
 
-    private static void StartInterpreter(IKernel kernel, string[] args, JSConsole console)
+    private static void StartInterpreter(InputLoop inputLoop, string[] args, JSConsole console)
     {
-      InputLoop inputLoop = kernel.Get<InputLoop>();
+      Trace.Assert(inputLoop != null);
+      Trace.Assert(console != null);
+
       if (args == null || args.Length == 0)
       {
         console.log("Welcome to Jish. Type '.help' for more options.");

@@ -11,8 +11,9 @@ namespace js.net.TestAdapters.Jasmine
   {
     private readonly string jasminJsFile;
 
-    public JasmineTestAdapter(JSDomAdapter js, string jasminJsFile) : base(js)
+    public JasmineTestAdapter(IFrameworkAdapter js, string jasminJsFile) : base(js)
     {
+      Trace.Assert(js != null);
       Trace.Assert(!String.IsNullOrWhiteSpace(jasminJsFile));
       Trace.Assert(File.Exists(jasminJsFile));
 
@@ -20,10 +21,10 @@ namespace js.net.TestAdapters.Jasmine
     }
     
     protected override void PrepareFrameworkAndRunTest(string testFile) {
+      Trace.Assert(js != null);
       Trace.Assert(!String.IsNullOrWhiteSpace(testFile));
       Trace.Assert(File.Exists(testFile));
 
-      js.Initialise();
       js.LoadJSFile(jasminJsFile, false);
       js.Run(GetTestingJSFromFile(testFile) + "; null;", new FileInfo(testFile).Name); // Load tests into memory
       string jasmineReporter = new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents("js.net.resources.jasmine.reporter.js");

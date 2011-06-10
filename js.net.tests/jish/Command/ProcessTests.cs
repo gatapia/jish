@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using NUnit.Framework;
 
 namespace js.net.tests.jish.Command
@@ -14,7 +13,7 @@ namespace js.net.tests.jish.Command
         Assert.Fail("Should throw a 'The system cannot find the file specified' exception");
       } catch (Exception e)
       {
-        Assert.AreEqual("The system cannot find the file specified", e.InnerException.Message);        
+        Assert.AreEqual("The system cannot find the file specified", e.Message);        
       }
     }
 

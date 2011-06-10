@@ -10,7 +10,7 @@ namespace js.net.TestAdapters.QUnit
   {
     private readonly string qUnitJs;
 
-    public QUnitTestAdapter(JSDomAdapter js, string qUnitJs) : base(js)
+    public QUnitTestAdapter(IFrameworkAdapter js, string qUnitJs) : base(js)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));
       Trace.Assert(File.Exists(qUnitJs));
@@ -22,30 +22,51 @@ namespace js.net.TestAdapters.QUnit
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
     {      
       Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
-      Trace.Assert(File.Exists(sourceFile));
+      Trace.Assert(File.Exists(sourceFile));      
+      
+      PrepareForQUnit();
+      LoadQUnit();
+      OverrideQUnitMembers();
+      
+      RunTestsInTargetFile(sourceFile); 
+    }
 
-      // Initialise Framework
-      js.Initialise(); 
-      // Pre - qunit.js load
+    private void PrepareForQUnit()
+    {
       js.Run(@"
 location.protocol = 'file:';
 // Required as QUnit will not extend the window object if this is not set 
 // to undefined.
 exports = undefined; 
 ", "QUniteTestAdapter.PreLoadFile");
-      // Load qunit.js
+    }
+
+    private void LoadQUnit()
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(qUnitJs));
+      Trace.Assert(File.Exists(qUnitJs));
+
       js.LoadJSFile(qUnitJs, false);
-      // Override testDone
+    }
+
+    private void OverrideQUnitMembers()
+    {
       js.Run(
-@"
+        @"
 var globalResults = {};
 QUnit.testDone = function(testResults) {
   globalResults[testResults.name] = testResults.failed;
 };
 "
-, "QUniteTestAdapter.PostLoadFile");
-      // Load <testfile>.js
-      js.Run(GetTestingJSFromFile(sourceFile), new FileInfo(sourceFile).Name); 
+        , "QUniteTestAdapter.PostLoadFile");
+    }
+
+    private void RunTestsInTargetFile(string sourceFile)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
+      Trace.Assert(File.Exists(sourceFile));
+
+      js.Run(GetTestingJSFromFile(sourceFile), new FileInfo(sourceFile).Name);
     }
 
     protected override TestResults GetResults(string testFixtureName)

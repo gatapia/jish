@@ -26,6 +26,9 @@ namespace js.net.jish
     {
       Trace.Assert(engine != null);
       Trace.Assert(console != null);
+      Trace.Assert(loadedAssemblies != null);
+      Trace.Assert(embeddedResourceLoader != null);
+      Trace.Assert(assemblyCommandsLoader != null);
 
       this.engine = engine;
       this.assemblyCommandsLoader = assemblyCommandsLoader;
@@ -34,7 +37,13 @@ namespace js.net.jish
       this.console = console;           
     }
 
-    public void InitialiseDependencies()
+    public void Initialise()
+    {
+      InitialiseDependencies();
+      InitialiseInputConsole();
+    }
+
+    private void InitialiseDependencies()
     {
       engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
 
@@ -43,6 +52,15 @@ namespace js.net.jish
       
       LoadJavaScriptModules();
     }    
+
+    private void InitialiseInputConsole()
+    {
+      try
+      {
+        Console.TreatControlCAsInput = false;
+        Console.CancelKeyPress += (s, e) => Environment.Exit(0);
+      } catch {} // Ignore, as this throws when running in a Process (tests)
+    }
 
     private IEnumerable<Assembly> LoadAllAssemblies()
     {
@@ -80,6 +98,10 @@ namespace js.net.jish
     
     public void ExecuteCommand(string input)
     {  
+      Trace.Assert(input != null);
+      
+      if (String.IsNullOrWhiteSpace(input)) return;
+
       if (input.StartsWith("."))
       {
         loadedAssemblies.InterceptSpecialCommands(input);
@@ -131,7 +153,7 @@ namespace js.net.jish
           string msg = ex2.Message;
           if (msg.IndexOf("Unexpected token ILLEGAL") >= 0 || msg.IndexOf("SyntaxError") < 0)
           {
-            throw;
+            throw ex2.InnerException ?? ex2;
           }
           return false;
         }
@@ -141,6 +163,9 @@ namespace js.net.jish
 
     public void RunFile(string file, string[] args = null)
     {
+      Trace.Assert(file != null);
+      Trace.Assert(File.Exists(file));
+
       engine.SetGlobal("args", args ?? new string[] {});
       FileInfo fi = new FileInfo(file);
       string cwd = Directory.GetCurrentDirectory();
@@ -152,6 +177,9 @@ namespace js.net.jish
 
     private void RunFileImpl(string file, IEnumerable<string> lines)
     {
+      Trace.Assert(file != null);
+      Trace.Assert(lines != null);
+
       // Do not loose line numbers
       IEnumerable<string> nonCommands = lines.Select(l => l.StartsWith(".") ? "" : l); 
       string nonCommandsInline = String.Join("\n", nonCommands);
@@ -163,24 +191,19 @@ namespace js.net.jish
       bufferedCommand = String.Empty;      
     }
 
-    public void SetGlobal(string name, object valud)
+    public void SetGlobal(string name, object value)
     {
-      engine.SetGlobal(name, valud);
-    }
+      Trace.Assert(!String.IsNullOrWhiteSpace(name));
 
-    public void InitialiseInputConsole()
-    {
-      try
-      {
-        Console.TreatControlCAsInput = false;
-        Console.CancelKeyPress += (s, e) => Environment.Exit(0);
-      } catch {} // Ignore, as this throws when running in a Process (tests)
+      engine.SetGlobal(name, value);
     }
-
+    
     public bool ThrowErrors { get; set; }
 
     private void PrintExceptionMessage(Exception e)
     {
+      Trace.Assert(e != null);
+
       string msg = e.Message;
       if (msg.IndexOf(": ") > 0) msg = msg.Substring(msg.IndexOf(": ") + 2);
       if (msg.IndexOf('(') > 0) msg = msg.Substring(0, msg.IndexOf('('));

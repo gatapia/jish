@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using js.net.Engine;
 using js.net.TestAdapters;
-using js.net.TestAdapters.QUnit;
 using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters
@@ -23,16 +21,14 @@ namespace js.net.tests.TestAdapters
     }
 
     [Test] public void RunEntireQUnitTestSuite()
-    {
-      QUnitTestAdapterFactory fact = new QUnitTestAdapterFactory(qUnitJS, new DefaultEngineFactory());
-      string[] files = GetTestSuiteFiles();
-      TestSuiteResults results = new TestSuiteRunner(fact).TestFiles(files);
+    {      
+      TestSuiteResults results = JSNet.QUnitTestSuiteRunner(qUnitJS).TestFiles(GetTestSuiteFiles());
       
       Assert.AreEqual(2, results.Failed.Count());
       Assert.AreEqual(38, results.Passed.Count());
     }
 
-    private string[] GetTestSuiteFiles()
+    private IEnumerable<string> GetTestSuiteFiles()
     {
       return new[] { @"C:\dev\libs\qunit\test\same.js", @"C:\dev\libs\qunit\test\test.js" };
     }

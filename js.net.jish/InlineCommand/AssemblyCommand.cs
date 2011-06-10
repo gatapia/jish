@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.Util;
@@ -13,6 +14,9 @@ namespace js.net.jish.InlineCommand
 
     public AssemblyCommand(LoadedAssembliesBucket loadedAssemblies, JSConsole console)
     {
+      Trace.Assert(loadedAssemblies != null);
+      Trace.Assert(console != null);
+
       this.loadedAssemblies = loadedAssemblies;
       this.console = console;
     }
@@ -32,6 +36,8 @@ namespace js.net.jish.InlineCommand
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
     public IDictionary<string, IInlineCommand> loadAssemblyImpl(string assemblyFileName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyFileName));      
+
       Assembly assembly = Assembly.LoadFrom(assemblyFileName);
       IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
@@ -40,6 +46,8 @@ namespace js.net.jish.InlineCommand
 
     private IDictionary<string, IInlineCommand> ConvertCommandsToFullyQualifiedDictionary(IEnumerable<IInlineCommand> loadedCommands)
     {
+      Trace.Assert(loadedCommands != null);
+
       IDictionary<string, IInlineCommand> fullyQualified = new Dictionary<string, IInlineCommand>();
       foreach (IInlineCommand command in loadedCommands)
       {

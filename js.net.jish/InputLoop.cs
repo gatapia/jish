@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -10,6 +11,8 @@ namespace js.net.jish
 
     public InputLoop(IJishInterpreter interpretter)
     {
+      Trace.Assert(interpretter != null);
+
       this.interpretter = interpretter;
     }
 
@@ -24,6 +27,8 @@ namespace js.net.jish
 
     public void ExecuteArgs(string[] args)
     {
+      Trace.Assert(args != null);
+
       string file = args[0];
       if (!File.Exists(file))
       {

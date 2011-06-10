@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using js.net.jish.Command;
+using js.net.jish.ConsoleCommand;
 using js.net.jish.InlineCommand;
 using Ninject;
 
@@ -22,6 +23,10 @@ namespace js.net.jish.Util
 
     public LoadedAssembliesBucket(HelpMgr helpManager, IKernel kernel, JSConsole console)
     {      
+      Trace.Assert(helpManager != null);
+      Trace.Assert(kernel != null);
+      Trace.Assert(console != null);
+
       this.console = console;
       this.kernel = kernel;
       this.helpManager = helpManager;
@@ -29,6 +34,8 @@ namespace js.net.jish.Util
 
     public IEnumerable<IInlineCommand> AddAssembly(Assembly a)
     {
+      Trace.Assert(a != null);
+
       string name = a.GetName().Name;
       if (assemblies.ContainsKey(name)) { return loadedInlineCommands[name]; }
       assemblies.Add(name, a);
@@ -41,16 +48,23 @@ namespace js.net.jish.Util
 
     public bool ContainsAssembly(string assemblyName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyName));
+
       return assemblies.ContainsKey(GetShortNameFrom(assemblyName));
     }
 
     public Assembly GetAssembly(string assemblyName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyName));
+
       return assemblies[GetShortNameFrom(assemblyName)];
     }
 
     public void InterceptSpecialCommands(string input)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(input));
+      Trace.Assert(input.StartsWith("."));
+
       string commandName = new Regex(@"\.([A-z0-9])+").Match(input).Captures[0].Value.Substring(1).Trim();
       if (commandName.Equals("help"))
       {
@@ -62,12 +76,14 @@ namespace js.net.jish.Util
         console.log("Could not find command: " + input);
         return;
       }
-      ICommand command = (ICommand) kernel.Get(commands[commandName]);
+      IConsoleCommand command = (IConsoleCommand) kernel.Get(commands[commandName]);
       command.Execute(ParseSpecialCommandInputs(input));
     }
 
     private string[] ParseSpecialCommandInputs(string input)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(input));
+
       if (input.IndexOf('(') < 0) return null;
       input = input.Substring(input.IndexOf('(') + 1); 
       input = input.Substring(0, input.LastIndexOf(')')); 
@@ -76,24 +92,30 @@ namespace js.net.jish.Util
 
     private string GetShortNameFrom(string assemblyName)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyName));
+
       if (assemblyName.IndexOf(',') < 0 ) return assemblyName;
       return assemblyName.Substring(0, assemblyName.IndexOf(','));
     }
 
     public IEnumerable<Assembly> GetAllAssemblies()
     {
+      Trace.Assert(assemblies != null);
+
       return assemblies.Values.ToArray();
     }
 
     private void LoadAllCommandsFromAssembly(Assembly assembly)
     {
-      foreach (Type t in GetAllTypesThatImplement(assembly, typeof(ICommand)))
+      Trace.Assert(assembly != null);
+
+      foreach (Type t in GetAllTypesThatImplement(assembly, typeof(IConsoleCommand)))
       {
-        ICommand command = (ICommand) kernel.Get(t);
+        IConsoleCommand command = (IConsoleCommand) kernel.Get(t);
         commands.Add(command.GetName(), t);
         if (command.GetType().Assembly.FullName.IndexOf("js.net.test.module") < 0)
         {
-          helpManager.AddHelpForSpecialCommand(command);
+          helpManager.AddHelpForConsoleCommand(command);
         }
       }
     }

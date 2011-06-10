@@ -1,27 +1,24 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace js.net.jish.IL
 {
   public class JishProxy
   {
-    private readonly object[] thiss;
-    private readonly MethodInfo[] realMethods;
+    private readonly MethodToProxify[] methodsToProxify;
 
-    public JishProxy(object[] thiss, MethodInfo[] realMethods)
+    public JishProxy(MethodToProxify[] methodsToProxify)
     {
-      this.thiss = thiss;
-      this.realMethods = realMethods;
+      this.methodsToProxify = methodsToProxify;
     }
 
     public object GetInstance(int thisIdx)
     {
-      return thiss[thisIdx];
+      return methodsToProxify[thisIdx].TargetInstance;
     }    
 
     public T GetOptionalParameterDefaultValue<T>(int thisIdx, int optionalParamIdx)
     {
-      MethodInfo mi = realMethods[thisIdx];
+      MethodInfo mi = methodsToProxify[thisIdx].RealMethod;
       return (T) mi.GetParameters()[optionalParamIdx].DefaultValue;
     }
   }

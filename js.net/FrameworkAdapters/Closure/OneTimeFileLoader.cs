@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace js.net.FrameworkAdapters
+namespace js.net.FrameworkAdapters.Closure
 {
-  public class PathLoader
+  public class OneTimeFileLoader
   {
     private readonly IList<string> loaded = new List<string>();
 
@@ -14,8 +14,8 @@ namespace js.net.FrameworkAdapters
       Trace.Assert(!String.IsNullOrWhiteSpace(path));
       Trace.Assert(File.Exists(path), "Could not find file: " + path);
 
-      string key = path.ToLower();
-      if (loaded.Contains(key)) return null;
+      string key = path.ToLower();      
+      if (loaded.Contains(key)) return null;  // Already loaded, dont load again
       loaded.Add(key);
 
       return File.ReadAllText(path);
@@ -23,6 +23,8 @@ namespace js.net.FrameworkAdapters
 
     public void Reset()
     {
+      Trace.Assert(loaded != null);
+
       loaded.Clear();
     }
   }

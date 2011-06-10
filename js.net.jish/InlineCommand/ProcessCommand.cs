@@ -10,6 +10,8 @@ namespace js.net.jish.InlineCommand
 
     public ProcessCommand(JSConsole console)
     {
+      Trace.Assert(console != null);
+
       this.console = console;
     }
 
@@ -37,6 +39,8 @@ namespace js.net.jish.InlineCommand
 
     public int process(string command, string arguments = null) 
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(command));
+
       using (var process = new Process
                       {
                         StartInfo =

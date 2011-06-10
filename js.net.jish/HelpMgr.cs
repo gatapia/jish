@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using js.net.jish.Command;
+using js.net.jish.ConsoleCommand;
 using js.net.jish.InlineCommand;
 using System.Linq;
 
@@ -14,13 +14,17 @@ namespace js.net.jish
     private readonly IDictionary<string, string> inlineCommandHelps = new Dictionary<string, string>();
     private string helpCached;
 
-    public void AddHelpForSpecialCommand(ICommand command)
+    public void AddHelpForConsoleCommand(IConsoleCommand command)
     {
+      Trace.Assert(command != null);
+
       AddHelpImpl(specialCommandHelps, command);
     }
 
     public void AddHelpForInlineCommand(IInlineCommand command)
-    {      
+    { 
+      Trace.Assert(command != null);
+
       AddHelpImpl(inlineCommandHelps, command);      
     }
 
@@ -31,12 +35,17 @@ namespace js.net.jish
 
     private void AddHelpImpl(IDictionary<string, string> dictionary, ICommandBase command)
     {
+      Trace.Assert(command != null);
+      Trace.Assert(dictionary != null);
       Trace.Assert(!dictionary.ContainsKey(command.GetName())); 
+
       dictionary.Add(command.GetName(), GetHelpRowForCommand(command));
     }
 
     private string GetHelpRowForCommand(ICommandBase command)
     {
+      Trace.Assert(command != null);
+
       string commandName = GetCommandName(command);
       StringBuilder sb = new StringBuilder(commandName);
       sb.Append(":\n");
@@ -47,7 +56,9 @@ namespace js.net.jish
 
     private string GetCommandName(ICommandBase command)
     {
-      if (command is ICommand) { return '.' + command.GetName(); }
+      Trace.Assert(command != null);
+
+      if (command is IConsoleCommand) { return '.' + command.GetName(); }
 
       IInlineCommand icommand = (IInlineCommand) command;
       return icommand.GetNameSpace() + '.' + icommand.GetName();
@@ -55,12 +66,16 @@ namespace js.net.jish
 
     private string GetArgumentDescriptionFor(ICommandBase command)
     {
+      Trace.Assert(command != null);
+
       IEnumerable<CommandParam> args = command.GetParameters();
       return '(' + String.Join(", ", args.Select(GetArgumentName).ToArray()) + ')';
     }
 
     private string GetArgumentName(CommandParam param)
     {
+      Trace.Assert(param != null);
+
       string name = param.Name;
       if (param.IsParams)
       {
@@ -85,6 +100,9 @@ namespace js.net.jish
 
     private void AddCommandsToBuilder(IDictionary<string, string> commands, StringBuilder sb)
     {
+      Trace.Assert(commands != null);
+      Trace.Assert(sb != null);
+
       IEnumerable<string> keysSorted = commands.Keys.OrderBy(k => k);
       foreach (string key in keysSorted)
       {

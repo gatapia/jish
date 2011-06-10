@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using js.net.Util;
 
-namespace js.net.TestAdapters.JSCoverage
+namespace js.net.TestAdapters.Coverage.JSCoverage
 {
   public class JSCoverageTestAdapter : ICoverageAdapter
   {
@@ -17,14 +17,20 @@ namespace js.net.TestAdapters.JSCoverage
 
     public void LoadSourceFile(string sourceFile)
     {
+      Trace.Assert(testAdapter != null);
+      Trace.Assert(sourceFile != null);
+
       testAdapter.LoadSourceFile(sourceFile);
     }
 
     public ICoverageResults RunCoverage(string testFile)
     {
+      Trace.Assert(testAdapter != null);
+      Trace.Assert(testFile != null);
+
       ITestResults results = testAdapter.RunTest(testFile);      
-      testAdapter.GetInternalEngine().Run(new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents(@"js.net.resources.jscoverage.parser.js"), "js.net.resources.jscoverage.parser.js");
-      IDictionary<string, object> rawCoverageResults = (IDictionary<string, object>) testAdapter.GetInternalEngine().GetGlobal("coverageResults");
+      testAdapter.GetFrameworkAdapter().Run(new EmbeddedResourcesUtils().ReadEmbeddedResourceTextContents(@"js.net.resources.jscoverage.parser.js"), "js.net.resources.jscoverage.parser.js");
+      IDictionary<string, object> rawCoverageResults = (IDictionary<string, object>) testAdapter.GetFrameworkAdapter().GetGlobal("coverageResults");
       TotalCoverageResults totalCoverageResults = new TotalCoverageResults(results, rawCoverageResults);
       totalCoverageResults.ParseCoverageResults();
       return totalCoverageResults;
@@ -32,6 +38,8 @@ namespace js.net.TestAdapters.JSCoverage
 
     public void Dispose()
     {
+      Trace.Assert(testAdapter != null);
+
       testAdapter.Dispose();
     }
   }

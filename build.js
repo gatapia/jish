@@ -43,7 +43,9 @@ function updateNuGetBuildFiles() {
   // js.net
   copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
     'build\\js.net\\lib\\Noesis.Javascript.dll');
-  copyFile('js.net.jish\\bin\\js.net.dll', 'build\\js.net\\lib\\js.net.dll');
+  jish.process('build\\ILMerge.exe', '/targetplatform:v4 /target:dll ' + 
+    '/out:build\\js.net\\lib\\js.net.dll js.net\\bin\\js.net.dll ' +
+    'js.net\\bin\\Ninject.dll');
 };
 
 function createZipBundles() {

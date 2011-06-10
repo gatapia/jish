@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace js.net.jish.Command
+namespace js.net.jish.ConsoleCommand
 {
-  public class ExitCommand : EmptyCommand
+  public class ExitCommand : EmptyConsoleCommand
   {
     public override string GetName()
     {

@@ -39,6 +39,8 @@ namespace js.net.Engine
 
     public override void Dispose()
     {
+      Trace.Assert(ctx != null);
+
       ctx.Dispose();
     }
   }

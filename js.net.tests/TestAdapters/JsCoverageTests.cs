@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using js.net.TestAdapters;
+using js.net.TestAdapters.Coverage;
 using NUnit.Framework;
 
 namespace js.net.tests.TestAdapters

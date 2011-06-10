@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using js.net.FrameworkAdapters.Closure;
+using js.net.FrameworkAdapters;
 
 namespace js.net.TestAdapters.Closure
 {
@@ -9,33 +9,65 @@ namespace js.net.TestAdapters.Closure
   {
     private ClosureTestsConsoleScrapper scrapper;
 
-    public ClosureTestAdapter(ClosureAdapter js) : base(js) {}
+    public ClosureTestAdapter(IFrameworkAdapter js) : base(js) {}
 
     protected override void PrepareFrameworkAndRunTest(string sourceFile)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(sourceFile));
       Trace.Assert(File.Exists(sourceFile));
 
-      string fileName = new FileInfo(sourceFile).Name;      
-      scrapper = new ClosureTestsConsoleScrapper(fileName);      
-      // Override default console
-      js.SetGlobal("console", scrapper); 
+      string niceFileName = new FileInfo(sourceFile).Name;      
+
+      InterceptConsoleLogging(niceFileName);
+      PrepareEnvironmentForTests();            
+      LoadTestFile(sourceFile, niceFileName);
+      ExecuteTests(niceFileName); 
+    }
+
+    private void InterceptConsoleLogging(string niceFileName)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(niceFileName));
+
+      scrapper = new ClosureTestsConsoleScrapper(niceFileName);            
+      js.SetGlobal("console", scrapper);
+    }
+
+    private void PrepareEnvironmentForTests()
+    {
+      Trace.Assert(js != null);
+
       js.Run(@"
 window.console = console;
 goog.require('goog.testing.jsunit');
-", "ClosureTestAdapter.PreLoadFile");            
-      js.Run(GetTestingJSFromFile(sourceFile), fileName); // Load the file        
+", "ClosureTestAdapter.PreLoadFile");
+    }
+
+    private void LoadTestFile(string sourceFile, string niceFileName)
+    {
+      Trace.Assert(js != null);
+      Trace.Assert(File.Exists(sourceFile));
+      Trace.Assert(!String.IsNullOrWhiteSpace(niceFileName));
+
+
+      js.Run(GetTestingJSFromFile(sourceFile), niceFileName);
+    }
+
+    private void ExecuteTests(string niceFileName)
+    {
+      Trace.Assert(!String.IsNullOrWhiteSpace(niceFileName));
+
       js.Run(
-@"
-var test = new goog.testing.TestCase('" + fileName + @"');
+        @"
+var test = new goog.testing.TestCase('" + niceFileName + @"');
 test.autoDiscoverTests();
 G_testRunner.initialize(test);
 G_testRunner.execute();
-", "ClosureTestAdapter.PostLoadFile"); 
+", "ClosureTestAdapter.PostLoadFile");
     }
 
     protected override TestResults GetResults(string testFixtureName)
     {
+      Trace.Assert(scrapper != null);
       Trace.Assert(!String.IsNullOrWhiteSpace(testFixtureName));
 
       return scrapper.GetResults();

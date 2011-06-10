@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using js.net.TestAdapters;
 using NUnit.Framework;
@@ -33,7 +34,7 @@ namespace js.net.tests.TestAdapters
         
     [Test, Ignore("Runs out of memory")] public void RunEntireClosureTestSuite()
     {
-      string[] files = GetTestSuiteFiles();
+      IEnumerable<string> files = GetTestSuiteFiles();
       TestSuiteRunner runner = JSNet.ClosureLibraryTestSuiteRunner(basejsfile);      
       TestSuiteResults results = runner.TestFiles(files);
 
@@ -41,9 +42,9 @@ namespace js.net.tests.TestAdapters
       Assert.AreEqual(500, results.Passed.Count(), results.ToString());
     }
 
-    private string[] GetTestSuiteFiles()
+    private IEnumerable<string> GetTestSuiteFiles()
     {
-      string dir = @"C:\dev\Projects\Misc\closure-library\closure\goog\";      
+      const string dir = @"C:\dev\Projects\Misc\closure-library\closure\goog\";      
       string[] allFiles = Directory.GetFiles(dir, "*_test.html", SearchOption.AllDirectories);
       string[] ignore = new [] {"fontsizemonitor_test.html", "icontent_test.html", "abstractdialogplugin_test.html", 
         "linkdialogplugin_test.html", "crossdomainrpc_test.html", "positioning_test.html", "serializer_test.html",

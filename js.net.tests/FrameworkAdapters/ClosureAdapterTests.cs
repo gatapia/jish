@@ -20,23 +20,23 @@ namespace js.net.tests.FrameworkAdapters
 
     [Test] public void NonClosureCode()
     {      
-      Assert.AreEqual(2, ctx.GetInternalEngine().Run("1 + 1", "ClosureAdapterTests.NonClosureCode"));
+      Assert.AreEqual(2, ctx.GetFrameworkAdapter().Run("1 + 1", "ClosureAdapterTests.NonClosureCode"));
     }
 
     [Test] public void SimpleBaseJSDependantScript()
     {
-      Assert.AreEqual("function", ctx.GetInternalEngine().Run("typeof (goog.bind)", "ClosureAdapterTests.SimpleBaseJSDependantScript"));
+      Assert.AreEqual("function", ctx.GetFrameworkAdapter().Run("typeof (goog.bind)", "ClosureAdapterTests.SimpleBaseJSDependantScript"));
     }
 
     [Test] public void AccrossMultipleSessions()
     {
-      ctx.GetInternalEngine().Run("var x = 1", "ClosureAdapterTests.TestSetModifyAndGetGlobal");
-      Assert.AreEqual(2, ctx.GetInternalEngine().Run("x + 1", "ClosureAdapterTests.AccrossMultipleSessions"));
+      ctx.GetFrameworkAdapter().Run("var x = 1", "ClosureAdapterTests.TestSetModifyAndGetGlobal");
+      Assert.AreEqual(2, ctx.GetFrameworkAdapter().Run("x + 1", "ClosureAdapterTests.AccrossMultipleSessions"));
     }
 
     [Test] public void CallingArrayFunction()
     {
-      Assert.AreEqual(10, ctx.GetInternalEngine().Run(
+      Assert.AreEqual(10, ctx.GetFrameworkAdapter().Run(
 @"
 [0,1,2,3,4].reduce(function(previousValue, currentValue, index, array){
   return previousValue + currentValue;
@@ -46,7 +46,7 @@ namespace js.net.tests.FrameworkAdapters
 
     [Test] public void UsingAComplexNonClosureFunction()
     {      
-      Assert.AreEqual(10, ctx.GetInternalEngine().Run(
+      Assert.AreEqual(10, ctx.GetFrameworkAdapter().Run(
 @"
 goog.require('goog.array');
 var arr = [0,1,2,3,4];
@@ -58,7 +58,9 @@ goog.array.reduce(arr, function(previousValue, currentValue, index, array){
 
     [Test] public void GoogRequireString()
     {
-      ctx.GetInternalEngine().Run("goog.require('goog.string');", "ClosureAdapterTests.GoogRequireString");
+      ctx.GetFrameworkAdapter().Run("console.log('typeof(goog): ' + typeof(goog));", ":");
+
+      ctx.GetFrameworkAdapter().Run("goog.require('goog.string');", "ClosureAdapterTests.GoogRequireString");
     }    
   }
 }

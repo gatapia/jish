@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.IL;
@@ -13,12 +14,17 @@ namespace js.net.jish.Util
 
     public TypeCreator(JSConsole console, TypeLoader typeLoader)
     {
+      Trace.Assert(console != null);
+      Trace.Assert(typeLoader != null);
+
       this.typeLoader = typeLoader;
       this.console = console;
     }
 
     public object CreateType(string typeName, params object[] constructorArgs)
     {
+      Trace.Assert(!String.IsNullOrWhiteSpace(typeName));
+
       Type t = typeLoader.LoadType(typeName);
       if (t == null)
       {
@@ -46,7 +52,9 @@ namespace js.net.jish.Util
 
     private object[] ConvertToActualArgs(object[] args, Type type)
     {      
-      if (args == null || args.Length == 0) return new object[] {};
+      Trace.Assert(type != null);
+
+      if (args == null || args.Length == 0) return new object[] {};      
       IEnumerable<ConstructorInfo> possibleConstructors = type.GetConstructors().Where(c => c.GetParameters().Length == args.Length);      
       foreach (ConstructorInfo ci in possibleConstructors)
       {
@@ -58,6 +66,9 @@ namespace js.net.jish.Util
 
     private IEnumerable<object> ConvertToActualArgs(object[] args, ConstructorInfo ci)
     {
+      Trace.Assert(args != null);
+      Trace.Assert(ci != null);
+
       IList<object> realArgs =new List<object>();
       for (int i = 0; i < args.Length; i++)
       {
