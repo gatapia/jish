@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 namespace js.net.jish.IL
-{
+{  
   public class TypeILWrapper
   {
     public object CreateWrapper(object instance)
@@ -44,12 +44,25 @@ namespace js.net.jish.IL
       return Activator.CreateInstance(wrapperType, new object[] { methodsToProxify });
     }
 
+    private bool IsValidDelegateMethod(MethodToProxify mp)
+    {
+      ParameterInfo[] parameters = mp.RealMethod.GetParameters();
+      ParameterInfo[] delegateParams = parameters.Where(IsParamDelegate).ToArray();      
+      if (delegateParams.Length == 0) return false;
+      if (delegateParams.Length > 1) throw new NotSupportedException("Only single delegate callback methods supported. I.e. Cannot have a callback and an errback.");
+      return true;
+    }
+
+    private bool IsParamDelegate(ParameterInfo p) { return typeof (Delegate).IsAssignableFrom(p.ParameterType.BaseType); }
+
     private MethodToProxify[] GetAllMethods(Type templateType, object instance)
     {
       Trace.Assert(templateType != null);
 
-      return templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType")).Select(mi => new MethodToProxify(mi, instance)).ToArray();
-    }
+      IEnumerable<MethodInfo> methodInfos = templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType"));      
+      MethodToProxify[] methods = methodInfos.Select(mi => new MethodToProxify(mi, instance)).ToArray();      
+      return methods;
+    }    
 
     private void CreateProxyConstructor(TypeBuilder wrapperBuilder)
     {
@@ -71,31 +84,37 @@ namespace js.net.jish.IL
       Trace.Assert(thissIdx >= 0);
       Trace.Assert(methodToProxify != null);
 
-      MethodInfo real = methodToProxify.RealMethod;
-      ParameterInfo[] realParams = real.GetParameters();
-      IList<IEnumerable<Type>> parameterCombinations = GetAllParameterCombinations(real);      
-      foreach (IEnumerable<Type> parameters in parameterCombinations)
+      MethodInfo realMethod = methodToProxify.RealMethod;
+      ParameterInfo[] realParams = realMethod.GetParameters();
+      IList<Type[]> parameterCombinations = GetAllParameterCombinations(realMethod);      
+      foreach (Type[] parameters in parameterCombinations)
       {
-        var methodBuilder = wrapperBuilder.DefineMethod(methodToProxify.OverrideMethodName ?? real.Name,
+        var methodBuilder = wrapperBuilder.DefineMethod(GetProxMethodName(methodToProxify, realMethod),
                                                         MethodAttributes.Public | MethodAttributes.Virtual,
-                                                        real.ReturnType, parameters.Select(pt => pt).ToArray());
-        if (real.GetGenericArguments().Length > 0) // Generics all get changed to objects
+                                                        realMethod.ReturnType, parameters);
+        if (realMethod.GetGenericArguments().Length > 0) // Generics all get changed to objects
         {
-          real = real.MakeGenericMethod(real.GetGenericArguments().Select(a => typeof (Object)).ToArray());
+          realMethod = realMethod.MakeGenericMethod(realMethod.GetGenericArguments().Select(a => typeof (Object)).ToArray());
         }
         var gen = methodBuilder.GetILGenerator();
-        if (!real.IsStatic)
+        if (!realMethod.IsStatic)
         {
           // Set 'this' to the result of JishProxy.GetInstance. This allows one 
           // class to proxy to methods from different source classes.
-          SetAReferenceToAppropriateThis(gen, thissIdx);
+          SetReferenceToAppropriateThis(gen, thissIdx);
         } 
-        for (int i = 0; i < parameters.Count(); i++)
+        for (int i = 0; i < parameters.Length; i++)
         {          
           if (IsParamsArray(realParams[i]))
           {            
             break;  // Break as this is the last parameter (params must always be last)
-          }
+          } 
+          // if (IsParamDelegate(realParams[i])) // TODO: This is in the wrong place
+          // {
+            // If the param is a delegate it needs to be replaced with a string which
+            // will be used to find the 'real' delegate in the jish_internal scope.
+
+          // }
           // Else add standard inline arg
           gen.Emit(OpCodes.Ldarg, i + 1);
         }
@@ -117,9 +136,15 @@ namespace js.net.jish.IL
           CovertRemainingParametersToArray(parameters, gen, realParams.Count() - 1, last.ParameterType.GetElementType());
         }
         // Call the real method
-        gen.Emit(real.IsStatic ? OpCodes.Call : OpCodes.Callvirt, real); 
+        gen.Emit(realMethod.IsStatic ? OpCodes.Call : OpCodes.Callvirt, realMethod); 
         gen.Emit(OpCodes.Ret);
       }
+    }
+
+    private string GetProxMethodName(MethodToProxify methodToProxify, MethodInfo realMethod)
+    {
+      string name = methodToProxify.OverrideMethodName ?? realMethod.Name;
+      return IsValidDelegateMethod(methodToProxify) ? (name + "_internal") : name;
     }
 
     private void CovertRemainingParametersToArray(IEnumerable<Type> parameters, ILGenerator gen, int startingIndex, Type arrayElementType)
@@ -141,7 +166,7 @@ namespace js.net.jish.IL
       }
     }
 
-    private void SetAReferenceToAppropriateThis(ILGenerator gen, int thissIdx)
+    private void SetReferenceToAppropriateThis(ILGenerator gen, int thissIdx)
     {
       Trace.Assert(gen != null);
       Trace.Assert(thissIdx >= 0);
@@ -151,11 +176,11 @@ namespace js.net.jish.IL
       gen.Emit(OpCodes.Callvirt, typeof (JishProxy).GetMethod("GetInstance")); // Call get instance and pop the current this pointer
     }
 
-    private IList<IEnumerable<Type>> GetAllParameterCombinations(MethodInfo mi)
+    private IList<Type[]> GetAllParameterCombinations(MethodInfo mi)
     {
       Trace.Assert(mi != null);
 
-      IList<IEnumerable<Type>> combinations = new List<IEnumerable<Type>>();
+      IList<Type[]> combinations = new List<Type[]>();
       ParameterInfo[] realParams = mi.GetParameters();
       if (realParams.Length == 0 || (!realParams.Last().IsOptional && !IsParamsArray(realParams.Last())))
       {
@@ -200,7 +225,7 @@ namespace js.net.jish.IL
       return Attribute.IsDefined(param, typeof (ParamArrayAttribute));
     }
 
-    private IEnumerable<Type> GetParamCombination(ParameterInfo[] realParams, int until, Type extraParamType = null, int extraParams = 0)
+    private Type[] GetParamCombination(ParameterInfo[] realParams, int until, Type extraParamType = null, int extraParams = 0)
     {
       Trace.Assert(realParams != null);
       Trace.Assert(until >= 0);
@@ -212,13 +237,20 @@ namespace js.net.jish.IL
       for (int i = 0; i < until; i++)
       {
         ParameterInfo pi = realParams[i];
-        combo.Add(pi.ParameterType.IsGenericParameter ? typeof(object) : pi.ParameterType);
+        combo.Add(GetProxyParamType(pi));
       }
       for (int i = 0; i < extraParams; i++)
       {        
         combo.Add(extraParamType);
       }
-      return combo;
+      return combo.ToArray();
+    }
+
+    private Type GetProxyParamType(ParameterInfo pi)
+    {
+      Type realType = pi.ParameterType;      
+      return IsParamDelegate(pi) ? typeof (string) : 
+        realType.IsGenericParameter ? typeof(object) : realType;
     }
   }
 }

@@ -4,11 +4,11 @@ using System.Reflection;
 using js.net.jish.IL;
 using NUnit.Framework;
 
-namespace js.net.tests.jish
+namespace js.net.tests.jish.TypeILWrapper
 {
   [TestFixture] public class TypeILWrapperTests
   {  
-    private readonly TypeILWrapper wrapper = new TypeILWrapper();
+    private readonly net.jish.IL.TypeILWrapper wrapper = new net.jish.IL.TypeILWrapper();
     private readonly MethodInfo miStatic = typeof (StaticClz).GetMethod("GetStringStatic", new [] {typeof(int)});
     private readonly MethodInfo miInstance = typeof (InstanceClz).GetMethod("GetStringNonStatic");
 

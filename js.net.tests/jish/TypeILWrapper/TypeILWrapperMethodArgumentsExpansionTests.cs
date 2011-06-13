@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using js.net.jish.IL;
 using NUnit.Framework;
 
-namespace js.net.tests.jish
+namespace js.net.tests.jish.TypeILWrapper
 {
-  [TestFixture] public class TypeILWrapperMethodArgumentsExpansionTests
-  {      
-    private readonly TypeILWrapper wrapper = new TypeILWrapper();
-    
+  [TestFixture] public class TypeILWrapperMethodArgumentsExpansionTests : AbstractTypeILWrapperTest
+  {
+    public TypeILWrapperMethodArgumentsExpansionTests() : base(typeof(TestExpansion)) {}
+
     [Test] public void TestNoArg()
     {
       IEnumerable<MethodInfo> expanded = GetExpandedMethods("NoArg");
@@ -210,17 +210,10 @@ namespace js.net.tests.jish
       Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(1).ParameterType);
       Assert.AreEqual(typeof(object), expanded.ElementAt(0).GetParameters().ElementAt(2).ParameterType);
     }
-
+  
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingOptinalWithoutValue() { typeof (TestExpansion).GetMethod("SingleDefValue").Invoke(null, new object[0]); }
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArg() { typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[0]); }
     [Test, ExpectedException(typeof(TargetParameterCountException))] public void TestCallingParamsWithoutArrayArg() { typeof (TestExpansion).GetMethod("SingleParamsArg").Invoke(null, new object[] {1, 2, 3}); }
-
-    private IEnumerable<MethodInfo> GetExpandedMethods(string methodName)
-    {
-      object wrapped = wrapper.CreateWrapper(typeof (TestExpansion), 
-                                             new [] {new MethodToProxify(typeof(TestExpansion).GetMethod(methodName), null)});
-      return wrapped.GetType().GetMethods().Where(mi => mi.Name.Equals(methodName)).OrderBy(mi => mi.GetParameters().Length);
-    }
   }
 
   public static class TestExpansion
@@ -243,7 +236,6 @@ namespace js.net.tests.jish
     public static void SingleGen<T>(T arg1) { }
     public static void DoubleGen<T, U>(T arg1, U arg2) { }
     public static void IntAndSingleGen<T>(int intarg1, T arg1) { }
-    public static void IntAndDoubleGen<T, U>(int intarg1, T arg1, U arg2) { }
-
+    public static void IntAndDoubleGen<T, U>(int intarg1, T arg1, U arg2) { }    
   }
 }
