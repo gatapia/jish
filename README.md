@@ -342,9 +342,24 @@ Feel free to email:
 ## License
 BSD, see license.txt for full license
 
-## An example jish JavaScript file
-This is an example JavaScript file that can be run using jish.exe.  In fact
-this is Jish's very own build file.  You can find the latest version of this 
+## An example jish JavaScript file (1) - Windows Forms
+This example is a very simple winforms app.
+
+
+    jish.assembly('js.net.jish/bin/System.Drawing.dll')
+    jish.assembly('js.net.jish/bin/System.Windows.Forms.dll')
+
+    var app = jish.create('System.Windows.Forms.Application');
+    var form = jish.create('System.Windows.Forms.Form');
+    var lbl = jish.create('System.Windows.Forms.Label');
+    form.Text = lbl.Text = 'Hello Jish!!!';
+    lbl.Location = jish.create('System.Drawing.Point', 50, 50);
+    form.Controls.Add(lbl);
+
+    app.Run(form);
+
+## An example jish JavaScript file (2) - Build Script
+This is Jish's very own build file.  You can find the latest version of this 
 file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
 
     
