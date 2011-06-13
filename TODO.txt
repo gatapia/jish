@@ -1,28 +1,21 @@
 - More unit testing frameworks
 - Fork the JavaScript.Net project as it appears to have died.
 - Node interface
+- Closure tools support in jish
+  - Library
+  - Provide/require
 
-- Documentation (Web Site)
-  - Overview
-  - js.net
-    - Embedded JS interpretter
-  - unit testing / coverage
-    - Closure
-    - JSNet
-    - QUnit
-    - JSCoverage
-  - jish
-    - Shell
-    - Commands      
-    - Scripts
-    - Extensions
-      - ICommand (inc hacks, limitations, etc)
-      - IInlineCommand
-      - JavaScript modules
-    - Misc
-      - Calling overriden c# methods requires [] syntax
-  - misc
-    - TODO
-    - Contributing
-    - License
-    - Contact    
+- Refactor the TypeILWrapper tests (too long)
+- Create a private namespace for all jish internals (jish.internal), dont use global any more
+- Support callbacks with some trickery
+   * - Rename method to <methodname>_internal
+   * - <methodname>_internal should replace the delegate param with a strin 
+   *   (id of real method in jish.internal scope)
+   * - Generate JS method with original name/namespace
+   *     - Generate <newid>
+   *     - Save the callback in the jish.internal['<newid>']   
+   *     - Call and <methodname>_internal, with a string arg (<newid>)
+   * - Create mock Action / Func
+   * - Execute original method (C#) with mock action
+   * - When mock Action / Func gets called call original callback in JS
+- Support multiple delegate params
