@@ -38,9 +38,16 @@
     <Reference Include="log4net">
       <HintPath>..\lib\log4net.dll</HintPath>
     </Reference>
+<<<<<<< HEAD
+    <Reference Include="Ninject">
+      <HintPath>..\lib\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Noesis.Javascript">
+=======
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="Noesis.Javascript, Version=0.0.0.0, Culture=neutral, PublicKeyToken=ae36d046c7f89f85, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
+>>>>>>> WIP: Delegate support
       <HintPath>..\lib\JSEngines\JS.Net\Noesis.Javascript.dll</HintPath>
     </Reference>
     <Reference Include="NSubstitute, Version=1.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
