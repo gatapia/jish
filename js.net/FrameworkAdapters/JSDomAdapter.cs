@@ -2,10 +2,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using js.net.Engine;
+using Ninject;
 
 namespace js.net.FrameworkAdapters
 {
-  public class JSDomAdapter : IFrameworkAdapter
+  public class JSDomAdapter : IFrameworkAdapter, IInitializable
   {
     protected readonly CWDFileLoader fileLoader;
     protected readonly IEngine engine;
@@ -21,7 +22,7 @@ namespace js.net.FrameworkAdapters
       this.fileLoader = fileLoader;            
     }
 
-    public virtual void Initialise()
+    public virtual void Initialize()
     {
       Trace.Assert(engine != null);
       Trace.Assert(fileLoader != null);

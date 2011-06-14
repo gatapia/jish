@@ -22,12 +22,12 @@ namespace js.net.FrameworkAdapters.Closure
       basedir = new FileInfo(baseJsFile).Directory.FullName;
     }
 
-    public override void Initialise()
-    {      
+    public override void Initialize()
+    {
       Trace.Assert(!String.IsNullOrWhiteSpace(baseJsFile));
       Trace.Assert(File.Exists(baseJsFile));
 
-      base.Initialise();
+      base.Initialize();
       
       LoadClosureBaseFileAndSetBaseDirectory();
       InterceptWriteScript();
@@ -61,6 +61,6 @@ goog.writeScriptTag_ = function(filename) {
       Trace.Assert(File.Exists(Path.Combine(basedir, "deps.js")));
 
       LoadJSFile(Path.Combine(basedir, "deps.js"), false);
-    }
+    }    
   }
 }
