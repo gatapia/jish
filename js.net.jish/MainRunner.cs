@@ -17,7 +17,7 @@ namespace js.net.jish
       
       kernel.Bind<IEngine>().ToConstant(engine);
       kernel.Bind<JSConsole>().ToConstant(console);
-      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope().OnActivation(jish => ((JishInterpreter)jish).Initialise());
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
       kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
       
       StartInterpreter(kernel.Get<InputLoop>(), args, console);
