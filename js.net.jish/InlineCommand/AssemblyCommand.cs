@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.Util;
@@ -32,13 +33,15 @@ namespace js.net.jish.InlineCommand
     /// is also why the help in this file is misleading (says name = assembly).
     //  This is intentioanl as jish.js assembly delegates to this.
     /// </summary>
-    /// <param name="assemblyFileName"></param>
+    /// <param name="assemblyFileNameOrAssemblyName"></param>
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
-    public IDictionary<string, IInlineCommand> loadAssemblyImpl(string assemblyFileName)
+    public IDictionary<string, IInlineCommand> loadAssemblyImpl(string assemblyFileNameOrAssemblyName)
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyFileName));      
+      Trace.Assert(!String.IsNullOrWhiteSpace(assemblyFileNameOrAssemblyName));      
 
-      Assembly assembly = Assembly.LoadFrom(assemblyFileName);
+      Assembly assembly = File.Exists(assemblyFileNameOrAssemblyName) 
+        ? Assembly.LoadFrom(assemblyFileNameOrAssemblyName)
+        : Assembly.Load(assemblyFileNameOrAssemblyName);
       IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
       return ConvertCommandsToFullyQualifiedDictionary(loadedCommands);
@@ -73,7 +76,7 @@ namespace js.net.jish.InlineCommand
 
     public IEnumerable<CommandParam> GetParameters()
     {
-      return new[] { new CommandParam {Name = "assemblyFileName"} };
+      return new[] { new CommandParam {Name = "assemblyFileNameOrAssemblyName"} };
     }
   }
 }
