@@ -84,9 +84,9 @@
     <Compile Include="TestAdapters\TestSuiteResults.cs" />
     <Compile Include="Engine\IEngine.cs" />
     <Compile Include="Engine\JSNetEngine.cs" />
-    <Compile Include="JSConsole.cs" />
-    <Compile Include="JSGlobal.cs" />
-    <Compile Include="HtmlFileScriptExtractor.cs" />
+    <Compile Include="Util\JSConsole.cs" />
+    <Compile Include="Util\JSGlobal.cs" />
+    <Compile Include="Util\HtmlFileScriptExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAdapters\ITestAdapter.cs" />
     <Compile Include="TestAdapters\TestSuiteRunner.cs" />

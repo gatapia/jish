@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using js.net.Engine;
 using js.net.jish.Util;
 using js.net.Util;
@@ -11,13 +11,9 @@ namespace js.net.jish
 {  
   public class MainRunner
   {    
-    static MainRunner()
-    {
-      AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
-    } 
-    
-    [STAThread] public static void Main(string[] args)
-    {      
+    [STAThread] public static void Main(string[] args) { new MainRunner(args); }
+
+    private MainRunner(string[] args) {
       IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
       IEngine engine = new JSNetEngine();
       JSConsole console = new JSConsole();

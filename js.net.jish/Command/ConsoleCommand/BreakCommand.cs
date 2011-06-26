@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace js.net.jish.ConsoleCommand
+namespace js.net.jish.Command.ConsoleCommand
 {
   public class BreakCommand : EmptyConsoleCommand
   {

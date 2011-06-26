@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using js.net.Engine;
+using js.net.jish.Command.InlineCommand;
 using js.net.jish.IL;
-using js.net.jish.InlineCommand;
 
 namespace js.net.jish.Util
 {

@@ -53,7 +53,7 @@ namespace js.net.jish
 
     private void LoadCommandsFromIncludedAssemblies()
     {
-      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
+      Assembly[] assemblies = new CurrentContextAssemblies().GetAllAssemblies().ToArray();
       Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
     }
 
@@ -66,15 +66,7 @@ namespace js.net.jish
       } catch {} // Ignore, as this throws when running in a Process (tests)
     }
 
-    private IEnumerable<Assembly> LoadAllAssemblies()
-    {
-      Assembly[] defaultAssemlies = AppDomain.CurrentDomain.GetAssemblies();
-      if (!Directory.Exists("modules")) return defaultAssemlies;
-      string[] assemblyFiles = Directory.GetFiles("modules", "*.dll", SearchOption.AllDirectories);
-      if (assemblyFiles.Length == 0) return defaultAssemlies;      
-      IEnumerable<Assembly> moduleAssemblies = assemblyFiles.Select(Assembly.LoadFrom);
-      return defaultAssemlies.Concat(moduleAssemblies);
-    }    
+       
 
     private void LoadJavaScriptModules()
     {

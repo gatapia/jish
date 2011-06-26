@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using js.net.Util;
 
 namespace js.net.tests.jish
 {

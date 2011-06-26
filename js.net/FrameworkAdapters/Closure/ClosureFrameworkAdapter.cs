@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using js.net.Engine;
+using js.net.Util;
 
 namespace js.net.FrameworkAdapters.Closure
 {

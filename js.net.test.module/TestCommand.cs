@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using js.net.jish;
-using js.net.jish.ConsoleCommand;
+using js.net.jish.Command;
+using js.net.jish.Command.ConsoleCommand;
+using js.net.Util;
 
 namespace js.net.test.module
 {

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+<<<<<<< HEAD
 using System.Reflection;
+=======
+using System.Linq;
+>>>>>>> Major refactorings
 using js.net.Engine;
 using js.net.jish.Util;
 using js.net.Util;
@@ -11,6 +15,7 @@ namespace js.net.jish
 {  
   public class MainRunner
   {    
+<<<<<<< HEAD
     static MainRunner()
     {
       AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
@@ -18,6 +23,11 @@ namespace js.net.jish
     
     [STAThread] public static void Main(string[] args)
     {      
+=======
+    [STAThread] public static void Main(string[] args) { new MainRunner(args); }
+
+    private MainRunner(string[] args) {
+>>>>>>> Major refactorings
       IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
       IEngine engine = new JSNetEngine();
       JSConsole console = new JSConsole();

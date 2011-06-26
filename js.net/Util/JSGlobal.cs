@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using js.net.Engine;
 using js.net.FrameworkAdapters;
-using js.net.Util;
 
-namespace js.net
+namespace js.net.Util
 {
   public class JSGlobal
   {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using js.net.Util;
 
-namespace js.net.jish.ConsoleCommand
+namespace js.net.jish.Command.ConsoleCommand
 {
   public class ClearCommand : EmptyConsoleCommand
   {

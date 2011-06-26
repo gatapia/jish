@@ -87,9 +87,9 @@ Jish are:
     Inline Commands
     
     jish.assembly:
-    	Loads an assembly into the Jish 'context'. You can not
+    	Loads an assembly into the Jish 'context'. You can now
     		jish.create(<typeNames>) types from this assembly.
-    	Arguments: (assemblyFileName)
+    	Arguments: (assemblyFileNameOrAssemblyName)
     
     jish.create:
     	Creates and instance of any type (including static classes).  If the
@@ -134,8 +134,9 @@ by `jish.process('commandName', 'arguments_string')`:
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using js.net.Util;
     
-    namespace js.net.jish.InlineCommand
+    namespace js.net.jish.Command.InlineCommand
     {
       public class ProcessCommand : IInlineCommand
       {

@@ -1,12 +1,7 @@
-- More unit testing frameworks
-- Fork the JavaScript.Net project as it appears to have died.
-- Node interface
-- Closure tools support in jish
-  - Library
-  - Provide/require
-
-- Refactor the TypeILWrapper tests (too long)
-- Create a private namespace for all jish internals (jish.internal), dont use global any more
+HIGH
+- Loading assemblies can take 2 paths, AssemblyCommandLoader and through 
+  jish.assembly, this is should just be 1 path.
+- jish.assembly bypases the IL Generation code
 
 - Support callbacks with some trickery
    * - Rename method to <methodname>_internal
@@ -20,3 +15,17 @@
    * - Execute original method (C#) with mock action
    * - When mock Action / Func gets called call original callback in JS
 - Support multiple delegate params
+ 
+
+MED
+- Should load file jish.js instead of resource if available for testing purposes.
+  This should be generic for all resource/* stuffs
+- More unit testing frameworks
+- Fork the JavaScript.Net project as it appears to have died.
+- Closure tools support in jish
+  - Library
+  - Provide/require
+- Refactor the TypeILWrapper tests (too long)
+
+LOW
+- Node interface

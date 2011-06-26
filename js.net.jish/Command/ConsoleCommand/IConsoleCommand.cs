@@ -1,4 +1,4 @@
-﻿namespace js.net.jish.ConsoleCommand
+﻿namespace js.net.jish.Command.ConsoleCommand
 {
   public interface IConsoleCommand : ICommandBase
   {

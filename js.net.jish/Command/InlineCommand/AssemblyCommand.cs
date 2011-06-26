@@ -5,8 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.Util;
+using js.net.Util;
 
-namespace js.net.jish.InlineCommand
+namespace js.net.jish.Command.InlineCommand
 {
   public class AssemblyCommand : IInlineCommand
   {
@@ -31,7 +32,7 @@ namespace js.net.jish.InlineCommand
     /// Note: This is not supposed to be called manually, it should be called 
     /// through the jish.assembly command which is defined in jish.js.  This
     /// is also why the help in this file is misleading (says name = assembly).
-    //  This is intentioanl as jish.js assembly delegates to this.
+    //  This is intentional as jish.js assembly delegates to this.
     /// </summary>
     /// <param name="assemblyFileNameOrAssemblyName"></param>
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
@@ -71,7 +72,7 @@ namespace js.net.jish.InlineCommand
 
     public string GetHelpDescription()
     {
-      return "Loads an assembly into the Jish 'context'. You can not\n\t\tjish.create(<typeNames>) types from this assembly.";
+      return "Loads an assembly into the Jish 'context'. You can now\n\t\tjish.create(<typeNames>) types from this assembly.";
     }
 
     public IEnumerable<CommandParam> GetParameters()

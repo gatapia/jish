@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using js.net.Util;
 
 namespace js.net.TestAdapters.Closure
 {
