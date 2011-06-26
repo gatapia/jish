@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using js.net.Engine;
 using js.net.jish.Util;
 using Ninject;
@@ -8,6 +10,11 @@ namespace js.net.jish
 {  
   public class MainRunner
   {    
+    static MainRunner()
+    {
+      AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
+    } 
+    
     [STAThread] public static void Main(string[] args)
     {      
       IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });

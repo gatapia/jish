@@ -15,7 +15,6 @@ var file = jish.create('System.IO.File');
 run(); // Go!!!!
 
 function run() {
-  updateNuGetBuildFiles();
   createZipBundles();
 
   if (args.indexOf('updatever') >= 0) {
@@ -32,25 +31,9 @@ function run() {
   }  
 };
 
-function updateNuGetBuildFiles() {
-  // jish
-  copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
-    'build\\jish\\tools\\Noesis.Javascript.dll');
-  jish.process('build\\ILMerge.exe', '/targetplatform:v4 /target:exe ' + 
-    '/out:build\\jish\\tools\\jish.exe js.net.jish\\bin\\jish.exe ' +
-    'js.net.jish\\bin\\js.net.dll js.net.jish\\bin\\Ninject.dll');
-
-  // js.net
-  copyFile('js.net.jish\\bin\\Noesis.Javascript.dll', 
-    'build\\js.net\\lib\\Noesis.Javascript.dll');
-  jish.process('build\\ILMerge.exe', '/targetplatform:v4 /target:dll ' + 
-    '/out:build\\js.net\\lib\\js.net.dll js.net\\bin\\js.net.dll ' +
-    'js.net\\bin\\Ninject.dll');
-};
-
 function createZipBundles() {
-  build.zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe', 'build\\jish\\tools\\Noesis.Javascript.dll']);
-  build.zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll', 'build\\js.net\\lib\\Noesis.Javascript.dll']);  
+  build.zip('build\\jish.exe.zip', ['build\\jish\\tools\\jish.exe']);
+  build.zip('build\\js.net.dll.zip', ['build\\js.net\\lib\\js.net.dll']);  
   build.zip('build\\both.zip', ['build\\js.net.dll.zip', 'build\\jish.exe.zip']);  
   console.log('Successfully created the zip bundles');
 };

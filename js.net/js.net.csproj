@@ -38,12 +38,15 @@
   <ItemGroup>
     <Reference Include="IronJS">
       <HintPath>..\lib\JSEngines\IronJS\IronJS.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\lib\Ninject.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Noesis.Javascript">
       <HintPath>..\lib\JSEngines\JS.Net\Noesis.Javascript.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,6 +101,8 @@
     <EmbeddedResource Include="resources\jsglobal.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="resources\Ninject.dll" />
+    <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
     <EmbeddedResource Include="resources\dom\CSSOM\lib\clone.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -161,8 +166,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /Y $(TargetPath) $(SolutionDir)js.net.jish\bin\$(TargetFileName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

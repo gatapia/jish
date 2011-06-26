@@ -52,8 +52,12 @@
   <ItemGroup>
     <Reference Include="Ninject">
       <HintPath>..\lib\Ninject.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Noesis.Javascript, Version=0.0.0.0, Culture=neutral, PublicKeyToken=ae36d046c7f89f85, processorArchitecture=x86" />
+    <Reference Include="Noesis.Javascript">
+      <HintPath>..\lib\JSEngines\JS.Net\Noesis.Javascript.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -77,6 +81,7 @@
     <Compile Include="ConsoleCommand\ClearCommand.cs" />
     <Compile Include="ConsoleCommand\EmptyConsoleCommand.cs" />
     <Compile Include="InlineCommand\ProcessCommand.cs" />
+    <Compile Include="Util\EmbeddedAssemblyLoader.cs" />
     <Compile Include="Util\TypeCreator.cs" />
     <Compile Include="InlineCommand\AssemblyCommand.cs" />
     <Compile Include="ConsoleCommand\ExitCommand.cs" />
@@ -93,6 +98,7 @@
     <ProjectReference Include="..\js.net\js.net.csproj">
       <Project>{78104D21-D04B-468F-924E-5649C5ED52CE}</Project>
       <Name>js.net</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +126,15 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\jish.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Ninject.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\js.net.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Noesis.Javascript.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
