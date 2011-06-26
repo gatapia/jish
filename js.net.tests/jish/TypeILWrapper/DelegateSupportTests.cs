@@ -1,17 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 
 namespace js.net.tests.jish.TypeILWrapper
 {
   /**
    * Steps to support delegates:   
-   * + Rename method to <methodname>_internal
+   * + Rename c# method to <methodname>_internal
    * + <methodname>_internal should replace the delegate param with a string 
-   *   (id of real method in jish.internal scope)
-   * - Generate JS method with original name/namespace
+   *    (id of real method in jish.internal scope)   
+   * - Generate JS method and register original name/namespace   
    *     - Generate <newid>
    *     - Save the callback in the jish.internal['<newid>']   
    *     - Call and <methodname>_internal, with a string arg (<newid>)

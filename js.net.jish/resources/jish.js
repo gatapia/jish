@@ -3,6 +3,10 @@ var global = this;
 global.jish = {};
 global.jish.internal = {};
 
+////////////////////////////////////////////////////////////////////////////////
+// jish.assembly
+////////////////////////////////////////////////////////////////////////////////
+
 // Loads the specified assembly and places all loaded IInlineCommands in the 
 // global context.
 global.jish.assembly = function(assemblyName) {
@@ -19,6 +23,10 @@ global.jish.internal.importCommands = function(commands) {
     global[split[0]][split[1]] = commands[nsAndFnName][split[1]];
   }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// jish.delegates
+////////////////////////////////////////////////////////////////////////////////
 
 // Used when calling functions in .Net that have delegates (callbacks)
 global.jish.internal.realDelegates = {};
