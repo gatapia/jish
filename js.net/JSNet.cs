@@ -22,9 +22,8 @@ namespace js.net
     {
       kernel = new StandardKernel();
       kernel.Bind<IEngine>().To<JSNetEngine>();
-      kernel.Bind<IFrameworkAdapter>().To<JSDomAdapter>().OnActivation(jsdom => ((JSDomAdapter)jsdom).Initialise());
+      kernel.Bind<IFrameworkAdapter>().To<JSDomAdapter>();
       kernel.Bind<CWDFileLoader>().ToSelf().InSingletonScope();
-      kernel.Bind<ClosureFrameworkAdapter>().ToSelf().OnActivation(closure => closure.Initialise());
     }
 
     public static ICoverageAdapter JSCoverage(ITestAdapter testAdapter)

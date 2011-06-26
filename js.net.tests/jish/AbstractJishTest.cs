@@ -20,13 +20,9 @@ namespace js.net.tests.jish
       console = new TestingConsole();      
       engine.SetGlobal("console", console);
       kernel.Bind<JSConsole>().ToConstant(console);
-      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope().OnActivation(j2 =>
-      {
-        JishInterpreter j = (JishInterpreter) j2;
-        j.ThrowErrors = true;
-        j.Initialise();
-      });
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
       jish = kernel.Get<IJishInterpreter>();
+      ((JishInterpreter) jish).ThrowErrors = true;
     }    
   }
 }

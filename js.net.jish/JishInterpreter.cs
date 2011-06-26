@@ -7,11 +7,12 @@ using System.Reflection;
 using js.net.Engine;
 using js.net.jish.Util;
 using js.net.Util;
+using Ninject;
 using Noesis.Javascript;
 
 namespace js.net.jish
 {
-  public class JishInterpreter : IJishInterpreter
+  public class JishInterpreter : IJishInterpreter, IInitializable
   {    
 
     private readonly JSConsole console;
@@ -37,23 +38,26 @@ namespace js.net.jish
       this.console = console;           
     }
 
-    public void Initialise()
+    public void Initialize()
     {
-      InitialiseDependencies();
-      InitialiseInputConsole();
+      LoadJishJS();
+      LoadCommandsFromIncludedAssemblies();
+      LoadJavaScriptModules();
+      ConfigureCommandLineInputConsole();
     }
 
-    private void InitialiseDependencies()
+    private void LoadJishJS()
     {
-      engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");
-
-      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
-      Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
-      
-      LoadJavaScriptModules();
+      engine.Run(embeddedResourceLoader.ReadEmbeddedResourceTextContents("js.net.jish.resources.jish.js", GetType().Assembly), "jish.js");                  
     }    
 
-    private void InitialiseInputConsole()
+    private void LoadCommandsFromIncludedAssemblies()
+    {
+      Assembly[] assemblies = LoadAllAssemblies().Distinct(new AssemblyNameComparer()).ToArray();
+      Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
+    }
+
+    private void ConfigureCommandLineInputConsole()
     {
       try
       {
