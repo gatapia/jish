@@ -1,13 +1,7 @@
-﻿var global = this;
-
+﻿// Namespace global.jish.internal
+var global = this;
 global.jish = {};
 global.jish.internal = {};
-
-global.jish.internal.initialise = function() {
-};
-
-global.jish.internal.initialise();
-
 
 // Loads the specified assembly and places all loaded IInlineCommands in the 
 // global context.

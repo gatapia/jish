@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using js.net.Util;
 
-namespace js.net.jish.InlineCommand
+namespace js.net.jish.Command.InlineCommand
 {
   public class ProcessCommand : IInlineCommand
   {

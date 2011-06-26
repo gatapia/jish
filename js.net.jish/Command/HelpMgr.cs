@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using js.net.jish.ConsoleCommand;
-using js.net.jish.InlineCommand;
 using System.Linq;
+using js.net.jish.Command.ConsoleCommand;
+using js.net.jish.Command.InlineCommand;
 
-namespace js.net.jish
+namespace js.net.jish.Command
 {
   public class HelpMgr
   {

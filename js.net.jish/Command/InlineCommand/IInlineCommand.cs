@@ -1,4 +1,4 @@
-﻿namespace js.net.jish.InlineCommand
+﻿namespace js.net.jish.Command.InlineCommand
 {
   public interface IInlineCommand : ICommandBase
   {

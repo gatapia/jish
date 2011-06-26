@@ -1,4 +1,4 @@
-﻿namespace js.net.jish
+﻿namespace js.net.jish.Command
 {
   public class CommandParam
   {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace js.net.jish
+namespace js.net.jish.Command
 {
   public interface ICommandBase
   {

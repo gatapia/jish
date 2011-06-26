@@ -63,30 +63,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandParam.cs" />
-    <Compile Include="HelpMgr.cs" />
-    <Compile Include="ICommandBase.cs" />
+    <Compile Include="Command\CommandParam.cs" />
+    <Compile Include="Command\HelpMgr.cs" />
+    <Compile Include="Command\ICommandBase.cs" />
     <Compile Include="IL\JishProxy.cs" />
     <Compile Include="IL\MethodToProxify.cs" />
-    <Compile Include="InlineCommand\CreateCommands.cs" />
+    <Compile Include="Command\InlineCommand\CreateCommands.cs" />
     <Compile Include="Util\AssemblyCommandLoader.cs" />
     <Compile Include="Util\AssemblyNameComparer.cs" />
     <Compile Include="IL\TypeILWrapper.cs" />
     <Compile Include="JishInterpreter.cs" />
-    <Compile Include="ConsoleCommand\BreakCommand.cs" />
-    <Compile Include="ConsoleCommand\ClearCommand.cs" />
-    <Compile Include="ConsoleCommand\EmptyConsoleCommand.cs" />
-    <Compile Include="InlineCommand\ProcessCommand.cs" />
+    <Compile Include="Command\ConsoleCommand\BreakCommand.cs" />
+    <Compile Include="Command\ConsoleCommand\ClearCommand.cs" />
+    <Compile Include="Command\ConsoleCommand\EmptyConsoleCommand.cs" />
+    <Compile Include="Command\InlineCommand\ProcessCommand.cs" />
+    <Compile Include="Util\CurrentContextAssemblies.cs" />
     <Compile Include="Util\TypeCreator.cs" />
-    <Compile Include="InlineCommand\AssemblyCommand.cs" />
-    <Compile Include="ConsoleCommand\ExitCommand.cs" />
-    <Compile Include="ConsoleCommand\IConsoleCommand.cs" />
+    <Compile Include="Command\InlineCommand\AssemblyCommand.cs" />
+    <Compile Include="Command\ConsoleCommand\ExitCommand.cs" />
+    <Compile Include="Command\ConsoleCommand\IConsoleCommand.cs" />
     <Compile Include="IJishInterpreter.cs" />
-    <Compile Include="InlineCommand\IInlineCommand.cs" />
+    <Compile Include="Command\InlineCommand\IInlineCommand.cs" />
     <Compile Include="Util\LoadedAssembliesBucket.cs" />
     <Compile Include="MainRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InputLoop.cs" />
     <Compile Include="Util\TypeLoader.cs" />
   </ItemGroup>
   <ItemGroup>

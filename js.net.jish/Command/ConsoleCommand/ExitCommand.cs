@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace js.net.jish.ConsoleCommand
+namespace js.net.jish.Command.ConsoleCommand
 {
   public class ExitCommand : EmptyConsoleCommand
   {

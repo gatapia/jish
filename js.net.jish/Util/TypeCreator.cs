@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using js.net.jish.IL;
+using js.net.Util;
 
 namespace js.net.jish.Util
 {

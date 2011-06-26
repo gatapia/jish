@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace js.net
+namespace js.net.Util
 {
   public class JSConsole
   {

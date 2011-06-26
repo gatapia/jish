@@ -41,7 +41,7 @@ namespace js.net.tests.jish
 
     [Test] public void AddIInlineCommandDescriptionToReadme()
     {
-      string processCommandContents = File.ReadAllText(@"..\..\..\js.net.jish\InlineCommand\ProcessCommand.cs");
+      string processCommandContents = File.ReadAllText(@"..\..\..\js.net.jish\Command\InlineCommand\ProcessCommand.cs");
       AddPrePostTagTextToReadme(inlineCommandSearchTagStart, inlineCommandSearchTagEnd, MakeCodeBlock(processCommandContents));
     }
 

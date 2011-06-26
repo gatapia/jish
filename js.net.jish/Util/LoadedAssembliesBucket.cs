@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using js.net.jish.ConsoleCommand;
-using js.net.jish.InlineCommand;
+using js.net.jish.Command;
+using js.net.jish.Command.ConsoleCommand;
+using js.net.jish.Command.InlineCommand;
+using js.net.Util;
 using Ninject;
 
 namespace js.net.jish.Util

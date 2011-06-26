@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using js.net.Engine;
+using js.net.Util;
 using Ninject;
 
 namespace js.net.FrameworkAdapters

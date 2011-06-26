@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using js.net.FrameworkAdapters;
+using js.net.Util;
 using Noesis.Javascript;
 
 namespace js.net.TestAdapters

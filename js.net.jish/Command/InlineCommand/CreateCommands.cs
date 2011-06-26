@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using js.net.jish.Util;
 
-namespace js.net.jish.InlineCommand
+namespace js.net.jish.Command.InlineCommand
 {
   public class CreateCommand : IInlineCommand
   {
