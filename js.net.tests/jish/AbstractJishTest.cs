@@ -1,6 +1,5 @@
 ﻿using js.net.Engine;
 using js.net.jish;
-using js.net.jish.Util;
 using js.net.Util;
 using Ninject;
 using NUnit.Framework;
@@ -15,7 +14,6 @@ namespace js.net.tests.jish
     [SetUp] public virtual void SetUp()
     {
       StandardKernel kernel = new StandardKernel();      
-      kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
       IEngine engine = new JSNetEngine();
       kernel.Bind<IEngine>().ToConstant(engine);      
       console = new TestingConsole();      

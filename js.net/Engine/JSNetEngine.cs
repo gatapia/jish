@@ -19,7 +19,12 @@ namespace js.net.Engine
     // not much that can be done.
     private static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
     {
-      string assemblyResourceShortName = args.Name.Substring(0, args.Name.IndexOf(',')) + ".dll";
+      string assemblyResourceShortName = args.Name;
+      if (assemblyResourceShortName.IndexOf(',') > 0)
+      {
+        assemblyResourceShortName = assemblyResourceShortName.Substring(0, args.Name.IndexOf(','));
+      }
+      assemblyResourceShortName += ".dll";
       Assembly a = Assembly.GetExecutingAssembly();
       
       Trace.Assert(Array.IndexOf(a.GetManifestResourceNames(), assemblyResourceShortName) >= 0, "Assembly '" + a.FullName + "' does not contain resource '" + assemblyResourceShortName + "' - " + String.Join(", ", a.GetManifestResourceNames()));

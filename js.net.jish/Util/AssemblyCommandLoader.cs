@@ -33,6 +33,7 @@ global['{0}']['{1}'] = function() {{
     public void LoadCommandsFromAssembly(Assembly assembly)
     {
       Trace.Assert(assembly != null);
+      if (loadedAssemblies.ContainsAssembly(assembly.GetName().Name)) { return; }
 
       IEnumerable<IInlineCommand> commands = loadedAssemblies.AddAssembly(assembly);
       if (commands.Any()) InjectCommandsIntoGlobalScope(commands);

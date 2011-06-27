@@ -43,6 +43,13 @@ namespace js.net.jish.Command.InlineCommand
       Assembly assembly = File.Exists(assemblyFileNameOrAssemblyName) 
         ? Assembly.LoadFrom(assemblyFileNameOrAssemblyName)
         : Assembly.Load(assemblyFileNameOrAssemblyName);
+
+      if (loadedAssemblies.ContainsAssembly(assembly.GetName().Name))
+      {
+        console.log("Assembly '" + assembly.GetName().Name + "' is already loaded. Ignoring.");
+        return null;
+      }
+
       IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
       return ConvertCommandsToFullyQualifiedDictionary(loadedCommands);

@@ -37,9 +37,9 @@ namespace js.net.jish.Util
     public IEnumerable<IInlineCommand> AddAssembly(Assembly a)
     {
       Trace.Assert(a != null);
-
       string name = a.GetName().Name;
-      if (assemblies.ContainsKey(name)) { return loadedInlineCommands[name]; }
+      Trace.Assert(!ContainsAssembly(name), "Assembly: " + name + " is already loaded.");
+      //Console.WriteLine("Loading: " + name);
       assemblies.Add(name, a);
       
       LoadAllCommandsFromAssembly(a);
