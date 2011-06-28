@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using js.net.Util;
@@ -12,7 +13,7 @@ namespace js.net.tests.jish
     public override void log(object message, bool newline)
     {
       base.log(message, newline);
-      messages.Add(message.ToString());
+      messages.Add(message == null ? String.Empty : message.ToString());
     }
 
     public IEnumerable<string> GetAllMessages()

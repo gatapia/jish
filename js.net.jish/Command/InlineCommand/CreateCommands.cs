@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using js.net.jish.IL;
 using js.net.jish.Util;
 
 namespace js.net.jish.Command.InlineCommand
@@ -23,8 +24,7 @@ namespace js.net.jish.Command.InlineCommand
     
     public object create(string typeName, params object[] args) 
     {
-      Trace.Assert(!String.IsNullOrWhiteSpace(typeName));
-
+      Trace.Assert(!String.IsNullOrWhiteSpace(typeName));      
       return typeCreator.CreateType(typeName, args);
     }
 

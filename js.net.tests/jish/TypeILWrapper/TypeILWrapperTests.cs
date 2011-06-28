@@ -15,35 +15,35 @@ namespace js.net.tests.jish.TypeILWrapper
     [Test] public void TestStaticTypeWithArrayArgs()
     {
       MethodInfo mi = typeof (StaticClz).GetMethod("GetStringArrStatic", new [] {typeof(string), typeof(string[])});
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new[] {new MethodToProxify(mi, null)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof(StaticClz), new[] {new MethodToProxify(mi, null)});
       Assert.AreEqual("STATICWITHARR[str1]", wrapped.GetType().GetMethod("GetStringArrStatic").Invoke(wrapped, new object[] {"str1", new string[0]}));
       Assert.AreEqual("STATICWITHARR[str11,2]", wrapped.GetType().GetMethod("GetStringArrStatic").Invoke(wrapped, new object[] {"str1", new []{"1","2"}}));
     }
 
     [Test] public void TestStaticTypeWithSimpleArgs()
     {
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz));
+      object wrapped = wrapper.CreateWrapperFromType(typeof(StaticClz));
       Assert.AreEqual("STATIC[123]", miStatic.Invoke(wrapped, new object[] {123}));
     }
 
     [Test] public void TestNonStaticWithSimpleArgs()
     {
       object instance = new InstanceClz(222);
-      object wrapped = wrapper.CreateWrapper(instance);
+      object wrapped = wrapper.CreateWrapperFromInstance(instance);
       Assert.AreEqual("INSTANCE[222][0][123]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {123}));
     }
 
     [Test] public void TestNonStaticWithMultipleArgs()
     {
       object instance = new InstanceClz(222, 333);
-      object wrapped = wrapper.CreateWrapper(instance);
+      object wrapped = wrapper.CreateWrapperFromInstance(instance);
       Assert.AreEqual("INSTANCE[222][333][123]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {123}));
     }
 
     [Test] public void TestMergeMethodsInSingleType()
     {
       object instance = new InstanceClz(222);
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance)});
       Assert.AreEqual("INSTANCE[222][0][1]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic").Invoke(wrapped, new object[] {2}));
     }
@@ -52,7 +52,7 @@ namespace js.net.tests.jish.TypeILWrapper
     {
       object instance = new InstanceClz(222);
       object instance2 = new InstanceClz(2, 3);
-      object wrapped = wrapper.CreateWrapper(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance), new MethodToProxify(miInstance, instance2) { OverrideMethodName = "NewMethodName"}});
+      object wrapped = wrapper.CreateWrapperFromType(typeof(StaticClz), new [] {new MethodToProxify(miStatic, null), new MethodToProxify(miInstance, instance), new MethodToProxify(miInstance, instance2) { OverrideMethodName = "NewMethodName"}});
       Assert.AreEqual("INSTANCE[222][0][1]", wrapped.GetType().GetMethod("GetStringNonStatic").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("INSTANCE[2][3][1]", wrapped.GetType().GetMethod("NewMethodName").Invoke(wrapped, new object[] {1}));
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic").Invoke(wrapped, new object[] {2}));
@@ -60,7 +60,7 @@ namespace js.net.tests.jish.TypeILWrapper
 
     [Test] public void TeatStaticOverridenMethod()
     {
-      object wrapped = wrapper.CreateWrapper(typeof (StaticClz));      
+      object wrapped = wrapper.CreateWrapperFromType(typeof (StaticClz));      
       Assert.AreEqual("STATIC[2]", wrapped.GetType().GetMethod("GetStringStatic", new [] {typeof(int)}).Invoke(wrapped, new object[] {2}));
       Assert.AreEqual("STATIC[6]", wrapped.GetType().GetMethod("GetStringStatic", new [] {typeof(int), typeof(int)}).Invoke(wrapped, new object[] {2, 4}));
     }
@@ -68,7 +68,7 @@ namespace js.net.tests.jish.TypeILWrapper
     [Test] public void TestParamsMethodCalledWithNoArgs()
     {
       InstanceClz instance = new InstanceClz(1);
-      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
       MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new Type[0]);
       string ret = (string) target.Invoke(wrapped, null);
       Assert.AreEqual("ParamsMethod: ", ret);
@@ -77,7 +77,7 @@ namespace js.net.tests.jish.TypeILWrapper
     [Test] public void TestParamsMethodCalledWithOneArgs()
     {
       InstanceClz instance = new InstanceClz(1);
-      object wrapped = wrapper.CreateWrapper(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof (InstanceClz), new [] {new MethodToProxify(typeof(InstanceClz).GetMethod("ParamsMethod"), instance)});
       MethodInfo target = wrapped.GetType().GetMethod("ParamsMethod", new[] {typeof (int)});
       string ret = (string) target.Invoke(wrapped, new object[] {1});
       Assert.AreEqual("ParamsMethod: 1", ret);
@@ -308,14 +308,14 @@ namespace js.net.tests.jish.TypeILWrapper
 
     private string InvokeWrapped(string methodName, object[] args)
     {
-      object wrapped = wrapper.CreateWrapper(typeof (ComplexClz), new [] {new MethodToProxify(typeof(ComplexClz).GetMethod(methodName), null)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof (ComplexClz), new [] {new MethodToProxify(typeof(ComplexClz).GetMethod(methodName), null)});
       MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
       return (string) mi.Invoke(wrapped, args);
     }    
 
     private string InvokeGenWrapped(string methodName, object[] args)
     {
-      object wrapped = wrapper.CreateWrapper(typeof (GenClz), new [] {new MethodToProxify(typeof(GenClz).GetMethod(methodName), null)});
+      object wrapped = wrapper.CreateWrapperFromType(typeof (GenClz), new [] {new MethodToProxify(typeof(GenClz).GetMethod(methodName), null)});
       MethodInfo mi = wrapped.GetType().GetMethod(methodName, args.Select(a => a.GetType()).ToArray());
       return (string) mi.Invoke(wrapped, args);
     }

@@ -81,6 +81,7 @@
     <Compile Include="jish\Command\ProcessTests.cs" />
     <Compile Include="jish\JishJsTests.cs" />
     <Compile Include="jish\TypeILWrapper\AbstractTypeILWrapperTest.cs" />
+    <Compile Include="jish\TypeILWrapper\TypeILWrapperPropertiesTests.cs" />
     <Compile Include="jish\TypeILWrapper\DelegateSupportTests.cs" />
     <Compile Include="jish\TypeILWrapper\TypeILWrapperMethodArgumentsExpansionTests.cs" />
     <Compile Include="jish\GlobalTests.cs" />

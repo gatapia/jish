@@ -1,8 +1,14 @@
-﻿using js.net.Engine;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using js.net.Engine;
 using js.net.jish;
+using js.net.jish.Command;
+using js.net.jish.Util;
 using js.net.Util;
 using Ninject;
 using NUnit.Framework;
+using System.Linq;
 
 namespace js.net.tests.jish
 {
@@ -16,12 +22,24 @@ namespace js.net.tests.jish
       StandardKernel kernel = new StandardKernel();      
       IEngine engine = new JSNetEngine();
       kernel.Bind<IEngine>().ToConstant(engine);      
-      console = new TestingConsole();      
+      kernel.Bind<ICurrentContextAssemblies>().To<TestCurrentContextAssemblies>();      
+      console = new TestingConsole();
+      LoadedAssembliesBucket bucket = new LoadedAssembliesBucket(kernel.Get<HelpMgr>(), kernel, console);
+      kernel.Bind<LoadedAssembliesBucket>().ToConstant(bucket);            
       engine.SetGlobal("console", console);
       kernel.Bind<JSConsole>().ToConstant(console);
       kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
       jish = kernel.Get<IJishInterpreter>();
       ((JishInterpreter) jish).ThrowErrors = true;
     }    
+  }
+
+  public class TestCurrentContextAssemblies : CurrentContextAssemblies
+  {
+    protected override IEnumerable<Assembly> GetCurrentDomainAssemblies()
+    {
+      return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.IndexOf("js.net.test.module") < 0);
+    }    
+    
   }
 }

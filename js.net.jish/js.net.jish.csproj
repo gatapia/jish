@@ -79,6 +79,7 @@
     <Compile Include="Command\InlineCommand\CreateCommands.cs" />
     <Compile Include="Command\InlineCommand\IInlineCommand.cs" />
     <Compile Include="Command\InlineCommand\ProcessCommand.cs" />
+    <Compile Include="IL\PropertyToProxify.cs" />
     <Compile Include="IL\JishProxy.cs" />
     <Compile Include="IL\MethodToProxify.cs" />
     <Compile Include="Util\AssemblyCommandLoader.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="JishInterpreter.cs" />
     <Compile Include="Util\CurrentContextAssemblies.cs" />
     <Compile Include="Util\EmbeddedAssemblyLoader.cs" />
+    <Compile Include="Util\ICurrentContextAssemblies.cs" />
     <Compile Include="Util\TypeCreator.cs" />
     <Compile Include="IJishInterpreter.cs" />
     <Compile Include="Util\LoadedAssembliesBucket.cs" />

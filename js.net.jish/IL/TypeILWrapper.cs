@@ -9,29 +9,33 @@ namespace js.net.jish.IL
 {  
   public class TypeILWrapper
   {
-    public object CreateWrapper(object instance)
-    {
+    private const bool SAVE_TEST_DLL = false;
+
+    private object instance;
+    public object CreateWrapperFromInstance(object instance)
+    {      
       Trace.Assert(instance != null);
+      this.instance = instance;
 
       Type templateType = instance.GetType();
-      return CreateWrapper(templateType, GetAllMethods(templateType, instance));
-    }
+      return CreateWrapperFromType(templateType, GetAllMethods(templateType), GetAllProperties(templateType));
+    }    
 
-    public object CreateWrapper(Type templateType)
+    public object CreateWrapperFromType(Type templateType)
     {
       Trace.Assert(templateType != null);
 
-      return CreateWrapper(templateType, GetAllMethods(templateType, null));
-    }    
+      return CreateWrapperFromType(templateType, GetAllMethods(templateType), GetAllProperties(templateType));
+    }  
 
-    public object CreateWrapper(Type templateType, MethodToProxify[] methodsToProxify)
+    public object CreateWrapperFromType(Type templateType, MethodToProxify[] methodsToProxify, PropertyToProxify[] propsToProxify = null)
     {
       Trace.Assert(templateType != null);
       Trace.Assert(methodsToProxify != null && methodsToProxify.Length > 0);      
 
       string ns = templateType.Assembly.FullName;
-      AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), AssemblyBuilderAccess.Run);
-      ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(ns);       
+      AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName(ns), SAVE_TEST_DLL ? AssemblyBuilderAccess.RunAndSave : AssemblyBuilderAccess.Run);
+      ModuleBuilder moduleBuilder = SAVE_TEST_DLL ? assemblyBuilder.DefineDynamicModule(ns, "testil.dll") : assemblyBuilder.DefineDynamicModule(ns);       
       TypeBuilder wrapperBuilder = moduleBuilder.DefineType(templateType.FullName + "Proxy", TypeAttributes.Public, typeof(JishProxy), new Type[0]);
       CreateProxyConstructor(wrapperBuilder);
 
@@ -39,9 +43,54 @@ namespace js.net.jish.IL
       {     
         CreateProxyMethod(wrapperBuilder, i, methodsToProxify.ElementAt(i));
       }
-
-      Type wrapperType = wrapperBuilder.CreateType();      
+      if (propsToProxify != null)
+      {
+        for (int i = 0; i < propsToProxify.Length; i++)
+        {
+          GenerateProxyProperty(wrapperBuilder, i, propsToProxify.ElementAt(i));
+        }
+      }
+      Type wrapperType = wrapperBuilder.CreateType();                  
+      
+      if (SAVE_TEST_DLL) assemblyBuilder.Save("testil.dll");
+      
       return Activator.CreateInstance(wrapperType, new object[] { methodsToProxify });
+    }
+
+    private void GenerateProxyProperty(TypeBuilder wrapperBuilder, int thisidx, PropertyToProxify propertyToProxify) {
+      Trace.Assert(wrapperBuilder != null);
+      Trace.Assert(thisidx >= 0);
+      Trace.Assert(propertyToProxify != null);
+      
+      PropertyInfo realProp = propertyToProxify.RealProperty;
+      Console.WriteLine("GenerateProxyProperty: " + realProp.Name);
+      PropertyBuilder propBuilder = wrapperBuilder.DefineProperty(realProp.Name, PropertyAttributes.HasDefault, realProp.PropertyType, new [] {realProp.PropertyType});
+      
+      if (realProp.CanRead && realProp.GetGetMethod(false) != null)
+      {
+        MethodBuilder getMethod = wrapperBuilder.DefineMethod("get_internal_" + realProp.Name, MethodAttributes.Public, realProp.PropertyType, new Type[] {});
+        ILGenerator gen = getMethod.GetILGenerator();
+
+        SetReferenceToAppropriateThis(gen, thisidx);
+        gen.Emit(OpCodes.Call, realProp.GetGetMethod()); 
+        gen.Emit(OpCodes.Ret);      
+ 
+        propBuilder.SetGetMethod(getMethod);
+      }
+
+      if (realProp.CanWrite && realProp.GetSetMethod(false) != null)
+      {
+        MethodBuilder setMethod = wrapperBuilder.DefineMethod("set_internal_" + realProp.Name, MethodAttributes.Public, null, new[] {realProp.PropertyType});
+        ILGenerator gen = setMethod.GetILGenerator();        
+
+        SetReferenceToAppropriateThis(gen, 0);
+        gen.Emit(OpCodes.Ldarg_1);
+        gen.Emit(OpCodes.Call, realProp.GetSetMethod()); 
+        gen.Emit(OpCodes.Ret);     
+
+        propBuilder.SetSetMethod(setMethod);
+      }      
+      
     }
 
     private bool IsValidDelegateMethod(MethodToProxify mp)
@@ -55,13 +104,22 @@ namespace js.net.jish.IL
 
     private bool IsParamDelegate(ParameterInfo p) { return typeof (Delegate).IsAssignableFrom(p.ParameterType.BaseType); }
 
-    private MethodToProxify[] GetAllMethods(Type templateType, object instance)
+    private MethodToProxify[] GetAllMethods(Type templateType)
     {
       Trace.Assert(templateType != null);
 
       IEnumerable<MethodInfo> methodInfos = templateType.GetMethods().Where(mi => !mi.Name.Equals("GetType"));      
       MethodToProxify[] methods = methodInfos.Select(mi => new MethodToProxify(mi, instance)).ToArray();      
       return methods;
+    }    
+
+    private PropertyToProxify[] GetAllProperties(Type templateType)
+    {
+      Trace.Assert(templateType != null);
+
+      IEnumerable<PropertyInfo> props = templateType.GetProperties();      
+      PropertyToProxify[] propertiesToProxify = props.Select(pi => new PropertyToProxify(pi, instance)).ToArray();      
+      return propertiesToProxify;
     }    
 
     private void CreateProxyConstructor(TypeBuilder wrapperBuilder)
@@ -92,53 +150,58 @@ namespace js.net.jish.IL
         var methodBuilder = wrapperBuilder.DefineMethod(GetProxMethodName(methodToProxify, realMethod),
                                                         MethodAttributes.Public | MethodAttributes.Virtual,
                                                         realMethod.ReturnType, parameters);
-        if (realMethod.GetGenericArguments().Length > 0) // Generics all get changed to objects
+        if (realMethod.GetGenericArguments().Length > 0)
         {
+          // Generics all get changed to objects
           realMethod = realMethod.MakeGenericMethod(realMethod.GetGenericArguments().Select(a => typeof (Object)).ToArray());
         }
-        var gen = methodBuilder.GetILGenerator();
-        if (!realMethod.IsStatic)
-        {
-          // Set 'this' to the result of JishProxy.GetInstance. This allows one 
-          // class to proxy to methods from different source classes.
-          SetReferenceToAppropriateThis(gen, thissIdx);
-        } 
-        for (int i = 0; i < parameters.Length; i++)
-        {          
-          if (IsParamsArray(realParams[i]))
-          {            
-            break;  // Break as this is the last parameter (params must always be last)
-          } 
-          // if (IsParamDelegate(realParams[i])) // TODO: This is in the wrong place
-          // {
-            // If the param is a delegate it needs to be replaced with a string which
-            // will be used to find the 'real' delegate in the jish_internal scope.
-
-          // }
-          // Else add standard inline arg
-          gen.Emit(OpCodes.Ldarg, i + 1);
-        }
-
-        for (int i = parameters.Count(); i < realParams.Length; i++)
-        {
-          if (IsParamsArray(realParams[i])) break;
-
-          gen.Emit(OpCodes.Ldarg_0);
-          gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
-          gen.Emit(OpCodes.Ldc_I4, i);
-          MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
-          getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams[i].ParameterType});
-          gen.Emit(OpCodes.Callvirt, getLastOptional);
-        }
-        ParameterInfo last = realParams.Any() ? realParams.Last() : null;
-        if (last != null && IsParamsArray(last))
-        {
-          CovertRemainingParametersToArray(parameters, gen, realParams.Count() - 1, last.ParameterType.GetElementType());
-        }
-        // Call the real method
-        gen.Emit(realMethod.IsStatic ? OpCodes.Call : OpCodes.Callvirt, realMethod); 
-        gen.Emit(OpCodes.Ret);
+        EmitMethodWithParameterCombo(thissIdx, realMethod, parameters, methodBuilder, realParams);
       }
+    }
+
+    private void EmitMethodWithParameterCombo(int thissIdx, MethodInfo realMethod, Type[] parameters, MethodBuilder methodBuilder, ParameterInfo[] realParams) {      
+      var gen = methodBuilder.GetILGenerator();
+      if (!realMethod.IsStatic)
+      {
+        // Set 'this' to the result of JishProxy.GetInstance. This allows one 
+        // class to proxy to methods from different source classes.
+        SetReferenceToAppropriateThis(gen, thissIdx);
+      } 
+      for (int i = 0; i < parameters.Length; i++)
+      {          
+        if (IsParamsArray(realParams[i]))
+        {            
+          break;  // Break as this is the last parameter (params must always be last)
+        } 
+        // if (IsParamDelegate(realParams[i])) // TODO: This is in the wrong place
+        // {
+        // If the param is a delegate it needs to be replaced with a string which
+        // will be used to find the 'real' delegate in the jish_internal scope.
+
+        // }
+        // Else add standard inline arg
+        gen.Emit(OpCodes.Ldarg, i + 1);
+      }
+
+      for (int i = parameters.Count(); i < realParams.Length; i++)
+      {
+        if (IsParamsArray(realParams[i])) break;
+
+        gen.Emit(OpCodes.Ldarg_0);
+        gen.Emit(OpCodes.Ldc_I4, thissIdx); // Load the this index into the stack for GetInstance param          
+        gen.Emit(OpCodes.Ldc_I4, i);
+        MethodInfo getLastOptional = typeof (JishProxy).GetMethod("GetOptionalParameterDefaultValue");
+        getLastOptional = getLastOptional.MakeGenericMethod(new[] {realParams[i].ParameterType});
+        gen.Emit(OpCodes.Callvirt, getLastOptional);
+      }
+      ParameterInfo last = realParams.Any() ? realParams.Last() : null;
+      if (last != null && IsParamsArray(last))
+      {
+        CovertRemainingParametersToArray(parameters, gen, realParams.Count() - 1, last.ParameterType.GetElementType());
+      }
+      // Call the real method
+      gen.Emit(realMethod.IsStatic ? OpCodes.Call : OpCodes.Callvirt, realMethod); 
+      gen.Emit(OpCodes.Ret);
     }
 
     private string GetProxMethodName(MethodToProxify methodToProxify, MethodInfo realMethod)

@@ -21,8 +21,6 @@ namespace js.net.Util
 
     public virtual void log(object message, bool newline)
     {
-      Trace.Assert(message != null);
-
       string msg = GetMessageObjectDescription(message);
       if (newline) Console.WriteLine(msg);
       else Console.Write(msg);

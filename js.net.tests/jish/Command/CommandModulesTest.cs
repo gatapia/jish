@@ -15,7 +15,7 @@ namespace js.net.tests.jish.Command
       base.SetUp();
     }
 
-    public void TearDown()
+    [TearDown, TestFixtureTearDown] public void TearDown()
     {
       if (File.Exists(targetCommandDll)) File.Delete(targetCommandDll);
     }

@@ -20,18 +20,21 @@ namespace js.net.jish
     private readonly LoadedAssembliesBucket loadedAssemblies;
     private readonly EmbeddedResourcesUtils embeddedResourceLoader;
     private readonly AssemblyCommandLoader assemblyCommandsLoader;
+    private readonly ICurrentContextAssemblies currentContextAssemblies;
 
     private string bufferedCommand = String.Empty;
 
-    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, AssemblyCommandLoader assemblyCommandsLoader)
+    public JishInterpreter(IEngine engine, JSConsole console, LoadedAssembliesBucket loadedAssemblies, EmbeddedResourcesUtils embeddedResourceLoader, AssemblyCommandLoader assemblyCommandsLoader, ICurrentContextAssemblies currentContextAssemblies)
     {
       Trace.Assert(engine != null);
       Trace.Assert(console != null);
       Trace.Assert(loadedAssemblies != null);
       Trace.Assert(embeddedResourceLoader != null);
       Trace.Assert(assemblyCommandsLoader != null);
+      Trace.Assert(currentContextAssemblies != null);
 
       this.engine = engine;
+      this.currentContextAssemblies = currentContextAssemblies;
       this.assemblyCommandsLoader = assemblyCommandsLoader;
       this.embeddedResourceLoader = embeddedResourceLoader;
       this.loadedAssemblies = loadedAssemblies;
@@ -53,7 +56,7 @@ namespace js.net.jish
 
     private void LoadCommandsFromIncludedAssemblies()
     {
-      Assembly[] assemblies = new CurrentContextAssemblies().GetAllAssemblies().ToArray();
+      Assembly[] assemblies = currentContextAssemblies.GetAllAssemblies().ToArray();
       Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
     }
 

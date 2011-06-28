@@ -23,7 +23,7 @@ namespace js.net.tests.jish.TypeILWrapper
 
     protected IEnumerable<MethodInfo> GetExpandedMethods(string realMethodName, string wrappedMethodName = null, object instace = null)
     {
-      object wrapped = wrapper.CreateWrapper(typeToWrap, 
+      object wrapped = wrapper.CreateWrapperFromType(typeToWrap, 
         new [] {new MethodToProxify(typeToWrap.GetMethod(realMethodName), instace)});
       return wrapped.GetType().GetMethods().Where(mi => mi.Name.Equals(wrappedMethodName ?? realMethodName)).OrderBy(mi => mi.GetParameters().Length);
     }

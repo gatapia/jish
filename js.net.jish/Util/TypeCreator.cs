@@ -43,10 +43,10 @@ namespace js.net.jish.Util
       {
         t = t.MakeGenericType(t.GetGenericArguments().Select(a => typeof(object)).ToArray());
       }
+      TypeILWrapper wrapper = new TypeILWrapper();
       object instance = t.GetConstructors().Length == 0 
-        ? new TypeILWrapper().CreateWrapper(t) 
-        : Activator.CreateInstance(t, realArgs);
-            
+        ? wrapper.CreateWrapperFromType(t) 
+        : wrapper.CreateWrapperFromInstance(Activator.CreateInstance(t, realArgs));            
       console.log("Created instance of " + typeName + ".");
       return instance;
     }

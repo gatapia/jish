@@ -83,7 +83,7 @@ global['{0}']['{1}'] = function() {{
           methods.Add(new MethodToProxify(mi, command));
         }
       }
-      var nsWrapper = new TypeILWrapper().CreateWrapper(commands.First().GetType(), methods.ToArray());
+      var nsWrapper = new TypeILWrapper().CreateWrapperFromType(commands.First().GetType(), methods.ToArray());
       return nsWrapper;
     }
   }

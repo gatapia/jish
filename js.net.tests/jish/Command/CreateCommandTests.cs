@@ -77,6 +77,32 @@ console.log('x1 - ' + x1.GetConstructorType() + ' x2 - ' + x2.GetConstructorType
       jish.ExecuteCommand("console.log('arg: ' + test.GetArg());");
       Assert.AreEqual("arg: 2", console.GetLastMessage());
     }
+
+    [Test] public void TestCreateCommandInNewAssembly()
+    {
+      jish.ExecuteCommand("jish.assembly('../../../js.net.test.module/bin/js.net.test.module.dll');");
+      Assert.AreEqual("Assembly 'js.net.test.module' loaded.", console.GetLastMessage());
+
+      jish.ExecuteCommand("var complex = jish.create('js.net.test.module.CreateCommandComplexFake, js.net.test.module');");      
+
+      jish.ExecuteCommand("console.log(complex.paramsTest());");
+      Assert.AreEqual("intparams: ", console.GetLastMessage());
+
+      jish.ExecuteCommand("console.log(complex.paramsTest(1, 2, 3));");
+      Assert.AreEqual("intparams: 1,2,3", console.GetLastMessage());
+
+      jish.ExecuteCommand("console.log(complex.defaultValueTest());");
+      Assert.AreEqual("defParam: 10", console.GetLastMessage());
+
+      jish.ExecuteCommand("console.log(complex.defaultValueTest(20));");
+      Assert.AreEqual("defParam: 20", console.GetLastMessage());
+
+      jish.ExecuteCommand("console.log(complex.genericsTest(10));");
+      Assert.AreEqual("genericParam: 10", console.GetLastMessage());
+
+      jish.ExecuteCommand("console.log(complex.genericsTest('superduper'));");
+      Assert.AreEqual("genericParam: superduper", console.GetLastMessage());
+    }
   }
 
   public class TestCreateTarget
