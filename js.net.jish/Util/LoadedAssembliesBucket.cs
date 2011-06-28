@@ -41,11 +41,6 @@ namespace js.net.jish.Util
       Trace.Assert(!ContainsAssembly(name), "Assembly: " + name + " is already loaded.");
       assemblies.Add(name, a);
      
-      if (name.IndexOf("js.net.test.module") >= 0)
-      {
-        Console.WriteLine("WTF");
-      }
- 
       LoadAllCommandsFromAssembly(a);
       IEnumerable<IInlineCommand> assemblyCommands = LoadAllInlineCommandsFromAssembly(a);
       loadedInlineCommands.Add(name, assemblyCommands);
