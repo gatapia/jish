@@ -48,11 +48,11 @@ namespace js.net.tests.FrameworkAdapters
     {      
       Assert.AreEqual(10, ctx.GetFrameworkAdapter().Run(
 @"
-goog.require('goog.array');
-var arr = [0,1,2,3,4];
-goog.array.reduce(arr, function(previousValue, currentValue, index, array){
-  return previousValue + currentValue;
-}, 0);
+  goog.require('goog.array');
+  var arr = [0,1,2,3,4];
+  goog.array.reduce(arr, function(previousValue, currentValue, index, array){
+    return previousValue + currentValue;
+  }, 0);
 ", "ClosureAdapterTests.UsingAComplexNonClosureFunction"));
     }
 

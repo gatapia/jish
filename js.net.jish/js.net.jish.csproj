@@ -76,7 +76,8 @@
     <Compile Include="Command\HelpMgr.cs" />
     <Compile Include="Command\ICommandBase.cs" />
     <Compile Include="Command\InlineCommand\AssemblyCommand.cs" />
-    <Compile Include="Command\InlineCommand\CreateCommands.cs" />
+    <Compile Include="Command\InlineCommand\ClosureLibraryCommand.cs" />
+    <Compile Include="Command\InlineCommand\CreateCommand.cs" />
     <Compile Include="Command\InlineCommand\IInlineCommand.cs" />
     <Compile Include="Command\InlineCommand\ProcessCommand.cs" />
     <Compile Include="IL\PropertyToProxify.cs" />

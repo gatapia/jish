@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace js.net.jish.Util
 {
-  internal class AssemblyNameComparer : IEqualityComparer<Assembly>
+  public class AssemblyNameComparer : IEqualityComparer<Assembly>
   {
     public bool Equals(Assembly x, Assembly y)
     {

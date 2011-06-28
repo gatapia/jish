@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace js.net.tests.jish.Command
 {
   [TestFixture]
-  internal class CreateCommandTests : AbstractJishTest
+  public class CreateCommandTests : AbstractJishTest
   {
     public override void SetUp()
     {

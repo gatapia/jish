@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using js.net.jish.IL;
 using js.net.jish.Util;
 
 namespace js.net.jish.Command.InlineCommand

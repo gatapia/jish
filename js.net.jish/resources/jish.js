@@ -23,6 +23,37 @@ global.jish.internal.importNamespaceCommands = function(namespaceCommands) {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// jish.closure
+////////////////////////////////////////////////////////////////////////////////
+global.jish.closure = function(baseJsPath) {
+  eval(global.jish.internal.getFileContents(baseJsPath));  
+  goog.global = global;
+  global.goog = goog;
+  global.goog.writeScriptTag_ = function(filename) {    
+    filename = filename.replace(/\//g, '\\');
+    var idx = baseJsPath.lastIndexOf('\\');
+    var dir = idx > 0 ? baseJsPath.substring(0, idx) : '.';
+    eval(global.jish.internal.getFileContents(dir + '\\' + filename));
+    return false;
+  };
+  eval(global.jish.internal.getFileContents(baseJsPath.replace('base.js', 'deps.js')));  
+};
+
+global.jish.internal.alreadyLoaded = {};
+
+global.jish.internal.getFileContents = function (file) {
+  if (!file) throw new Error('file is required');
+  
+  if (global.jish.internal.alreadyLoaded[file]) return;
+  global.jish.internal.alreadyLoaded[file] = 1;
+
+  var f = jish.create('System.IO.File');
+  if (!f.Exists(file)) throw new Error('file: ' + file + ' could not be found');
+  return f.ReadAllText(file);  
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
 // jish.delegates
 ////////////////////////////////////////////////////////////////////////////////
 

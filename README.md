@@ -91,6 +91,10 @@ Jish are:
     		jish.create(<typeNames>) types from this assembly.
     	Arguments: (assemblyFileNameOrAssemblyName)
     
+    jish.closure:
+    	Loads google closure library environment.
+    	Arguments: (baseJsPath)
+    
     jish.create:
     	Creates and instance of any type (including static classes).  If the
     		type's assembly is not loaded you must precede this call with a

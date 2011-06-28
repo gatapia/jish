@@ -1,5 +1,4 @@
 HIGH
-
 - Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal
    * - <methodname>_internal should replace the delegate param with a strin 
@@ -13,17 +12,8 @@ HIGH
    * - When mock Action / Func gets called call original callback in JS
 - Support multiple callbacks/delegates params
  
-
 MED
-- Should load file jish.js instead of resource if available for testing purposes.
-  This should be generic for all resource/* stuffs
-- More unit testing frameworks
 - Fork the JavaScript.Net project as it appears to have died.
-- Closure tools support in jish
-  - Library
-  - Provide/require
-- Refactor the TypeILWrapper tests (too long)
 
 LOW
 - Node interface
-

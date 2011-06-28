@@ -9,7 +9,7 @@ namespace js.net.jish.IL
 {  
   public class TypeILWrapper
   {
-    private const bool SAVE_TEST_DLL = false;
+    private static bool SAVE_TEST_DLL = false;
 
     private object instance;
     public object CreateWrapperFromInstance(object instance)
