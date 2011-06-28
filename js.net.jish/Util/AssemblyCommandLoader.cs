@@ -30,35 +30,45 @@ global['{0}']['{1}'] = function() {{
       this.engine = engine;
     }
 
-    public void LoadCommandsFromAssembly(Assembly assembly)
+    public IDictionary<string, object> GetCommandsMapFromAssembly(Assembly assembly)
     {
       Trace.Assert(assembly != null);
-      if (loadedAssemblies.ContainsAssembly(assembly.GetName().Name)) { return; }
 
-      IEnumerable<IInlineCommand> commands = loadedAssemblies.AddAssembly(assembly);
-      if (commands.Any()) InjectCommandsIntoGlobalScope(commands);
-    }
-
-    private void InjectCommandsIntoGlobalScope(IEnumerable<IInlineCommand> commands)
-    {
-      Trace.Assert(commands != null);
-      
-      StringBuilder js = new StringBuilder();
+      IEnumerable<IInlineCommand> commands = GetInlineCommandsInAssembly(assembly);
+      if (commands == null) return null;      
+      IDictionary<string, object> namespaceProxies = new Dictionary<string, object>();
       foreach (var commandsInNamespace in commands.GroupBy(c => c.GetNameSpace()))
       {
-        CreateAndInjectNamespaceProxy(commandsInNamespace, js);
+        object proxy = GetNamespaceCommandProxy(commandsInNamespace);
+        namespaceProxies.Add(commandsInNamespace.Key, proxy);
+      }
+      return namespaceProxies;
+    }
+
+    public void LoadCommandsFromAssemblyAndInjectIntoGlobalScope(Assembly assembly)
+    {
+      Trace.Assert(assembly != null);
+
+      IDictionary<string, object> commandsMap = GetCommandsMapFromAssembly(assembly);
+      if (commandsMap == null || !commandsMap.Any()) return;
+
+      StringBuilder js = new StringBuilder();
+      foreach (KeyValuePair<string, object> nsAndProxy in commandsMap)
+      {
+         CreateInjectProxyIntoGlobalScopeJS(nsAndProxy.Value, nsAndProxy.Key, js);
       }
       engine.Run(js.ToString(), "JishInterpreter.InjectCommandsIntoGlobalScope");
     }
 
-    private void CreateAndInjectNamespaceProxy(IGrouping<string, IInlineCommand> commandsInNamespace, StringBuilder jsBuilder)
+    private IEnumerable<IInlineCommand> GetInlineCommandsInAssembly(Assembly assembly) {
+      Trace.Assert(assembly != null);
+      if (loadedAssemblies.ContainsAssembly(assembly.GetName().Name)) { return null; }
+
+      return loadedAssemblies.AddAssembly(assembly);
+    }
+
+    private void CreateInjectProxyIntoGlobalScopeJS(object namespaceCommand, string ns, StringBuilder jsBuilder)
     {
-      Trace.Assert(commandsInNamespace != null);
-      Trace.Assert(jsBuilder != null);
-
-      string ns = commandsInNamespace.Key;
-      object namespaceCommand = GetNamespaceCommandProxy(commandsInNamespace);
-
       jsBuilder.Append(String.Format("\nif (!global['{0}']) global['{0}'] = {{}};\n", ns));
 
       string tmpClassName = "__" + Guid.NewGuid();
@@ -66,7 +76,7 @@ global['{0}']['{1}'] = function() {{
 
       foreach (string method in namespaceCommand.GetType().GetMethods().Select(mi => mi.Name).Distinct().Where(m => Char.IsLower(m[0])))
       {
-        jsBuilder.Append(String.Format(jsBinder, commandsInNamespace.Key, method, tmpClassName));
+        jsBuilder.Append(String.Format(jsBinder, ns, method, tmpClassName));
       }
     }
 

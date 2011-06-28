@@ -28,6 +28,8 @@ namespace js.net.tests.jish.Command
 
     [Test] public void TestAlreadyLoadedAssemblyCommandsAreILedProperly()
     {
+      jish.ExecuteCommand("jish.assembly('js.net.tests.dll');");
+
       jish.ExecuteCommand("console.log(tst2.paramsAddTest());");
       Assert.AreEqual("0", console.GetLastMessage());
 

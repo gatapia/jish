@@ -1,9 +1,16 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace js.net.tests.jish.Command
 {
   [TestFixture] public class CreateAndLoadCommandTests : AbstractJishTest
-  {    
+  {
+    public override void SetUp()
+    {
+      base.SetUp();
+      jish.ExecuteCommand("jish.assembly('js.net.tests.dll');");
+    }
+
     [Test] public void TestUsingRecognisedRegardlessOfParenthesisOrQuotes() 
     {             
       jish.ExecuteCommand("var file = jish.create('System.IO.File');");

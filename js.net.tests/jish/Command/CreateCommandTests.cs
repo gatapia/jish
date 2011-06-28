@@ -6,6 +6,12 @@ namespace js.net.tests.jish.Command
   [TestFixture]
   internal class CreateCommandTests : AbstractJishTest
   {
+    public override void SetUp()
+    {
+      base.SetUp();
+      jish.ExecuteCommand("jish.assembly('js.net.tests.dll');");
+    }
+
     [Test] public void TestCreateFileInfoSuccess()
     {
       const string file = @"..\\..\\..\\lib\\PicNet2.dll";

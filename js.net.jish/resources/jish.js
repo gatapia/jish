@@ -10,17 +10,15 @@ global.jish.internal = {};
 // Loads the specified assembly and places all loaded IInlineCommands in the 
 // global context.
 global.jish.assembly = function(assemblyName) {
-  var commands = jish.loadAssemblyImpl(assemblyName);  
-  global.jish.internal.importCommands(commands);
+  var namespaceCommands = jish.loadAssemblyImpl(assemblyName);  
+  global.jish.internal.importNamespaceCommands(namespaceCommands);
 };
 
-global.jish.internal.importCommands = function(commands) {
-  for (var nsAndFnName in commands) {    
-    var split = nsAndFnName.split('.');      
-    if (!global[split[0]]) {
-      global[split[0]] = {};
-    }
-    global[split[0]][split[1]] = commands[nsAndFnName][split[1]];
+global.jish.internal.importNamespaceCommands = function(namespaceCommands) {
+  for (var namespace in namespaceCommands) {            
+    var command = namespaceCommands[namespace];        
+    if (global[namespace]) { throw new Error('Namespace "' + namespace + '" is already registered'); }
+    global[namespace] = command;
   }
 };
 

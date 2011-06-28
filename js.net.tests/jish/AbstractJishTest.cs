@@ -41,7 +41,7 @@ namespace js.net.tests.jish
   {
     protected override IEnumerable<Assembly> GetCurrentDomainAssemblies()
     {
-      return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.IndexOf("js.net.test.module") < 0);
+      return AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name.IndexOf("js.net.test.module") < 0 && a.GetName().Name.IndexOf("js.net.tests") < 0);
     }    
     
   }

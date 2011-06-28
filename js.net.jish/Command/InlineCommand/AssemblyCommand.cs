@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using js.net.jish.Util;
 using js.net.Util;
@@ -11,21 +10,16 @@ namespace js.net.jish.Command.InlineCommand
 {
   public class AssemblyCommand : IInlineCommand
   {
-    private readonly LoadedAssembliesBucket loadedAssemblies;
+    private readonly AssemblyCommandLoader loader;
     private readonly JSConsole console;
 
-    public AssemblyCommand(LoadedAssembliesBucket loadedAssemblies, JSConsole console)
+    public AssemblyCommand(AssemblyCommandLoader loader, JSConsole console)
     {
-      Trace.Assert(loadedAssemblies != null);
+      Trace.Assert(loader != null);
       Trace.Assert(console != null);
 
-      this.loadedAssemblies = loadedAssemblies;
+      this.loader = loader;
       this.console = console;
-    }
-    
-    public string GetNameSpace()
-    {
-      return "jish";
     }
 
     /// <summary>
@@ -36,41 +30,29 @@ namespace js.net.jish.Command.InlineCommand
     /// </summary>
     /// <param name="assemblyFileNameOrAssemblyName"></param>
     /// <returns>Returns a dictionary of all commands added (by namespace.commandName).</returns>
-    public IDictionary<string, IInlineCommand> loadAssemblyImpl(string assemblyFileNameOrAssemblyName)
+    public IDictionary<string, object> loadAssemblyImpl(string assemblyFileNameOrAssemblyName)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(assemblyFileNameOrAssemblyName));      
 
       Assembly assembly = File.Exists(assemblyFileNameOrAssemblyName) 
         ? Assembly.LoadFrom(assemblyFileNameOrAssemblyName)
         : Assembly.Load(assemblyFileNameOrAssemblyName);
+      
+      IDictionary<string, object> namespaceCommands = loader.GetCommandsMapFromAssembly(assembly);
 
-      if (loadedAssemblies.ContainsAssembly(assembly.GetName().Name))
+      if (namespaceCommands == null)
       {
         console.log("Assembly '" + assembly.GetName().Name + "' is already loaded. Ignoring.");
         return null;
-      }
-
-      IEnumerable<IInlineCommand> loadedCommands = loadedAssemblies.AddAssembly(assembly);
+      }      
       console.log("Assembly '" + assembly.GetName().Name + "' loaded.");
-      return ConvertCommandsToFullyQualifiedDictionary(loadedCommands);
-    }
-
-    private IDictionary<string, IInlineCommand> ConvertCommandsToFullyQualifiedDictionary(IEnumerable<IInlineCommand> loadedCommands)
+      return namespaceCommands;
+    }    
+    
+    public string GetNameSpace()
     {
-      Trace.Assert(loadedCommands != null);
-
-      IDictionary<string, IInlineCommand> fullyQualified = new Dictionary<string, IInlineCommand>();
-      foreach (IInlineCommand command in loadedCommands)
-      {
-        string ns = command.GetNameSpace();
-        IEnumerable<string> methods = command.GetType().GetMethods().Select(mi => mi.Name).Where(n => Char.IsLower(n[0]));
-        foreach (var method in methods)
-        {
-          fullyQualified.Add(ns + '.' + method, command);
-        }
-      }
-      return fullyQualified;
-    }
+      return "jish";
+    }    
 
     public string GetName()
     {

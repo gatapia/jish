@@ -57,7 +57,7 @@ namespace js.net.jish
     private void LoadCommandsFromIncludedAssemblies()
     {
       Assembly[] assemblies = currentContextAssemblies.GetAllAssemblies().ToArray();
-      Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssembly);      
+      Array.ForEach(assemblies, assemblyCommandsLoader.LoadCommandsFromAssemblyAndInjectIntoGlobalScope);      
     }
 
     private void ConfigureCommandLineInputConsole()
