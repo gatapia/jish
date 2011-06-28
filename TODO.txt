@@ -1,7 +1,7 @@
 HIGH
 - Loading assemblies can take 2 paths, AssemblyCommandLoader and through 
   jish.assembly, this is should just be 1 path.
-- jish.assembly bypases the IL Generation code
+- jish.assembly bypases the IL Generation code for commands
 
 - Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal

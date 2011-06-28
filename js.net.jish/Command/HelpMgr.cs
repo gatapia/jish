@@ -69,7 +69,7 @@ namespace js.net.jish.Command
       Trace.Assert(command != null);
 
       IEnumerable<CommandParam> args = command.GetParameters();
-      return '(' + String.Join(", ", args.Select(GetArgumentName).ToArray()) + ')';
+      return '(' + (args == null ? "" : String.Join(", ", args.Select(GetArgumentName).ToArray())) + ')';
     }
 
     private string GetArgumentName(CommandParam param)
