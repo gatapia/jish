@@ -3,7 +3,7 @@ HIGH
   jish.assembly, this is should just be 1 path.
 - jish.assembly bypases the IL Generation code
 
-- Support callbacks with some trickery
+- Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal
    * - <methodname>_internal should replace the delegate param with a strin 
    *   (id of real method in jish.internal scope)
@@ -14,7 +14,7 @@ HIGH
    * - Create mock Action / Func
    * - Execute original method (C#) with mock action
    * - When mock Action / Func gets called call original callback in JS
-- Support multiple delegate params
+- Support multiple callbacks/delegates params
  
 
 MED
