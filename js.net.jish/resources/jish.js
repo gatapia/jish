@@ -39,6 +39,10 @@ global.jish.closure = function(baseJsPath) {
   eval(global.jish.internal.getFileContents(baseJsPath.replace('base.js', 'deps.js')));  
 };
 
+global.jish.addClosureDeps = function(depsFile) {
+  eval(global.jish.internal.getFileContents(depsFile));  
+};
+
 global.jish.internal.alreadyLoaded = {};
 
 global.jish.internal.getFileContents = function (file) {

@@ -34,5 +34,20 @@ console.log(reduced);
 ");
       Assert.AreEqual("10", console.GetLastMessage());
     }
+
+    [Test] public void TestMultipleFileProject()
+    {
+      jish.ExecuteCommand(
+@"
+jish.closure('" + basejsfile + @"');      
+jish.addClosureDeps('..\\..\\resources\\closure_command_test\\deps.js');
+
+goog.require('jish.test.main');
+
+var main = new jish.test.main();
+console.log(main.callUtilMethod());
+");
+      Assert.AreEqual("hello world", console.GetLastMessage());
+    }
   }
 }

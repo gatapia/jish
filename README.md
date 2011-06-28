@@ -221,6 +221,22 @@ certain charasteristics which may not be immediately obvious.
 * ICommand(s) are invoked by calling the command prefixed by a `.`. 
   I.e. `.commandname`
 
+
+## Running multi-file scripts / Google Closure Support
+jish comes with out of the box support for Google Closure Library.  This means
+that if you want to levarage the huge utility library in closure or use
+multi file projects then this is easy.
+
+Download the [closure library] http://code.google.com/closure/library/docs/gettingstarted.html) if you have not already done so and then Jish away:
+
+    jish.closure('path/to/your/closure/base.js');      
+    jish.addClosureDeps('path/to/any/additional/deps.js');    
+    // Require your files or any closure library file
+    goog.require('jish.test.main');    
+    // Go!!
+    var main = new jish.test.main();
+    console.log(main.callUtilMethod());
+
     
 ## Unit Testing
 One of js.net's primary and most stable feature is JavaScript unit testing 
