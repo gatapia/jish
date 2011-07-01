@@ -2,47 +2,29 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using js.net.Engine;
-using js.net.jish.Util;
-using js.net.Util;
-using Ninject;
 
 namespace js.net.jish
 {  
   public class MainRunner
-  {    
-    static MainRunner()
-    {
-      AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
-    } 
-    
+  {            
     [STAThread] public static void Main(string[] args) { new MainRunner(args); }
 
-    public MainRunner(string[] args) {
-      IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
-      IEngine engine = new JSNetEngine();
-      JSConsole console = new JSConsole();
-      engine.SetGlobal("console", console);
-      
-      kernel.Bind<IEngine>().ToConstant(engine);
-      kernel.Bind<JSConsole>().ToConstant(console);
-      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
-      kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
-
-      IJishInterpreter interpreter = kernel.Get<IJishInterpreter>();
+    public MainRunner(string[] args)
+    {
+      IJishInterpreter interpreter = DefaultJishInterpreterFactory.CreateInterpreter();
 
       if (args == null || args.Length == 0)
       {
-        StartInputLoop(console, interpreter);
+        StartInputLoop(interpreter);
       } else
       {
         ExecuteArgs(args, interpreter);
       }
     }
 
-    private void StartInputLoop(JSConsole console, IJishInterpreter interpreter) 
+    private void StartInputLoop(IJishInterpreter interpreter) 
     { 
-      console.log("Welcome to Jish. Type '.help' for more options.");
+      Console.WriteLine("Welcome to Jish. Type '.help' for more options.");
       while (true)
       {
         string command = interpreter.ReadCommand();

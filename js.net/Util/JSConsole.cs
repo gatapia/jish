@@ -26,7 +26,7 @@ namespace js.net.Util
       else Console.Write(msg);
     }
 
-    private string GetMessageObjectDescription(object msg)
+    protected string GetMessageObjectDescription(object msg)
     {
       if (msg == null)
       {

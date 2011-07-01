@@ -12,9 +12,32 @@ using Noesis.Javascript;
 
 namespace js.net.jish
 {
+  public static class DefaultJishInterpreterFactory
+  {
+    static DefaultJishInterpreterFactory()
+    {
+      AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
+    } 
+
+    public static IJishInterpreter CreateInterpreter()
+    {
+      IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
+      IEngine engine = new JSNetEngine();
+      JSConsole console = new JSConsole();
+      engine.SetGlobal("console", console);
+      
+      kernel.Bind<IEngine>().ToConstant(engine);
+      kernel.Bind<JSConsole>().ToConstant(console);
+      kernel.Bind<IJishInterpreter>().To<JishInterpreter>().InSingletonScope();
+      kernel.Bind<ICurrentContextAssemblies>().To<CurrentContextAssemblies>().InSingletonScope();
+      kernel.Bind<LoadedAssembliesBucket>().ToSelf().InSingletonScope();
+
+      return kernel.Get<IJishInterpreter>();
+    }
+  }
+
   public class JishInterpreter : IJishInterpreter, IInitializable
   {    
-
     private readonly JSConsole console;
     private readonly IEngine engine;
     private readonly LoadedAssembliesBucket loadedAssemblies;
@@ -189,6 +212,8 @@ namespace js.net.jish
     {
       bufferedCommand = String.Empty;      
     }
+
+    public IEngine GetEngine() { return engine; }
 
     public void SetGlobal(string name, object value)
     {

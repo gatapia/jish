@@ -150,7 +150,7 @@ namespace js.net.jish.Util
         foreach(Exception inner in ex.LoaderExceptions) {
             Console.WriteLine(inner);
         }
-        throw;
+        return new Type[0];
       }
     }
 
