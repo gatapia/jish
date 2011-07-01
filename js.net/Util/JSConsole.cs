@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -19,14 +18,19 @@ namespace js.net.Util
       log(message, true);
     }
 
-    public virtual void log(object message, bool newline)
+    public void log(object message, bool newline)
     {
       string msg = GetMessageObjectDescription(message);
+      logImpl(msg, newline);
+    }
+
+    protected virtual void logImpl(string msg, bool newline)
+    {
       if (newline) Console.WriteLine(msg);
       else Console.Write(msg);
     }
 
-    protected string GetMessageObjectDescription(object msg)
+    private string GetMessageObjectDescription(object msg)
     {
       if (msg == null)
       {

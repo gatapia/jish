@@ -19,12 +19,12 @@ namespace js.net.jish
       AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
     } 
 
-    public static IJishInterpreter CreateInterpreter()
-    {
-      IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
+    public static IJishInterpreter CreateInterpreter(JSConsole console)
+    {      
       IEngine engine = new JSNetEngine();
-      JSConsole console = new JSConsole();
       engine.SetGlobal("console", console);
+
+      IKernel kernel = new StandardKernel(new NinjectSettings { UseReflectionBasedInjection = true });
       
       kernel.Bind<IEngine>().ToConstant(engine);
       kernel.Bind<JSConsole>().ToConstant(console);
@@ -212,8 +212,6 @@ namespace js.net.jish
     {
       bufferedCommand = String.Empty;      
     }
-
-    public IEngine GetEngine() { return engine; }
 
     public void SetGlobal(string name, object value)
     {

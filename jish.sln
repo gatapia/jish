@@ -22,6 +22,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "js.net.setup", "js.net.setu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{598E163C-4575-4575-86A9-ACDA10AFF0ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "js.net.jish.vsext", "js.net.jish.vsext\js.net.jish.vsext.csproj", "{D0F9864B-D782-4471-81A2-29555E5DC0D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,16 @@ Global
 		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|Any CPU.ActiveCfg = Release
 		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|Mixed Platforms.ActiveCfg = Release
 		{57E62709-58B5-4065-9250-597AAB74CF8C}.Release|x86.ActiveCfg = Release
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D0F9864B-D782-4471-81A2-29555E5DC0D7}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

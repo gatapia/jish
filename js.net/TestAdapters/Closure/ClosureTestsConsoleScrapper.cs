@@ -20,14 +20,11 @@ namespace js.net.TestAdapters.Closure
       return results;
     }
 
-    public override void log(object message, bool newline)
+    protected override void logImpl(string message, bool newline)
     {
-      Trace.Assert(message != null);
+      base.logImpl(message, newline);
 
-      base.log(message, newline);
-
-      string msg = message as string;
-      if (!String.IsNullOrEmpty(msg)) ScrapeResultInformationFromMessage(msg);
+      if (!String.IsNullOrEmpty(message)) ScrapeResultInformationFromMessage(message);
     }
 
     private void ScrapeResultInformationFromMessage(string message)

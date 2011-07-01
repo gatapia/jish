@@ -1,6 +1,4 @@
-﻿using js.net.Engine;
-
-namespace js.net.jish
+﻿namespace js.net.jish
 {
   public interface IJishInterpreter
   {
@@ -8,6 +6,5 @@ namespace js.net.jish
     void ExecuteCommand(string command);
     void RunFile(string file, string[] args = null);
     void ClearBufferedCommand();
-    IEngine GetEngine();
   }
 }

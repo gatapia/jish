@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using js.net.Util;
 
 namespace js.net.jish
 {  
@@ -11,7 +12,7 @@ namespace js.net.jish
 
     public MainRunner(string[] args)
     {
-      IJishInterpreter interpreter = DefaultJishInterpreterFactory.CreateInterpreter();
+      IJishInterpreter interpreter = DefaultJishInterpreterFactory.CreateInterpreter(new JSConsole());
 
       if (args == null || args.Length == 0)
       {

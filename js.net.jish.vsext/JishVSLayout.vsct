@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Extern href="msobtnid.h"/>
+
+  <Commands package="guidJishPkg">
+
+    <Menus>
+      <!-- This is the toolbar in the console -->
+      <Menu guid="guidJishCmdSet" id="idToolbar" type="ToolWindowToolbar">
+        <Strings>
+          <ButtonText>Jish</ButtonText>
+        </Strings>
+      </Menu>      
+    </Menus>
+
+    <Groups>
+      <Group guid="guidJishCmdSet" id="idToolbarHostsGroup" priority="0x1000">
+        <Parent guid="guidJishCmdSet" id="idToolbar"/>
+      </Group>
+      <Group guid="guidJishCmdSet" id="idToolbarProjectGroup" priority="0x1500">
+        <Parent guid="guidJishCmdSet" id="idToolbar"/>
+      </Group>
+      <Group guid="guidJishCmdSet" id="idToolbarCommandsGroup" priority="0x2000">
+        <Parent guid="guidJishCmdSet" id="idToolbar"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidJishCmdSet" id="cmdidJish" priority="0x0100" type="Button">
+        <Icon guid="guidToolbarImages" id="bmpJish" />
+        <Strings>
+          <ButtonText>Jish</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidJishCmdSet" id="cmdidClearHost" priority="0x1010" type="Button">
+        <Parent guid="guidJishCmdSet" id="idToolbarCommandsGroup"/>
+        <Icon guid="guidToolbarImages" id="bmpClearConsole" />
+        <Strings>
+          <ButtonText>&amp;Clear Console</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidToolbarImages" href="resources\Toolbar.png"/>
+    </Bitmaps>
+  </Commands>
+
+  <CommandPlacements>      
+    <CommandPlacement guid="guidJishCmdSet" id="cmdidJish" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="guidJishPkg" value="{8f2b2744-2c93-4a98-93d2-a6014f47fdd8}" />    
+    <GuidSymbol name="guidJishCmdSet" value="{298cdc02-f910-447c-881e-cbf0ea7df11a}">
+      <IDSymbol name="idToolbar" value="0x1010"/>
+      <IDSymbol name="idToolbarHostsGroup" value="0x2000"/>
+      <IDSymbol name="idToolbarProjectGroup" value="0x2005"/>
+      <IDSymbol name="idToolbarCommandsGroup" value="0x2010"/>
+      <IDSymbol name="cmdidJish" value="0x0100" />
+      <IDSymbol name="cmdidClearHost" value="0x0300" />      
+    </GuidSymbol>
+    <GuidSymbol name="guidToolbarImages" value="{d9691bf7-1723-4ef5-9a58-46290a804868}" >
+      <IDSymbol name="bmpJish" value="1" />
+      <IDSymbol name="bmpClearConsole" value="2" />            
+    </GuidSymbol>        
+  </Symbols>
+
+</CommandTable>

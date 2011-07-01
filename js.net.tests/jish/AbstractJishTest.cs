@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using js.net.Engine;
 using js.net.jish;
@@ -15,8 +14,6 @@ namespace js.net.tests.jish
 {
   public abstract class AbstractJishTest
   {
-    private const string targetCommandDll = @"modules\js.net.test.module.dll";
-
     protected IJishInterpreter jish;
     protected TestingConsole console;
 

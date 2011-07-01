@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using js.net.Util;
 
@@ -10,10 +8,10 @@ namespace js.net.tests.jish
   {
     private readonly IList<string> messages = new List<string>();
 
-    public override void log(object message, bool newline)
+    protected override void logImpl(string message, bool newline)
     {
-      base.log(message, newline);
-      messages.Add(message == null ? String.Empty : message.ToString());
+      base.logImpl(message, newline);
+      messages.Add(message);
     }
 
     public IEnumerable<string> GetAllMessages()
