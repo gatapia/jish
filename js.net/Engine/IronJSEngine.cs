@@ -4,7 +4,7 @@ using IronJS.Hosting;
 
 namespace js.net.Engine
 {
-  public class IronJSEngine : AbstractEngine, IEngine
+  public class IronJSEngine : AbstractEngine
   {    
     private readonly CSharp.Context ctx;
     
