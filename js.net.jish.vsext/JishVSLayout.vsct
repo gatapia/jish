@@ -56,7 +56,7 @@
   </CommandPlacements>
 
   <Symbols>
-    <GuidSymbol name="guidJishPkg" value="{8f2b2744-2c93-4a98-93d2-a6014f47fdd8}" />    
+    <GuidSymbol name="guidJishPkg" value="{796ee83e-2e4a-419e-9e79-69c2ab2294b3}" />    
     <GuidSymbol name="guidJishCmdSet" value="{298cdc02-f910-447c-881e-cbf0ea7df11a}">
       <IDSymbol name="idToolbar" value="0x1010"/>
       <IDSymbol name="idToolbarHostsGroup" value="0x2000"/>

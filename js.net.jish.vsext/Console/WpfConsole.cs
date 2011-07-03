@@ -164,8 +164,9 @@ namespace js.net.jish.vsext.Console
             int hr = propCategoryContainer.GetPropertyCategory(ref guidPropCategory, out propContainer);
             if (hr == 0)
             {
-              propContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_FontCategory, new Guid(JishVSPackage.FontAndColoursGuid));
-              propContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_ColorCategory, new Guid(JishVSPackage.FontAndColoursGuid));
+              Guid fonts = new Guid("adf1170d-74b2-4593-9124-38ba74fb20eb");
+              propContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_FontCategory, fonts);
+              propContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_ColorCategory, fonts);
             }
           }
 
