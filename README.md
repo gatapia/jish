@@ -6,7 +6,7 @@ kind of way:
 
 - A wrapper around V8:  Include js.net.dll in your project and you can run 
  JavaScript straight from your .Net programs
-- A command line interface and JavaScript file interpreter for running 
+- A command line interface (REPL) and JavaScript file interpreter for running 
  JavaScript straight from your console (Jish).
 - A set of unit testing bindings for different JavaScript frameoworks that
  allows you tu run your JavaScript tests straight from Visual Studio or your

@@ -1,4 +1,5 @@
 HIGH
+- Add a jish.run which takes a script file
 - Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal
    * - <methodname>_internal should replace the delegate param with a strin 
