@@ -1,5 +1,5 @@
 HIGH
-- Add a jish.run which takes a script file
+- JSDom emulation in jish
 - Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal
    * - <methodname>_internal should replace the delegate param with a strin 
@@ -15,7 +15,6 @@ HIGH
  
 MED
 - Fork the JavaScript.Net project as it appears to have died.
-- An interactive sheel in Visual Studio like the F# Interactive Shell
 
 LOW
 - Node interface

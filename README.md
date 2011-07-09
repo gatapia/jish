@@ -101,6 +101,10 @@ Jish are:
     		call to jish.assembly('assemblyFileName').
     	Arguments: (typeName, param object[] args)
     
+    jish.load:
+    	Load and executes another Jish or plain JavaScript file.
+    	Arguments: (file)
+    
     jish.process:
     	Executes the command in a separate Process.
     	Arguments: (command, arguments?)

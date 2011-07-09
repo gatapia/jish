@@ -24,13 +24,12 @@ namespace js.net.Util
    
     public void InjectJavaScriptNetAssemblyIntoRunningDir()
     {
-      Assembly ass = Assembly.GetExecutingAssembly();
-
+      Assembly ass = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
       string dir = Path.GetDirectoryName(ass.Location);
       string path = dir + "\\Noesis.Javascript.dll";
 
       if (File.Exists(path)) return;
-      using(Stream s = ass.GetManifestResourceStream("js.net.resources.Noesis.Javascript.dll"))
+      using(Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("js.net.resources.Noesis.Javascript.dll"))
       {
         byte[] assemblyBytes = new byte[s.Length];
         s.Read(assemblyBytes, 0, assemblyBytes.Length);

@@ -77,6 +77,7 @@
     <Compile Include="Command\ICommandBase.cs" />
     <Compile Include="Command\InlineCommand\AssemblyCommand.cs" />
     <Compile Include="Command\InlineCommand\ClosureLibraryCommand.cs" />
+    <Compile Include="Command\InlineCommand\LoadCommand.cs" />
     <Compile Include="Command\InlineCommand\CreateCommand.cs" />
     <Compile Include="Command\InlineCommand\IInlineCommand.cs" />
     <Compile Include="Command\InlineCommand\ProcessCommand.cs" />
@@ -139,6 +140,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>COPY /y $(TargetPath) $(SolutionDir)build\jish\tools</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

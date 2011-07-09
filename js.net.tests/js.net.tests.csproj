@@ -76,6 +76,7 @@
     <Compile Include="jish\Command\ClearCommandTests.cs" />
     <Compile Include="jish\Command\CommandModulesTest.cs" />
     <Compile Include="jish\Command\ClosureCommandTests.cs" />
+    <Compile Include="jish\Command\LoadCommandTests.cs" />
     <Compile Include="jish\Command\HelpCommandTests.cs" />
     <Compile Include="jish\Command\InlineCommandModulesTest.cs" />
     <Compile Include="jish\Command\CreateCommandTests.cs" />

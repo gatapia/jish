@@ -2,12 +2,18 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using js.net.jish.Util;
 using js.net.Util;
 
 namespace js.net.jish
 {  
   public class MainRunner
   {            
+    static MainRunner()
+    {
+      AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyLoader.OnAssemblyResolve;
+    }
+
     [STAThread] public static void Main(string[] args) { new MainRunner(args); }
 
     public MainRunner(string[] args)

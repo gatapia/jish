@@ -166,7 +166,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y $(TargetPath) $(ProjectDir)..\js.net.jish\bin\$(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>copy /Y $(TargetPath) $(ProjectDir)..\js.net.jish\resources\$(TargetFileName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
