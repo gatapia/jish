@@ -1,4 +1,5 @@
-﻿
+﻿var window = global;
+
 global.setTimeout = function(func, timeOut) {
   func();
   return 0;

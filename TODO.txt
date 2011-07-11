@@ -1,5 +1,6 @@
 HIGH
 - JSDom emulation in jish
+- Closure tests should read script src and import automatically
 - Support callbacks/delegates with some trickery
    * - Rename method to <methodname>_internal
    * - <methodname>_internal should replace the delegate param with a strin 

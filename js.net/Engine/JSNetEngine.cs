@@ -25,6 +25,10 @@ namespace js.net.Engine
         assemblyResourceShortName = assemblyResourceShortName.Substring(0, args.Name.IndexOf(','));
       }
       assemblyResourceShortName += ".dll";
+      string dir = Path.GetDirectoryName((Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly()).Location);      
+      string path = dir + "\\" + assemblyResourceShortName;
+      if (File.Exists(path)) return Assembly.LoadFrom(path);
+
       Assembly a = Assembly.GetExecutingAssembly();
       
       Trace.Assert(Array.IndexOf(a.GetManifestResourceNames(), assemblyResourceShortName) >= 0, "Assembly '" + a.FullName + "' does not contain resource '" + assemblyResourceShortName + "' - " + String.Join(", ", a.GetManifestResourceNames()));

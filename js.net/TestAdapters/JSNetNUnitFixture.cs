@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace js.net.TestAdapters
@@ -29,17 +28,16 @@ namespace js.net.TestAdapters
     
     private TestSuiteResults results;
 
-    public JSNetNUnitFixture(TestSuiteResults results) { 
-      SetResults(results);
+    public JSNetNUnitFixture(TestSuiteResults results = null) { 
+      SetJavaScriptTestResults(results);
     }
 
-    public void SetResults(TestSuiteResults results) {
+    public void SetJavaScriptTestResults(TestSuiteResults results) {
       this.results = results;
     }
 
     protected IEnumerable<string> GetTestNames() {
-      Trace.Assert(results != null);
-
+      if (results == null) { throw new InvalidOperationException("GetTestNames called before SetResults"); }
       return results.Failed.Concat(results.Passed);
     }
 
