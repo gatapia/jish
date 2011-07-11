@@ -304,6 +304,26 @@ Example:
       }
     }
 
+## Integration with NUnit test runners
+Modern NUnit test runners that support
+the ValueSource attribute can very nicely display test results of JavaScript 
+tests if you do the following:
+
+    // Must inherit: 'JSNetNUnitFixture' 
+    [TestFixture] public class JavaScriptTests : JSNetNUnitFixture {  
+    
+      // If running tests in the constructor is not an option, you can also 
+      // call base.SetResults at a later stage.
+      public JSNetNunitFixtureTests() : 
+        base(JSNet.QUnitTestSuiteRunner(@"..\lib\qunit.js").
+          TestFiles(new[] { @"..\src\tests.js" })) {}    
+    
+      // Implement a test that has the ValueSource("GetTestNames") attribute
+      [Test] public void JavaScriptTest(
+          [ValueSource("GetTestNames")] string testName) {  
+        Assert.IsTrue(Passed(testName));
+      }
+
 ## Coverage
 Running coverage on your tests is just as simple as running the tests 
 themselves.

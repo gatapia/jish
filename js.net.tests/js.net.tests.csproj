@@ -99,6 +99,7 @@
     <Compile Include="TestAdapters\ClosureTests.cs" />
     <Compile Include="TestAdapters\JSCoverageTests.cs" />
     <Compile Include="TestAdapters\JasmineTests.cs" />
+    <Compile Include="TestAdapters\JSNetNunitFixtureTests.cs" />
     <Compile Include="TestAdapters\QUnitTests.cs" />
     <Compile Include="TestAdapters\JSUnitTests.cs" />
   </ItemGroup>

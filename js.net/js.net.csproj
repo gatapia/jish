@@ -55,6 +55,7 @@
     <Compile Include="Engine\AbstractEngine.cs" />
     <Compile Include="FrameworkAdapters\IFrameworkAdapter.cs" />
     <Compile Include="TestAdapters\Coverage\TestCoverageFormatter.cs" />
+    <Compile Include="TestAdapters\JSNetNUnitFixture.cs" />
     <Compile Include="Util\ExceptionTraceListener.cs" />
     <Compile Include="Engine\IronJSEngine.cs">
       <SubType>Code</SubType>

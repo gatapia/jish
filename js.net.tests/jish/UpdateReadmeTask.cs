@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -12,6 +14,9 @@ namespace js.net.tests.jish
     const string helpScreenSearchTagEnd = "## Extending Jish";
     const string inlineCommandSearchTagStart = "`jish.process('commandName', 'arguments_string')`:";
     const string inlineCommandSearchTagEnd = "### js.net.jish.Command.IConsoleCommand (Console Commands)";
+    const string jSNetNUnitFixtureSearchTagStart = "do the following:";
+    const string jSNetNUnitFixtureSearchTagEnd = "## Coverage";
+
 
     public override void SetUp()
     {
@@ -45,6 +50,20 @@ namespace js.net.tests.jish
       AddPrePostTagTextToReadme(inlineCommandSearchTagStart, inlineCommandSearchTagEnd, MakeCodeBlock(processCommandContents));
     }
 
+    [Test] public void AddJSNetNUnitFixtureDescription() {
+      string[] fixtureCodeLines = File.ReadAllLines(@"..\..\..\js.net\TestAdapters\JSNetNUnitFixture.cs");
+      IList<string> neededLines = new List<string>();
+      bool inCodeBlock = false;
+      foreach (var line in fixtureCodeLines)
+      {
+        if (line.IndexOf("<code>") >= 0) inCodeBlock = true;
+        else if (line.IndexOf("</code>") >= 0) inCodeBlock = false;
+        else if (inCodeBlock) neededLines.Add(line.Replace("  /// ", string.Empty));
+      }      
+      string code = String.Join("\n", neededLines);
+      AddPrePostTagTextToReadme(jSNetNUnitFixtureSearchTagStart, jSNetNUnitFixtureSearchTagEnd, MakeCodeBlock(code));
+    }
+
     private string MakeCodeBlock(string block) {
       block = "\n\n    " + block.Replace("\n", "\n    ") + "\n\n";
       return block;
@@ -72,6 +91,9 @@ namespace js.net.tests.jish
 
       // IInlineCommand
       ValidateStarAndEndIndexes(readmeContents, inlineCommandSearchTagStart, inlineCommandSearchTagEnd);      
+
+      // JSNetNUnitFixture
+      ValidateStarAndEndIndexes(readmeContents, jSNetNUnitFixtureSearchTagStart, jSNetNUnitFixtureSearchTagEnd);      
     }
 
     private void ValidateStarAndEndIndexes(string readmeContents, string startTag, string endTag)
