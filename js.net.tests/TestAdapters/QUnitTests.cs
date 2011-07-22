@@ -7,13 +7,13 @@ namespace js.net.tests.TestAdapters
 {
   [TestFixture] public class QUnitTests
   {
-    private const string qUnitJS = @"C:\dev\libs\qunit\qunit\qunit.js";
+    private const string qUnitJS = @"J:\dev\libs\qunit\qunit\qunit.js";
 
     [Test] public void RunSingleTestFile()
     {      
       using (ITestAdapter adapter = JSNet.QUnit(qUnitJS))
       {
-        ITestResults results = adapter.RunTest(@"C:\dev\libs\qunit\test\test.js"); 
+        ITestResults results = adapter.RunTest(@"J:\dev\libs\qunit\test\test.js"); 
         
         Assert.AreEqual(2, results.Failed.Count());
         Assert.AreEqual(23, results.Passed.Count());
@@ -30,7 +30,7 @@ namespace js.net.tests.TestAdapters
 
     private IEnumerable<string> GetTestSuiteFiles()
     {
-      return new[] { @"C:\dev\libs\qunit\test\same.js", @"C:\dev\libs\qunit\test\test.js" };
+      return new[] { @"J:\dev\libs\qunit\test\same.js", @"J:\dev\libs\qunit\test\test.js" };
     }
   }
 }

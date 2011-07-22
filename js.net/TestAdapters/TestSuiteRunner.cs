@@ -37,7 +37,7 @@ namespace js.net.TestAdapters
     private ITestResults RunSingleTest(string file)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
-      Trace.Assert(File.Exists(file));
+      Trace.Assert(File.Exists(file), string.Format("Could not find file '{0}'", file));
 
       using (ITestAdapter adapter = GetAdapter())
       {

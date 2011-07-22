@@ -40,6 +40,9 @@
       <HintPath>..\lib\JSEngines\IronJS\IronJS.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Jurassic">
+      <HintPath>..\lib\JSEngines\Jurassic\Jurassic.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\lib\Ninject.dll</HintPath>
       <Private>False</Private>
@@ -53,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\AbstractEngine.cs" />
+    <Compile Include="Engine\JurassicEngine.cs" />
     <Compile Include="FrameworkAdapters\IFrameworkAdapter.cs" />
     <Compile Include="TestAdapters\Coverage\TestCoverageFormatter.cs" />
     <Compile Include="TestAdapters\JSNetNUnitFixture.cs" />

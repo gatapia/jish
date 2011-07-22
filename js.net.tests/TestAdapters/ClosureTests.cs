@@ -8,7 +8,7 @@ namespace js.net.tests.TestAdapters
 {
   [TestFixture] public class ClosureTests
   {
-    const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";    
+    const string basejsfile = @"J:\dev\Projects\Misc\closure-library\closure\goog\base.js";    
 
     [Test] public void RunJSFileTest()
     {
@@ -25,7 +25,7 @@ namespace js.net.tests.TestAdapters
     {
       using (ITestAdapter adapter = JSNet.ClosureLibrary(basejsfile))
       {        
-        ITestResults results = adapter.RunTest(@"C:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
+        ITestResults results = adapter.RunTest(@"J:\dev\Projects\Misc\closure-library\closure\goog\array\array_test.html");
         
         Assert.AreEqual(0, results.Failed.Count(), results.ToString());
         Assert.AreEqual(71, results.Passed.Count(), results.ToString());
@@ -44,7 +44,7 @@ namespace js.net.tests.TestAdapters
 
     private IEnumerable<string> GetTestSuiteFiles()
     {
-      const string dir = @"C:\dev\Projects\Misc\closure-library\closure\goog\";      
+      const string dir = @"J:\dev\Projects\Misc\closure-library\closure\goog\";      
       string[] allFiles = Directory.GetFiles(dir, "*_test.html", SearchOption.AllDirectories);
       string[] ignore = new [] {"fontsizemonitor_test.html", "icontent_test.html", "abstractdialogplugin_test.html", 
         "linkdialogplugin_test.html", "crossdomainrpc_test.html", "positioning_test.html", "serializer_test.html",

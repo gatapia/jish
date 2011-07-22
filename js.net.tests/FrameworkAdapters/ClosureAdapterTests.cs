@@ -8,7 +8,7 @@ namespace js.net.tests.FrameworkAdapters
     private ITestAdapter ctx;
     [SetUp] public void SetUp()
     {
-      const string basejsfile = @"C:\dev\Projects\Misc\closure-library\closure\goog\base.js";
+      const string basejsfile = @"J:\dev\Projects\Misc\closure-library\closure\goog\base.js";
 
       ctx = JSNet.ClosureLibrary(basejsfile);
     }

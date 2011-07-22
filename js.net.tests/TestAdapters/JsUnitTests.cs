@@ -9,13 +9,13 @@ namespace js.net.tests.TestAdapters
 {
   [TestFixture] public class JSUnitTests
   {
-    private const string jsUnitCoreFile = @"C:\dev\libs\jsunit\app\jsUnitCore.js";
+    private const string jsUnitCoreFile = @"J:\dev\libs\jsunit\app\jsUnitCore.js";
 
     [Test] public void RunFailingTests()
     {      
       using (ITestAdapter adapter = JSNet.JSUnit(jsUnitCoreFile))
       {
-        ITestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\failingTest.html"); 
+        ITestResults results = adapter.RunTest(@"J:\dev\libs\jsunit\tests\failingTest.html"); 
 
         Assert.AreEqual(2, results.Failed.Count());
         Assert.AreEqual(0, results.Passed.Count());
@@ -29,7 +29,7 @@ namespace js.net.tests.TestAdapters
     {      
       using (ITestAdapter adapter = JSNet.JSUnit(jsUnitCoreFile))
       {
-        ITestResults results = adapter.RunTest(@"C:\dev\libs\jsunit\tests\jsUnitAssertionTests.html"); 
+        ITestResults results = adapter.RunTest(@"J:\dev\libs\jsunit\tests\jsUnitAssertionTests.html"); 
 
         Assert.AreEqual(0, results.Failed.Count());
         Assert.AreEqual(31, results.Passed.Count());
@@ -50,7 +50,7 @@ namespace js.net.tests.TestAdapters
 
     private IEnumerable<string> GetTestSuiteFiles()
     {
-      return Directory.GetFiles(@"C:\dev\libs\jsunit\tests", "*Tests.html");
+      return Directory.GetFiles(@"J:\dev\libs\jsunit\tests", "*Tests.html");
     }
   }
 }
