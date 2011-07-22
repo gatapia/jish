@@ -1,0 +1,1 @@
+﻿var varDefinedInSupport = 100;

@@ -44,8 +44,8 @@ namespace js.net.tests.TestAdapters
       IEnumerable<string> files = GetTestSuiteFiles();
       TestSuiteResults results = JSNet.JSUnitTestSuiteRunner(jsUnitCoreFile).TestFiles(files);
             
-      Assert.AreEqual(51, results.Passed.Count());
-      Assert.AreEqual(22, results.Failed.Count());
+      Assert.AreEqual(68, results.Passed.Count(), results.ToString());
+      Assert.AreEqual(5, results.Failed.Count(), results.ToString());
     }
 
     private IEnumerable<string> GetTestSuiteFiles()

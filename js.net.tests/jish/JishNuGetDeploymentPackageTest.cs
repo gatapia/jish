@@ -67,8 +67,8 @@ if (file.Exists('test.js')) {
       Assert.IsTrue(Directory.Exists(jishBuildDir));
       string[] files = Directory.GetFiles(jishBuildDir, "*.exe");
       Assert.IsTrue(files.Single(f => f.EndsWith("jish.exe")) != null);
-      files = Directory.GetFiles(jishBuildDir, "*.dll");
-      Assert.IsTrue(files.Single(f => f.EndsWith("Noesis.Javascript.dll")) != null);
+      files = Directory.GetFiles(jishBuildDir, "*.exe");
+      Assert.IsTrue(files.Single(f => f.EndsWith("jish.exe")) != null);
     }
   }
 }

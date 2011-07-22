@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace js.net.Util
 {
   public class HtmlFileScriptExtractor
-  {    
+  {        
     public string GetScriptContents(string file)
     {
       Trace.Assert(!String.IsNullOrWhiteSpace(file));
@@ -14,13 +15,32 @@ namespace js.net.Util
 
       string html = File.ReadAllText(file);
       string js = "";
-      while (html.IndexOf("<script") >= 0)
+      int startIndex;
+      while ((startIndex = html.IndexOf("<script")) >= 0)
       {
-        html = html.Substring(html.IndexOf(">", html.IndexOf("<script")) + 1);
-        js += "\n" + html.Substring(0, html.IndexOf("</script>"));
+        html = html.Substring(startIndex + 1); // Ensure we dont match again
+        Match m = Regex.Match(html, @"src *= *['""](.*)['""]");
+        string content;
+        if (m.Success) { // Has Source
+          string srcFile = m.Groups[1].Value;        
+          if (srcFile.IndexOf("base.js") >= 0) { continue; }
+
+          string parent = new FileInfo(file).Directory.FullName;
+          content = File.ReadAllText(Path.Combine(parent, srcFile));
+        } else { // Is Inline Script
+          html = html.Substring(html.IndexOf(">") + 1);
+          content = "\n" + html.Substring(0, html.IndexOf("</script>"));          
+        }
+        js += content;
       }
-      // File.WriteAllText(file.Replace(".html", ".debug.js").Replace(".htm", ".debug.js"), js);      
+      // SaveDebugFile(file, js);      
       return js;
+    }
+
+    private void SaveDebugFile(string file, string jsContents) { 
+      string debug = file.Replace(".html", ".debug.js").Replace(".htm", ".debug.js");
+      if (File.Exists(debug)) File.Delete(debug);
+      File.WriteAllText(debug, jsContents);      
     }
   }
 }

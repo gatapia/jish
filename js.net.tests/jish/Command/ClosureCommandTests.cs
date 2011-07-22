@@ -6,7 +6,7 @@ namespace js.net.tests.jish.Command
   [TestFixture]
   public class ClosureCommandTests : AbstractJishTest
   {
-    const string basejsfile = @"C:\\dev\\Projects\\Misc\\closure-library\\closure\\goog\\base.js";
+    const string basejsfile = @"J:\\dev\\Projects\\Misc\\closure-library\\closure\\goog\\base.js";
 
     [Test] public void TestClosureExists()
     {
