@@ -1,18 +1,10 @@
 HIGH
-- Closure tests should read script src and import automatically
+- setTimeout / Interval not working, to implement this we would need to 
+    implement an entire event loop.
+- Closure tests should read script src and import automatically. Also load 
+  the html contents
 - Support callbacks/delegates with some trickery
-   * - Rename method to <methodname>_internal
-   * - <methodname>_internal should replace the delegate param with a strin 
-   *   (id of real method in jish.internal scope)
-   * - Generate JS method with original name/namespace
-   *     - Generate <newid>
-   *     - Save the callback in the jish.internal['<newid>']   
-   *     - Call and <methodname>_internal, with a string arg (<newid>)
-   * - Create mock Action / Func
-   * - Execute original method (C#) with mock action
-   * - When mock Action / Func gets called call original callback in JS
-- Support multiple callbacks/delegates params
- 
+  
 MED
 - Fork the JavaScript.Net project as it appears to have died.
 
