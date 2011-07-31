@@ -12,21 +12,19 @@ kind of way:
  allows you tu run your JavaScript tests straight from Visual Studio or your
  favourite CI tools.
 
-For full details see the [wiki](https://github.com/gatapia/js.net/wiki/)
-
 ## Getting Started
 The best way to get started is to download the source:
 
-    git clone git://github.com/gatapia/js.net.git
+    git clone git://github.com/gatapia/jish.git
 
 That way you can send me fixes ;)
 
 Otherwise just download one of the following:
 
-* [Jish - JavaScript Interactive SHell](https://github.com/gatapia/js.net/raw/master/build/jish.exe.zip)
-* [js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/js.net/raw/master/build/js.net.dll.zip)
-* [Both](https://github.com/gatapia/js.net/raw/master/build/both.zip)
-* [Installer](https://github.com/gatapia/js.net/raw/master/build/jish.msi)
+* [Jish - JavaScript Interactive SHell](https://github.com/gatapia/jish/raw/master/build/jish.exe.zip)
+* [js.net - Embed JavaScript in Your .Net Projects](https://github.com/gatapia/jish/raw/master/build/js.net.dll.zip)
+* [Both](https://github.com/gatapia/jish/raw/master/build/both.zip)
+* [Installer](https://github.com/gatapia/jish/raw/master/build/jish.msi)
 
 Note: The installer just 'unzips' the 'Both' package into a specified folder.
 
@@ -405,7 +403,7 @@ This example is a very simple winforms app.
 
 ## An example jish JavaScript file (2) - Build Script
 This is Jish's very own build file.  You can find the latest version of this 
-file [in github](https://github.com/gatapia/js.net/blob/master/build.js).
+file [in github](https://github.com/gatapia/jish/blob/master/build.js).
 
     
         
